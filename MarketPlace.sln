@@ -3,7 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.7.34024.191
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MarketPlace.Web", "MarketPlace.Web\MarketPlace.Web.csproj", "{FC4FDE94-BB40-4733-BAB4-A76898989DD0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MarketPlace.Web", "MarketPlace.Web\MarketPlace.Web.csproj", "{FC4FDE94-BB40-4733-BAB4-A76898989DD0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MarketPlace.Applicationn", "MarketPlace.Applicationn\MarketPlace.Applicationn.csproj", "{479346D8-94BD-4821-B098-95C14CAEE5A3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MarketPlace.DataLayerr", "MarketPlace.DataLayerr\MarketPlace.DataLayerr.csproj", "{E6416CC3-CDCC-4A1B-B2CF-6C8370B9ED95}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +19,14 @@ Global
 		{FC4FDE94-BB40-4733-BAB4-A76898989DD0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FC4FDE94-BB40-4733-BAB4-A76898989DD0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FC4FDE94-BB40-4733-BAB4-A76898989DD0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{479346D8-94BD-4821-B098-95C14CAEE5A3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{479346D8-94BD-4821-B098-95C14CAEE5A3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{479346D8-94BD-4821-B098-95C14CAEE5A3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{479346D8-94BD-4821-B098-95C14CAEE5A3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E6416CC3-CDCC-4A1B-B2CF-6C8370B9ED95}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E6416CC3-CDCC-4A1B-B2CF-6C8370B9ED95}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E6416CC3-CDCC-4A1B-B2CF-6C8370B9ED95}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E6416CC3-CDCC-4A1B-B2CF-6C8370B9ED95}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
