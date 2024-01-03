@@ -7,16 +7,16 @@ using MarketPlace.DataLayerr.Entities.Commen;
 
 namespace MarketPlace.DataLayerr.Repository
 {
-	public interface IGenericRepository<TEntity> : IAsyncDisposable where TEntity : BaseEntity 
+	public interface IGenericRepository<TEntity> : IAsyncDisposable where TEntity : BaseEntity
 	{
+		IQueryable<TEntity> GetQuery();
 		Task AddEntity(TEntity entity);
 		Task<TEntity> GetEntityById(long entityId);
 		void EditEntity(TEntity entity);
 		void DeleteEntity(TEntity entity);
-		void DeleteEntity(long entityId);
+		Task DeleteEntity(long entityId);
 		void DeletePermanent(TEntity entity);
-		
-		Task DeleteParmenant(long entityId);
-
+		Task DeletePermanent(long entityId);
+		Task SaveChanges();
 	}
 }

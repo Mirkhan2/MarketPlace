@@ -3,33 +3,38 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using MarketPlace.DataLayerr.Context;
 using MarketPlace.DataLayerr.Entities.Commen;
-using MarketPlace.DataLayerr.Entities.Context;
 using Microsoft.EntityFrameworkCore;
 
 namespace MarketPlace.DataLayerr.Repository
 {
-	public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEntity : BaseEntity
+
+    public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEntity : BaseEntity
 	{
-       private readonly MarketPlaceDbContext _context;
+		private readonly MarketPlaceDbContext _context;
 		private readonly DbSet<TEntity> _dbSet;
 
-        public GenericRepository(MarketPlaceDbContext context)
-        {
-            _context = context;
-            this._dbSet = context.Set<TEntity>();
-        }
-        public async Task AddEntity(TEntity entity)
-        {
-			entity.CreateDate = DateTime.Now;
-            _dbSet.AddAsync(entity);
-        }
+		public GenericRepository(MarketPlaceDbContext context)
+		{
+			_context = context;
+			this._dbSet = _context.Set<TEntity>();
+		}
 
-	
+		public IQueryable<TEntity> GetQuery()
+		{
+			return _dbSet.AsQueryable();
+		}
+
+		public async Task AddEntity(TEntity entity)
+		{
+			entity.CreateDate = DateTime.Now;
+			await _dbSet.AddAsync(entity);
+		}
 
 		public async Task<TEntity> GetEntityById(long entityId)
 		{
-			return await _dbSet.SingleOrDefaultAsync(s => s.Id == entityId );
+			return await _dbSet.SingleOrDefaultAsync(s => s.Id == entityId);
 		}
 
 		public void EditEntity(TEntity entity)
@@ -40,20 +45,14 @@ namespace MarketPlace.DataLayerr.Repository
 
 		public void DeleteEntity(TEntity entity)
 		{
-			_dbSet.Remove(entity);
+			entity.IsDelete = true;
+			EditEntity(entity);
 		}
 
-		public void DeleteEntity(long entityId)
+		public async Task DeleteEntity(long entityId)
 		{
-			throw new NotImplementedException();
-		}
-		public async ValueTask DisposeAsync()
-		{
-			if (_context != null)
-			{
-				await _context.DisposeAsync();
-			}
-
+			TEntity entity = await GetEntityById(entityId);
+			if (entity != null) DeleteEntity(entity);
 		}
 
 		public void DeletePermanent(TEntity entity)
@@ -61,22 +60,23 @@ namespace MarketPlace.DataLayerr.Repository
 			_dbSet.Remove(entity);
 		}
 
-		public async void DeleteParmanent(long entityId)
+		public async Task DeletePermanent(long entityId)
 		{
 			TEntity entity = await GetEntityById(entityId);
+			if (entity != null) DeletePermanent(entity);
 		}
 
-		
-
-		private void DeleteParmenat(TEntity entity)
+		public async Task SaveChanges()
 		{
-			TEntity entity = await GetEntityById(entityId);
-			DeleteParmenat(entity);
+			await _context.SaveChangesAsync();
 		}
 
-		public Task DeleteParmenant(long entityId)
+		public async ValueTask DisposeAsync()
 		{
-			throw new NotImplementedException();
+			if (_context != null)
+			{
+				await _context.DisposeAsync();
+			}
 		}
 	}
 }

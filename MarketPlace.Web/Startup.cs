@@ -2,16 +2,20 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using MarketPlace.DataLayerr.Context;
+using MarketPlace.DataLayerr.Entities.Account;
+using MarketPlace.DataLayerr.Repository;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
 namespace MarketPlace.Web
 {
-	public class Startup
+    public class Startup
 	{
 		public Startup(IConfiguration configuration)
 		{
@@ -24,6 +28,17 @@ namespace MarketPlace.Web
 		public void ConfigureServices(IServiceCollection services)
 		{
 			services.AddControllersWithViews();
+			services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
+			//	services.AddScoped<IUserService, UserService>();
+
+			#region config database
+
+			services.AddDbContext<MarketPlaceDbContext>(options =>
+			{
+				options.UseSqlServer(Configuration.GetConnectionString("MarketPlaceConnection"));
+			});
+
+			#endregion
 		}
 
 		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
