@@ -7,57 +7,60 @@ namespace MarketPlace.Web.Controllers
 {
 	public class AccountController : SiteBaseController
 	{
+		#region constructor
 
-        #region constructor
+		private readonly IUserService _userService;
 
-        private readonly IUserService _userService;
+		public AccountController(IUserService userService)
+		{
+			_userService = userService;
+		}
 
-        public AccountController(IUserService userService)
-        {
-            _userService = userService;
-        }
+		#endregion
 
-        #endregion
+		#region register
 
-        #region register
+		[HttpGet("register")]
+		public IActionResult Register()
+		{
+			TempData[SuccessMessage] = "ثبت نام شما با موفقیت انجام شد";
+			TempData[ErrorMessage] = "ثبت نام شما با موفقیت انجام شد";
+			TempData[InfoMessage] = "ثبت نام شما با موفقیت انجام شد";
+			TempData[WarningMessage] = "ثبت نام شما با موفقیت انجام شد";
+			return View();
+		}
 
-        [HttpGet("register")]
-        public IActionResult Register()
-        {
-            return View();
-        }
+		[HttpPost("register"), ValidateAntiForgeryToken]
+		public async Task<IActionResult> Register(RegisterUserDTO register)
+		{
+			if (ModelState.IsValid)
+			{
+				var res = await _userService.RegisterUser(register);
+				switch (res)
+				{
+					case RegisterUserResult.MobileExists:
+						TempData[ErrorMessage] = "تلفن همراه وارد شده تکراری می باشد";
+						ModelState.AddModelError("Mobile", "تلفن همراه وارد شده تکراری می باشد");
+						break;
+					case RegisterUserResult.Success:
+						TempData[SuccessMessage] = "ثبت نام شما با موفقیت انجام شد";
+						TempData[InfoMessage] = "کد تایید تلفن همراه برای شما ارسال شد";
+						return RedirectToAction("Login");
+				}
+			}
 
-        [HttpPost("register"), ValidateAntiForgeryToken]
-        public async Task<IActionResult> Register(RegisterUserDTO register)
-        {
-            if (ModelState.IsValid)
-            {
-                var res = await _userService.RegisterUser(register);
-                switch (res)
-                {
-                    case RegisterUserResult.MobileExists:
-                        TempData["ErrorMessage"] = "تلفن همراه وارد شده تکراری می باشد";
-                        ModelState.AddModelError("Mobile", "تلفن همراه وارد شده تکراری می باشد");
-                        break;
-                    case RegisterUserResult.Success:
-                        TempData["SuccessMessage"] = "ثبت نام شما با موفقیت انجام شد";
-                        TempData["InfoMessage"] = "کد تایید تلفن همراه برای شما ارسال شد";
-                        return RedirectToAction("Login");
-                }
-            }
+			return View(register);
+		}
 
-            return View(register);
-        }
+		#endregion
 
-        #endregion
+		#region login
 
-        #region login
+		public IActionResult Login()
+		{
+			return View();
+		}
 
-        public IActionResult Login()
-        {
-            return View();
-        }
-
-        #endregion
-    }
+		#endregion
+	}
 }

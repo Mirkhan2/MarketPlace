@@ -4,6 +4,7 @@ using MarketPlace.Application.Services.Interfaces;
 using MarketPlace.DataLayer.DTOs.Account;
 using MarketPlace.DataLayerr.Entities.Account;
 using MarketPlace.DataLayerr.Repository;
+using Microsoft.EntityFrameworkCore;
 
 namespace MarketPlace.Application.Services.Implementations
 {
@@ -12,15 +13,18 @@ namespace MarketPlace.Application.Services.Implementations
         #region constructor
 
         private readonly IGenericRepository<User> _userRepository;
+        private readonly IPasswordHelper _passwordHelper;
 
-        public UserService(IGenericRepository<User> userRepository)
+        public UserService(IGenericRepository<User> userRepository, IPasswordHelper passwordHelper)
         {
             _userRepository = userRepository;
+            _passwordHelper = passwordHelper;
         }
 
         #endregion
 
-        #region
+        #region account
+
         public async Task<RegisterUserResult> RegisterUser(RegisterUserDTO register)
         {
             if (!await IsUserExistsByMobileNumber(register.Mobile))
@@ -46,6 +50,7 @@ namespace MarketPlace.Application.Services.Implementations
         {
             return await _userRepository.GetQuery().AsQueryable().AnyAsync(s => s.Mobile == mobile);
         }
+
         #endregion
 
         #region dispose
@@ -53,11 +58,6 @@ namespace MarketPlace.Application.Services.Implementations
         public async ValueTask DisposeAsync()
         {
             await _userRepository.DisposeAsync();
-        }
-
-        public Task<bool> IsUserExistsByMobileNumber(string mobile)
-        {
-            throw new System.NotImplementedException();
         }
 
         #endregion

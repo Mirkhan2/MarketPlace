@@ -4,9 +4,10 @@ namespace MarketPlace.Web.Controllers
 {
 	public class SiteBaseController : Controller
 	{
-		public IActionResult Index()
-		{
-			return View();
-		}
-	}
+		protected string ErrorMessage = "ErrorMessage";
+        protected string SuccessMessage = "SuccessMessage";
+        protected string InfoMessage = "InfoMessage";
+        protected string WarningMessage = "WarningMessage";
+
+    }
 }
