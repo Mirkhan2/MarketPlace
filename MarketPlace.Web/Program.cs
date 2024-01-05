@@ -9,7 +9,8 @@ using Microsoft.Extensions.Logging;
 
 namespace MarketPlace.Web
 {
-	public class Program
+	
+    public class Program
 	{
 		public static void Main(string[] args)
 		{
@@ -23,4 +24,5 @@ namespace MarketPlace.Web
 					webBuilder.UseStartup<Startup>();
 				});
 	}
+
 }

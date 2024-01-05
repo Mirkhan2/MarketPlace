@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
-using MarketPlace.DataLayer.DTOs.Account;
+using MarketPlace.DataLayerr.DTOs.Account;
 
 namespace MarketPlace.Application.Services.Interfaces
 {

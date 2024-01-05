@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations;
 
-namespace MarketPlace.DataLayer.DTOs.Account
+
+namespace MarketPlace.DataLayerr.DTOs.Account
 {
     public class RegisterUserDTO
     {

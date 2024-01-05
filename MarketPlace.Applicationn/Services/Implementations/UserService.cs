@@ -1,7 +1,8 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using MarketPlace.Application.Services.Interfaces;
-using MarketPlace.DataLayer.DTOs.Account;
+using MarketPlace.DataLayerr.DTOs.Account;
 using MarketPlace.DataLayerr.Entities.Account;
 using MarketPlace.DataLayerr.Repository;
 using Microsoft.EntityFrameworkCore;
@@ -34,7 +35,10 @@ namespace MarketPlace.Application.Services.Implementations
                     FirstName = register.FirstName,
                     LastName = register.LastName,
                     Mobile = register.Mobile,
-                    Password = _passwordHelper.EncodePasswordMd5(register.Password)
+                    Password = _passwordHelper.EncodePasswordMd5(register.Password),
+                    MobileActiveCode = new Random().Next(10000, 999999).ToString(),
+                    EmailActiveCode = Guid.NewGuid().ToString("N")
+                    
                 };
 
                 await _userRepository.AddEntity(user);
@@ -59,6 +63,8 @@ namespace MarketPlace.Application.Services.Implementations
         {
             await _userRepository.DisposeAsync();
         }
+
+       
 
         #endregion
     }

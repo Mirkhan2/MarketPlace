@@ -8,28 +8,29 @@ using Microsoft.EntityFrameworkCore;
 
 namespace MarketPlace.DataLayerr.Context
 {
-    public class MarketPlaceDbContext : DbContext
-    {
-        public MarketPlaceDbContext(DbContextOptions<MarketPlaceDbContext> options) : base(options) { }
 
-        #region account
+	public class MarketPlaceDbContext : DbContext
+	{
+		public MarketPlaceDbContext(DbContextOptions<MarketPlaceDbContext> options) : base(options) { }
 
-        public DbSet<User> Users { get; set; }
+		#region account
 
-        #endregion
+		public DbSet<User> Users { get; set; }
 
-        #region on model creating
+		#endregion
 
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
-        {
-            foreach (var relationship in modelBuilder.Model.GetEntityTypes().SelectMany(s => s.GetForeignKeys()))
-            {
-                relationship.DeleteBehavior = DeleteBehavior.Cascade;
-            }
+		#region on model creating
 
-            base.OnModelCreating(modelBuilder);
-        }
+		protected override void OnModelCreating(ModelBuilder modelBuilder)
+		{
+			foreach (var relationship in modelBuilder.Model.GetEntityTypes().SelectMany(s => s.GetForeignKeys()))
+			{
+				relationship.DeleteBehavior = DeleteBehavior.Cascade;
+			}
 
-        #endregion
-    }
+			base.OnModelCreating(modelBuilder);
+		}
+
+		#endregion
+	}
 }

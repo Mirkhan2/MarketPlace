@@ -5,7 +5,15 @@
   </PropertyGroup>
 
   <ItemGroup>
+	  <PackageReference Include="Kavenegar" Version="1.2.4" />
     <ProjectReference Include="..\MarketPlace.DataLayerr\MarketPlace.DataLayerr.csproj" />
+	  <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
+	  
+	  
   </ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\MarketPlace.DataLayer\MarketPlace.DataLayer.csproj" />
+	</ItemGroup>
 
 </Project>

@@ -20,7 +20,7 @@ using Microsoft.Extensions.Hosting;
 
 namespace MarketPlace.Web
 {
-    public class Startup
+	public class Startup
 	{
 		public Startup(IConfiguration configuration)
 		{
@@ -32,18 +32,18 @@ namespace MarketPlace.Web
 		// This method gets called by the runtime. Use this method to add services to the container.
 		public void ConfigureServices(IServiceCollection services)
 		{
-            #region config services
+			#region config services
 
-            services.AddControllersWithViews();
-            services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
-            services.AddScoped<IUserService, UserService>();
-            services.AddScoped<IPasswordHelper, IPasswordHelper>();
+			services.AddControllersWithViews();
+			services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
+			services.AddScoped<IUserService, UserService>();
+			services.AddScoped<IPasswordHelper, IPasswordHelper>();
 
-            #endregion
+			#endregion
 
-            #region config database
+			#region config database
 
-            services.AddDbContext<MarketPlaceDbContext>(options =>
+			services.AddDbContext<MarketPlaceDbContext>(options =>
 			{
 				options.UseSqlServer(Configuration.GetConnectionString("MarketPlaceConnection"));
 			});
@@ -97,12 +97,20 @@ namespace MarketPlace.Web
 			app.UseAuthentication();
 			app.UseAuthorization();
 
+			//app.UseEndpoints(endpoints =>
+			//{
+			//	endpoints.MapControllerRoute(
+			//		 name: "areas",
+			//		 pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}"
+			//	   );
+
 			app.UseEndpoints(endpoints =>
-			{
-				endpoints.MapControllerRoute(
-					name: "default",
-					pattern: "{controller=Home}/{action=Index}/{id?}");
-			});
+		{
+			endpoints.MapControllerRoute(
+				name: "default",
+				pattern: "{controller=Home}/{action=Index}/{id?}");
+		});
 		}
+
 	}
 }
