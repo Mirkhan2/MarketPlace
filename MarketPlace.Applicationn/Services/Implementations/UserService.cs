@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 using MarketPlace.Application.Services.Interfaces;
+using MarketPlace.DataLayerr.DTO.Account;
 using MarketPlace.DataLayerr.DTOs.Account;
 using MarketPlace.DataLayerr.Entities.Account;
 using MarketPlace.DataLayerr.Repository;
@@ -54,6 +55,29 @@ namespace MarketPlace.Application.Services.Implementations
         {
             return await _userRepository.GetQuery().AsQueryable().AnyAsync(s => s.Mobile == mobile);
         }
+        public async Task<LoginUserResult> GetUserForLogin(LoginUserDTO login)
+        {
+            var user = await _userRepository.GetQuery().AsQueryable()
+                 .SingleOrDefaultAsync(s => s.Mobile == login.Mobile);
+            if (user == null)
+            {
+                return LoginUserResult.NotFound;
+            }
+            if (!user.IsMobileActive)
+            {
+                return LoginUserResult.NotActivated;
+            }
+            if (user.Password != _passwordHelper.EncodePasswordMd5(login.Password))
+            {
+                return LoginUserResult.NotFound;
+            }
+            return LoginUserResult.Success;
+        }
+
+        public async Task<User> GetUserByMobile(string mobile)
+        {
+            return await _userRepository.GetQuery().AsQueryable().SingleOrDefaultAsync(s => s.Mobile == mobile);
+        }
 
         #endregion
 
@@ -64,7 +88,10 @@ namespace MarketPlace.Application.Services.Implementations
             await _userRepository.DisposeAsync();
         }
 
-       
+      
+
+
+
 
         #endregion
     }

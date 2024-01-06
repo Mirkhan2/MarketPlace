@@ -1,68 +1,112 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Security.Claims;
+using System.Threading.Tasks;
 using MarketPlace.Application.Services.Implementations;
 using MarketPlace.Application.Services.Interfaces;
+using MarketPlace.DataLayerr.DTO.Account;
 using MarketPlace.DataLayerr.DTOs.Account;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
 
 namespace MarketPlace.Web.Controllers
 {
-	public class AccountController : SiteBaseController
-	{
-		#region constructor
+    public class AccountController : SiteBaseController
+    {
+        #region constructor
 
-		private readonly IUserService _userService;
+        private readonly IUserService _userService;
 
-		public AccountController(IUserService userService)
-		{
-			_userService = userService;
-		}
+        public AccountController(IUserService userService)
+        {
+            _userService = userService;
+        }
 
-		#endregion
 
-		#region register
+        #region register
 
-		[HttpGet("register")]
-		public IActionResult Register()
-		{
-			
-			return View();
-		}
+        [HttpGet("register")]
+        public IActionResult Register()
+        {
+            if (User.Identity.IsAuthenticated) return Redirect("/");
+            return View();
+        }
 
-		[HttpPost("register"), ValidateAntiForgeryToken]
-		public async Task<IActionResult> Register(RegisterUserDTO register)
-		{
-			if (ModelState.IsValid)
-			{
-				var res = await _userService.RegisterUser(register);
-				switch (res)
-				{
-					case RegisterUserResult.MobileExists:
-						TempData[ErrorMessage] = "تلفن همراه وارد شده تکراری می باشد";
-						ModelState.AddModelError("Mobile", "تلفن همراه وارد شده تکراری می باشد");
-						break;
-					case RegisterUserResult.Success:
-						TempData[SuccessMessage] = "ثبت نام شما با موفقیت انجام شد";
-						TempData[InfoMessage] = "کد تایید تلفن همراه برای شما ارسال شد";
-						return RedirectToAction("Login");
-				}
-			}
+        [HttpPost("register"), ValidateAntiForgeryToken]
+        public async Task<IActionResult> Register(RegisterUserDTO register)
+        {
+            if (ModelState.IsValid)
+            {
+                var res = await _userService.RegisterUser(register);
+                switch (res)
+                {
+                    case RegisterUserResult.MobileExists:
+                        TempData[ErrorMessage] = "تلفن همراه وارد شده تکراری می باشد";
+                        ModelState.AddModelError("Mobile", "تلفن همراه وارد شده تکراری می باشد");
+                        break;
+                    case RegisterUserResult.Success:
+                        TempData[SuccessMessage] = "ثبت نام شما با موفقیت انجام شد";
+                        TempData[InfoMessage] = "کد تایید تلفن همراه برای شما ارسال شد";
+                        return RedirectToAction("Login");
+                }
+            }
 
-			return View(register);
-		}
+            return View(register);
+        }
 
-		#endregion
+        #endregion
 
-		#region login
+        #region login
 
-		[HttpGet("Login")]
-		public IActionResult Login()
-		{
-			return View();
-		}
-		public async Task<IActionResult> Loginn()
-		{
-			return View();
-		}
-		#endregion
-	}
+        [HttpGet("login")]
+        public IActionResult Login()
+        {
+            if (User.Identity.IsAuthenticated) return Redirect("/");
+            return View();
+        }
+
+        [HttpPost("login"), ValidateAntiForgeryToken]
+        public async Task<IActionResult> Login(LoginUserDTO login)
+        {
+            if (ModelState.IsValid)
+            {
+                var res = await _userService.GetUserForLogin(login);
+                switch (res)
+                {
+                    case LoginUserResult.NotFound:
+                        TempData[ErrorMessage] = "کاربر مورد نظر یافت نشد";
+                        break;
+                    case LoginUserResult.NotActivated:
+                        TempData[WarningMessage] = "حساب کاربری شما فعال نشده است";
+                        break;
+                    case LoginUserResult.Success:
+
+                        var user = await _userService.GetUserByMobile(login.Mobile);
+
+                        var claims = new List<Claim>
+                        {
+                            new Claim(ClaimTypes.Name,user.Mobile),
+                            new Claim(ClaimTypes.NameIdentifier,user.Id.ToString())
+                        };
+
+                        var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+                        var principal = new ClaimsPrincipal(identity);
+                        var properties = new AuthenticationProperties
+                        {
+                            IsPersistent = login.RememberMe
+                        };
+
+                        await HttpContext.SignInAsync(principal, properties);
+
+                        TempData[SuccessMessage] = "عملیات ورود با موفقیت انجام شد";
+                        return Redirect("/");
+
+                }
+            }
+
+
+            return View(login);
+        }
+        #endregion
+    }
 }

@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Threading.Tasks;
+using MarketPlace.DataLayerr.DTO.Account;
 using MarketPlace.DataLayerr.DTOs.Account;
+using MarketPlace.DataLayerr.Entities.Account;
 
 namespace MarketPlace.Application.Services.Interfaces
 {
@@ -10,6 +12,8 @@ namespace MarketPlace.Application.Services.Interfaces
 
         Task<RegisterUserResult> RegisterUser(RegisterUserDTO register);
         Task<bool> IsUserExistsByMobileNumber(string mobile);
+        Task<LoginUserResult> GetUserForLogin(LoginUserDTO login);
+        Task<User> GetUserByMobile(string mobile);
 
 
 
