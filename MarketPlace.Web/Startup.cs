@@ -1,26 +1,21 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text.Encodings.Web;
 using System.Text.Unicode;
-using System.Threading.Tasks;
 using MarketPlace.Application.Services.Implementations;
 using MarketPlace.Application.Services.Interfaces;
 using MarketPlace.DataLayerr.Context;
-using MarketPlace.DataLayerr.Entities.Account;
 using MarketPlace.DataLayerr.Repository;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-
+using GoogleReCaptcha.V3;
 namespace MarketPlace.Web
 {
-	public class Startup
+    public class Startup
 	{
 		public Startup(IConfiguration configuration)
 		{
@@ -38,12 +33,13 @@ namespace MarketPlace.Web
 			services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
 			services.AddScoped<IUserService, UserService>();
 			services.AddScoped<IPasswordHelper, IPasswordHelper>();
+            services.AddHttpClient<ICaptchaValidator, GoogleReCaptchaValidator>();
 
-			#endregion
+            #endregion
 
-			#region config database
+            #region config database
 
-			services.AddDbContext<MarketPlaceDbContext>(options =>
+            services.AddDbContext<MarketPlaceDbContext>(options =>
 			{
 				options.UseSqlServer(Configuration.GetConnectionString("MarketPlaceConnection"));
 			});

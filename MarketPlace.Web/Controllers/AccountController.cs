@@ -22,7 +22,7 @@ namespace MarketPlace.Web.Controllers
             _userService = userService;
         }
 
-
+        #endregion
         #region register
 
         [HttpGet("register")]
@@ -108,5 +108,19 @@ namespace MarketPlace.Web.Controllers
             return View(login);
         }
         #endregion
+
+
+        #region log out
+
+        [HttpGet("log-out")]
+        public async Task<IActionResult> LogOut()
+        {
+            await HttpContext.SignOutAsync();
+
+            return Redirect("/");
+        }
+
+        #endregion
+
     }
 }

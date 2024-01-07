@@ -5,8 +5,8 @@
   </PropertyGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\MarketPlace.Applicationn\MarketPlace.Applicationn.csproj" />
-		<ProjectReference Include="..\MarketPlace.DataLayerr\MarketPlace.DataLayerr.csproj" />
+		<ProjectReference Include=".MarketPlace.Applicationn.csproj" />
+		<ProjectReference Include=".MarketPlace.DataLayerr.csproj" />
 	</ItemGroup>
 	
   <ItemGroup>
