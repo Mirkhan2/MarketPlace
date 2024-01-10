@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using GoogleReCaptcha.V3;
+
 namespace MarketPlace.Web
 {
     public class Startup
@@ -33,7 +33,7 @@ namespace MarketPlace.Web
 			services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
 			services.AddScoped<IUserService, UserService>();
 			services.AddScoped<IPasswordHelper, IPasswordHelper>();
-            services.AddHttpClient<ICaptchaValidator, GoogleReCaptchaValidator>();
+          //  services.AddHttpClient<ICaptchaValidator, GoogleReCaptchaValidator>();
 
             #endregion
 

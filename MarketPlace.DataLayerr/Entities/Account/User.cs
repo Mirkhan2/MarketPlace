@@ -14,7 +14,7 @@ namespace MarketPlace.DataLayerr.Entities.Account
 		[EmailAddress(ErrorMessage = "ایمیل وارد شده معتبر نمی باشد")]
 		[DataType(DataType.EmailAddress)]
 		public string Email { get; set; }
-        public int IDD { get; set; }
+       
 
         [Required(ErrorMessage = "لطفا {0} را وارد کنید")]
 		[MaxLength(100, ErrorMessage = "{0} نمی تواند بیشتر از {1} کاراکتر باشد")]

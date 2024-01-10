@@ -1,13 +1,12 @@
 ﻿using System.Collections.Generic;
 using System.Security.Claims;
 using System.Threading.Tasks;
-using MarketPlace.Application.Services.Implementations;
-using MarketPlace.Application.Services.Interfaces;
-using MarketPlace.DataLayerr.DTO.Account;
-using MarketPlace.DataLayerr.DTOs.Account;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
+using MarketPlace.Application.Services.Interfaces;
+using MarketPlace.DataLayerr.DTOs.Account;
+using MarketPlace.DataLayerr.DTO.Account;
 
 namespace MarketPlace.Web.Controllers
 {
