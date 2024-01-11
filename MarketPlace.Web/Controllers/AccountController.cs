@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
 using MarketPlace.Application.Services.Interfaces;
-using MarketPlace.DataLayerr.DTOs.Account;
 using MarketPlace.DataLayerr.DTO.Account;
 
 namespace MarketPlace.Web.Controllers

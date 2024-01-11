@@ -3,7 +3,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using MarketPlace.Application.Services.Interfaces;
 using MarketPlace.DataLayerr.DTO.Account;
-using MarketPlace.DataLayerr.DTOs.Account;
 using MarketPlace.DataLayerr.Entities.Account;
 using MarketPlace.DataLayerr.Repository;
 using Microsoft.EntityFrameworkCore;
@@ -15,12 +14,10 @@ namespace MarketPlace.Application.Services.Implementations
         #region constructor
 
         private readonly IGenericRepository<User> _userRepository;
-        private readonly IPasswordHelper _passwordHelper;
 
-        public UserService(IGenericRepository<User> userRepository, IPasswordHelper passwordHelper)
+        public UserService(IGenericRepository<User> userRepository )
         {
             _userRepository = userRepository;
-            _passwordHelper = passwordHelper;
         }
 
         #endregion
@@ -36,7 +33,7 @@ namespace MarketPlace.Application.Services.Implementations
                     FirstName = register.FirstName,
                     LastName = register.LastName,
                     Mobile = register.Mobile,
-                    Password = _passwordHelper.EncodePasswordMd5(register.Password),
+                    Password = register.Password,
                     MobileActiveCode = new Random().Next(10000, 999999).ToString(),
                     EmailActiveCode = Guid.NewGuid().ToString("N")
                     
@@ -67,7 +64,7 @@ namespace MarketPlace.Application.Services.Implementations
             {
                 return LoginUserResult.NotActivated;
             }
-            if (user.Password != _passwordHelper.EncodePasswordMd5(login.Password))
+            if (user.Password != login.Password)
             {
                 return LoginUserResult.NotFound;
             }
@@ -87,13 +84,6 @@ namespace MarketPlace.Application.Services.Implementations
         {
             await _userRepository.DisposeAsync();
         }
-
-        
-
-
-
-
-
 
         #endregion
     }

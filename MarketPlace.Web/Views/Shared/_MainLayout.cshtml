@@ -1,5 +1,4 @@
-﻿
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html class="no-js" lang="fa" dir="rtl">
 <head>
     <meta charset="utf-8">
@@ -7,7 +6,7 @@
     <title> فروشگاه ساز | @ViewData["Title"] </title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <partial name="_HeaderReferences" />
+    <partial name="_HeaderRefrences" />
     @RenderSection("styles", false)
 </head>
 
@@ -15,9 +14,9 @@
     @await Component.InvokeAsync("SiteHeader")
     @RenderBody()
     @await Component.InvokeAsync("SiteFooter")
-    <partial name="_FooterReferences" />
+    <partial name="_FooterRefrences" />
     @RenderSection("scripts", false)
-    <partial name="_SiteMessages" />
+    <partial name="_SiteMessage" />
 </body>
 
 </html>

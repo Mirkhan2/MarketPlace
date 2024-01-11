@@ -32,7 +32,7 @@ namespace MarketPlace.Web
 			services.AddControllersWithViews();
 			services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
 			services.AddScoped<IUserService, UserService>();
-			services.AddScoped<IPasswordHelper, IPasswordHelper>();
+			//services.AddScoped<IPasswordHelper, IPasswordHelper>();
           //  services.AddHttpClient<ICaptchaValidator, GoogleReCaptchaValidator>();
 
             #endregion

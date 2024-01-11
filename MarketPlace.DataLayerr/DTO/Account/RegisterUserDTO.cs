@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
 
-namespace MarketPlace.DataLayerr.DTOs.Account
+namespace MarketPlace.DataLayerr.DTO.Account
 {
     public class RegisterUserDTO
     {
