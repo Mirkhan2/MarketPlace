@@ -14,10 +14,12 @@ namespace MarketPlace.Application.Services.Implementations
         #region constructor
 
         private readonly IGenericRepository<User> _userRepository;
+        private readonly IPasswordHelper _passwordHelper;
 
-        public UserService(IGenericRepository<User> userRepository )
+        public UserService(IGenericRepository<User> userRepository, IPasswordHelper passwordHelper)
         {
             _userRepository = userRepository;
+            _passwordHelper = passwordHelper;
         }
 
         #endregion
@@ -33,7 +35,7 @@ namespace MarketPlace.Application.Services.Implementations
                     FirstName = register.FirstName,
                     LastName = register.LastName,
                     Mobile = register.Mobile,
-                    Password = register.Password,
+                    Password = _passwordHelper.EncodePasswordMd5(register.Password),
                     MobileActiveCode = new Random().Next(10000, 999999).ToString(),
                     EmailActiveCode = Guid.NewGuid().ToString("N")
                     
@@ -54,20 +56,10 @@ namespace MarketPlace.Application.Services.Implementations
         }
         public async Task<LoginUserResult> GetUserForLogin(LoginUserDTO login)
         {
-            var user = await _userRepository.GetQuery().AsQueryable()
-                 .SingleOrDefaultAsync(s => s.Mobile == login.Mobile);
-            if (user == null)
-            {
-                return LoginUserResult.NotFound;
-            }
-            if (!user.IsMobileActive)
-            {
-                return LoginUserResult.NotActivated;
-            }
-            if (user.Password != login.Password)
-            {
-                return LoginUserResult.NotFound;
-            }
+            var user = await _userRepository.GetQuery().AsQueryable().SingleOrDefaultAsync(s => s.Mobile == login.Mobile);
+            if (user == null) return LoginUserResult.NotFound;
+            if (!user.IsMobileActive) return LoginUserResult.NotActivated;
+            if (user.Password != _passwordHelper.EncodePasswordMd5(login.Password)) return LoginUserResult.NotFound;
             return LoginUserResult.Success;
         }
 

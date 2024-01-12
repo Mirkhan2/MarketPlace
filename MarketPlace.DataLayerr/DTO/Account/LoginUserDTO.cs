@@ -1,11 +1,11 @@
 ﻿
 using System.ComponentModel.DataAnnotations;
-
+using MarketPlace.DataLayerr.DTO.Site;
 
 namespace MarketPlace.DataLayerr.DTO.Account
 {
-	public class LoginUserDTO
-	{
+	public class LoginUserDTO : CaptchaViewModel
+    {
 		[Display(Name = "تلفن همراه")]
 		[Required(ErrorMessage = "لطفا {0} را وارد کنید")]
 		[MaxLength(200, ErrorMessage = "{0} نمی تواند بیشتر از {1} کاراکتر باشد")]
@@ -17,6 +17,7 @@ namespace MarketPlace.DataLayerr.DTO.Account
 		[MaxLength(200, ErrorMessage = "{0} نمی تواند بیشتر از {1} کاراکتر باشد")]
 		public string Password { get; set; }
         public bool RememberMe { get; set; }
+        public string Captcha { get; set; }
     }
 
 	public enum LoginUserResult

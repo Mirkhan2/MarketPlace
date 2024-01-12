@@ -32,7 +32,7 @@ namespace MarketPlace.Web
 			services.AddControllersWithViews();
 			services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
 			services.AddScoped<IUserService, UserService>();
-			//services.AddScoped<IPasswordHelper, IPasswordHelper>();
+			services.AddScoped<IPasswordHelper, IPasswordHelper>();
           //  services.AddHttpClient<ICaptchaValidator, GoogleReCaptchaValidator>();
 
             #endregion
@@ -47,6 +47,7 @@ namespace MarketPlace.Web
 			#endregion
 
 			#region authentication
+
 			services.AddAuthentication(options =>
 			{
 				options.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
@@ -61,10 +62,9 @@ namespace MarketPlace.Web
 
 			#endregion
 
-			#region
+			#region html encoder
 
-			services.AddSingleton<HtmlEncoder>(
-				HtmlEncoder.Create(new[]
+			services.AddSingleton<HtmlEncoder>(HtmlEncoder.Create(new[]
 				{
 					UnicodeRanges.BasicLatin , UnicodeRanges.Arabic
 				}));

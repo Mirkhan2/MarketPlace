@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
 using MarketPlace.Application.Services.Interfaces;
 using MarketPlace.DataLayerr.DTO.Account;
+using GoogleReCaptcha.V3.Interface;
 
 namespace MarketPlace.Web.Controllers
 {
@@ -14,13 +15,16 @@ namespace MarketPlace.Web.Controllers
         #region constructor
 
         private readonly IUserService _userService;
+        private readonly ICaptchaValidator _captchaValidator;
 
-        public AccountController(IUserService userService)
+        public AccountController(IUserService userService, ICaptchaValidator captchaValidator)
         {
             _userService = userService;
+            _captchaValidator = captchaValidator;
         }
 
         #endregion
+
         #region register
 
         [HttpGet("register")]
@@ -33,6 +37,12 @@ namespace MarketPlace.Web.Controllers
         [HttpPost("register"), ValidateAntiForgeryToken]
         public async Task<IActionResult> Register(RegisterUserDTO register)
         {
+            if (!await _captchaValidator.IsCaptchaPassedAsync(register.Captcha))
+            {
+                TempData[ErrorMessage] = "کد کپچای شما تایید نشد";
+                return View(register);
+            }
+
             if (ModelState.IsValid)
             {
                 var res = await _userService.RegisterUser(register);
@@ -66,6 +76,13 @@ namespace MarketPlace.Web.Controllers
         [HttpPost("login"), ValidateAntiForgeryToken]
         public async Task<IActionResult> Login(LoginUserDTO login)
         {
+            if (!await _captchaValidator.IsCaptchaPassedAsync(login.Captcha))
+            {
+                TempData[ErrorMessage] = "کد کپچای شما تایید نشد";
+                return View(login);
+            }
+
+
             if (ModelState.IsValid)
             {
                 var res = await _userService.GetUserForLogin(login);
@@ -98,15 +115,14 @@ namespace MarketPlace.Web.Controllers
 
                         TempData[SuccessMessage] = "عملیات ورود با موفقیت انجام شد";
                         return Redirect("/");
-
                 }
             }
 
 
             return View(login);
         }
-        #endregion
 
+        #endregion
 
         #region log out
 
@@ -119,6 +135,5 @@ namespace MarketPlace.Web.Controllers
         }
 
         #endregion
-
     }
 }
