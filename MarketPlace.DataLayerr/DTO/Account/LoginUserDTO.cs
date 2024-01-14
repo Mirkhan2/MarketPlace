@@ -1,5 +1,4 @@
-﻿
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using MarketPlace.DataLayerr.DTO.Site;
 
 namespace MarketPlace.DataLayerr.DTO.Account

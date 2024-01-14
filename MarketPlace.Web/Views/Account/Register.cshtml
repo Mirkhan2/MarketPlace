@@ -6,6 +6,7 @@
 @section scripts
     {
     <partial name="_JqueryValidators" />
+    <partial name="_CaptchaScripts" />
 }
 
 <div class="breadcrumbs_area">
@@ -31,6 +32,7 @@
                 <div class="account_form register">
                     <h2>ثبت نام</h2>
                     <form method="post" asp-controller="Account" asp-action="Register">
+                        <partial name="_CaptchaInput" />
                         <p>
                             <label>نام <span>*</span></label>
                             <input type="text" asp-for="FirstName">

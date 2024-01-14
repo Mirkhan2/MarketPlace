@@ -5,6 +5,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Include="..\MarketPlace.DataLayerr\DTO\Site\CaptchaViewModel.cs" Link="CaptchaViewModel.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
 	  <PackageReference Include="Kavenegar" Version="1.2.4" />
 	  <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
 	  <PackageReference Include="Microsoft.AspNetCore.Http" Version="2.2.2" />
