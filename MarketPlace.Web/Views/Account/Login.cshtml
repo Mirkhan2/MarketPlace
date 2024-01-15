@@ -2,7 +2,8 @@
 @model MarketPlace.DataLayerr.DTO.Account.LoginUserDTO
 
 @{
-    ViewData["Title"] = "VOrod be hesabe karbari";
+    ViewData["Title"] = "ورودM به حساب کاربری";
+
 }
 
 @section scripts
@@ -45,6 +46,9 @@
                             <input type="password"asp-for="Password">
                             <span class="text-danger" asp-validation-for="Password"></span>
 
+                        </p>
+                        <p>
+                            <a asp-area="" asp-controller="Account" asp-action="ForgotPassword">کلمه ی عبور خود را فراموش کرده ام</a>
                         </p>
                         <div class="login_submit">
                             <button type="submit">Vorod </button>
