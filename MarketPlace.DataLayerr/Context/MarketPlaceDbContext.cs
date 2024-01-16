@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using MarketPlace.DataLayerr.Entities.Account;
+using MarketPlace.DataLayerr.Entities.Commen.Site;
 using Microsoft.EntityFrameworkCore;
 
 namespace MarketPlace.DataLayerr.Context
@@ -17,11 +18,16 @@ namespace MarketPlace.DataLayerr.Context
 
 		public DbSet<User> Users { get; set; }
 
-		#endregion
+        #endregion
+        #region site
 
-		#region on model creating
+        public DbSet<SiteSetting> SiteSettings { get; set; }
 
-		protected override void OnModelCreating(ModelBuilder modelBuilder)
+        #endregion
+
+        #region on model creating
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
 		{
 			foreach (var relationship in modelBuilder.Model.GetEntityTypes().SelectMany(s => s.GetForeignKeys()))
 			{

@@ -5,6 +5,7 @@ using GoogleReCaptcha.V3;
 using GoogleReCaptcha.V3.Interface;
 using MarketPlace.Application.Services.Implementations;
 using MarketPlace.Application.Services.Interfaces;
+using MarketPlace.Applicationn.Services.Implementations;
 using MarketPlace.DataLayerr.Context;
 using MarketPlace.DataLayerr.Repository;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -34,8 +35,10 @@ namespace MarketPlace.Web
 			services.AddControllersWithViews();
 			services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
 			services.AddScoped<IUserService, UserService>();
-			services.AddScoped<IPasswordHelper, IPasswordHelper>();
+            services.AddScoped<SiteService, SiteService>();
+            services.AddScoped<IPasswordHelper, IPasswordHelper>();
             services.AddHttpClient<ICaptchaValidator, GoogleReCaptchaValidator>();
+		
 
             #endregion
 

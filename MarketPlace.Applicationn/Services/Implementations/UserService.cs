@@ -5,6 +5,7 @@ using MarketPlace.Application.Services.Interfaces;
 using MarketPlace.DataLayerr.DTO.Account;
 using MarketPlace.DataLayerr.Entities.Account;
 using MarketPlace.DataLayerr.Repository;
+using Microsoft.Data.SqlClient.Server;
 using Microsoft.EntityFrameworkCore;
 
 namespace MarketPlace.Application.Services.Implementations
@@ -67,6 +68,19 @@ namespace MarketPlace.Application.Services.Implementations
         {
             return await _userRepository.GetQuery().AsQueryable().SingleOrDefaultAsync(s => s.Mobile == mobile);
         }
+        public async Task<ForgotPasswordResult> RecoverUserPassword(ForgotPasswordDTO forgot)
+        {
+
+            var user = await _userRepository.GetQuery().SingleOrDefaultAsync(s => s.Mobile == forgot.Mobile);
+            if (user == null) return ForgotPasswordResult.NotFound;
+            var newPassword = new Random().Next(1000000, 999999999).ToString();
+            user.Password = _passwordHelper.EncodePasswordMd5(newPassword);
+            _userRepository.EditEntity(user);
+            // todo: send new password to user with sms
+            await _userRepository.SaveChanges();
+
+            return ForgotPasswordResult.Success;
+        }
 
         #endregion
 
@@ -77,18 +91,7 @@ namespace MarketPlace.Application.Services.Implementations
             await _userRepository.DisposeAsync();
         }
 
-        public async Task<ForgotPasswordResult> RecoverUserPassword(ForgotPasswordDTO forget)
-        {
-            var user = await _userRepository.GetQuery().SingleOrDefaultAsync(s => s.Mobile == forgot.Mobile);   
-            if(user == null ) return ForgotPasswordResult.NotFound;
-            var newPassword = new Random().Next(10000000,999999).ToString();
-            user.Password = _passwordHelper.EncodePasswordMd5(newPassword);
-            _userRepository.EditEntity(user);
-            //todo send new pass to user with sms
-            await _userRepository.SaveChanges();
-            return ForgotPasswordResult.Success;
-        }
-
+       
         #endregion
     }
 }
