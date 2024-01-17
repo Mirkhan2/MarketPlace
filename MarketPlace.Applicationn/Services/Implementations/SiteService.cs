@@ -4,8 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using MarketPlace.Applicationn.Services.Interfaces;
-using MarketPlace.DataLayerr.Entities.Commen.Site;
+using MarketPlace.DataLayerr.Entities.Site;
 using MarketPlace.DataLayerr.Repository;
+using Microsoft.EntityFrameworkCore;
 
 namespace MarketPlace.Applicationn.Services.Implementations
 {
@@ -23,6 +24,15 @@ namespace MarketPlace.Applicationn.Services.Implementations
         {
            await _siteSettingRepository.DisposeAsync();
         }
+        #endregion
+        #region site settings
+
+        public async Task<SiteSetting> GetDefaultSiteSetting()
+        {
+            return await _siteSettingRepository.GetQuery().AsQueryable()
+                .SingleOrDefaultAsync(s => s.IsDefault && !s.IsDelete);
+        }
+
         #endregion
     }
 }

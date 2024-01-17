@@ -1,8 +1,7 @@
-﻿
+﻿using System.ComponentModel.DataAnnotations;
+using MarketPlace.DataLayerr.Entities.Commen;
 
-using System.ComponentModel.DataAnnotations;
-
-namespace MarketPlace.DataLayerr.Entities.Commen.Site
+namespace MarketPlace.DataLayerr.Entities.Site
 {
     public class SiteSetting : BaseEntity
     {

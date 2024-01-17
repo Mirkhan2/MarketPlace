@@ -3,9 +3,8 @@ using System.Text.Encodings.Web;
 using System.Text.Unicode;
 using GoogleReCaptcha.V3;
 using GoogleReCaptcha.V3.Interface;
-using MarketPlace.Application.Services.Implementations;
-using MarketPlace.Application.Services.Interfaces;
 using MarketPlace.Applicationn.Services.Implementations;
+using MarketPlace.Applicationn.Services.Interfaces;
 using MarketPlace.DataLayerr.Context;
 using MarketPlace.DataLayerr.Repository;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -20,12 +19,12 @@ namespace MarketPlace.Web
 {
     public class Startup
 	{
-		public Startup(IConfiguration configuration)
-		{
-			Configuration = configuration;
-		}
+        public Startup(IConfiguration configuration)
+        {
+            Configuration = configuration;
+        }
 
-		public IConfiguration Configuration { get; }
+        public IConfiguration Configuration { get; }
 
 		// This method gets called by the runtime. Use this method to add services to the container.
 		public void ConfigureServices(IServiceCollection services)
@@ -35,7 +34,7 @@ namespace MarketPlace.Web
 			services.AddControllersWithViews();
 			services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
 			services.AddScoped<IUserService, UserService>();
-            services.AddScoped<SiteService, SiteService>();
+           services.AddScoped<ISiteService, SiteService>();
             services.AddScoped<IPasswordHelper, IPasswordHelper>();
             services.AddHttpClient<ICaptchaValidator, GoogleReCaptchaValidator>();
 		

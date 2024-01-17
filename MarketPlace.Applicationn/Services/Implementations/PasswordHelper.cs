@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Security.Cryptography;
 using System.Text;
-using MarketPlace.Application.Services.Interfaces;
+using MarketPlace.Applicationn.Services.Interfaces;
 
-namespace MarketPlace.Application.Services.Implementations
+namespace MarketPlace.Applicationn.Services.Implementations
 {
     public class PasswordHelper : IPasswordHelper
     {

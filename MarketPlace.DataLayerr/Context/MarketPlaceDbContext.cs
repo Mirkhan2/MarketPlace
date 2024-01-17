@@ -1,23 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Linq;
 using MarketPlace.DataLayerr.Entities.Account;
-using MarketPlace.DataLayerr.Entities.Commen.Site;
+using MarketPlace.DataLayerr.Entities.Site;
 using Microsoft.EntityFrameworkCore;
 
 namespace MarketPlace.DataLayerr.Context
 {
 
-	public class MarketPlaceDbContext : DbContext
+    public class MarketPlaceDbContext : DbContext
 	{
 		public MarketPlaceDbContext(DbContextOptions<MarketPlaceDbContext> options) : base(options) { }
 
 		#region account
 
 		public DbSet<User> Users { get; set; }
-
+      
         #endregion
         #region site
 

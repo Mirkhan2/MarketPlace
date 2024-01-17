@@ -1,14 +1,14 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
-using MarketPlace.Application.Services.Interfaces;
+using MarketPlace.Applicationn.Services.Interfaces;
 using MarketPlace.DataLayerr.DTO.Account;
 using MarketPlace.DataLayerr.Entities.Account;
 using MarketPlace.DataLayerr.Repository;
 using Microsoft.Data.SqlClient.Server;
 using Microsoft.EntityFrameworkCore;
 
-namespace MarketPlace.Application.Services.Implementations
+namespace MarketPlace.Applicationn.Services.Implementations
 {
     public class UserService : IUserService
     {

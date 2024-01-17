@@ -1,4 +1,4 @@
-﻿namespace MarketPlace.Application.Services.Interfaces
+﻿namespace MarketPlace.Applicationn.Services.Interfaces
 {
     public interface IPasswordHelper
     {

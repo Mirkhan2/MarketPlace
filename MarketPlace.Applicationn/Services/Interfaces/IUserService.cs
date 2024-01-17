@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using MarketPlace.DataLayerr.DTO.Account;
 using MarketPlace.DataLayerr.Entities.Account;
 
-namespace MarketPlace.Application.Services.Interfaces
+namespace MarketPlace.Applicationn.Services.Interfaces
 {
     public interface IUserService : IAsyncDisposable
     {
