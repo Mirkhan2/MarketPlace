@@ -16,12 +16,14 @@ namespace MarketPlace.Applicationn.Services.Implementations
 
         private readonly IGenericRepository<User> _userRepository;
         private readonly IPasswordHelper _passwordHelper;
+		private readonly ISmsService _smsService;
 
-        public UserService(IGenericRepository<User> userRepository, IPasswordHelper passwordHelper)
+		public UserService(IGenericRepository<User> userRepository, IPasswordHelper passwordHelper, ISmsService smsService)
         {
             _userRepository = userRepository;
             _passwordHelper = passwordHelper;
-        }
+			_smsService = smsService;
+		}
 
         #endregion
 
@@ -44,7 +46,7 @@ namespace MarketPlace.Applicationn.Services.Implementations
 
                 await _userRepository.AddEntity(user);
                 await _userRepository.SaveChanges();
-                // todo: send activation mobile code to user
+                await _smsService.SendVerificationSms(user.Mobile, user.MobileActiveCode );
                 return RegisterUserResult.Success;
             }
 
@@ -81,17 +83,31 @@ namespace MarketPlace.Applicationn.Services.Implementations
 
             return ForgotPasswordResult.Success;
         }
+		public async Task<bool> ActivateMobile(ActivateMobileDTO activate)
+		{
+			var user = await _userRepository.GetQuery().SingleOrDefaultAsync(s => s.Mobile == activate.Mobile); 
+            if (user != null)
+            {
+                user.IsEmailActive = true;
+                user.MobileActiveCode = new Random().Next(1000000, 999999999).ToString();
+                await _userRepository.SaveChanges();
+				return true;
+			}
+			return false;
+		}
 
-        #endregion
+		#endregion
 
-        #region dispose
+		#region dispose
 
-        public async ValueTask DisposeAsync()
+		public async ValueTask DisposeAsync()
         {
             await _userRepository.DisposeAsync();
         }
 
-       
-        #endregion
-    }
+		
+
+
+		#endregion
+	}
 }

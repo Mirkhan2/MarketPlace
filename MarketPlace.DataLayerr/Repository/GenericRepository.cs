@@ -29,6 +29,7 @@ namespace MarketPlace.DataLayerr.Repository
 		public async Task AddEntity(TEntity entity)
 		{
 			entity.CreateDate = DateTime.Now;
+			entity.LastUpdateDate = entity.CreateDate;
 			await _dbSet.AddAsync(entity);
 		}
 

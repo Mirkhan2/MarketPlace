@@ -37,6 +37,7 @@ namespace MarketPlace.Web
            services.AddScoped<ISiteService, SiteService>();
             services.AddScoped<IPasswordHelper, IPasswordHelper>();
             services.AddHttpClient<ICaptchaValidator, GoogleReCaptchaValidator>();
+			services.AddScoped<ISmsService, SmsService>();
 		
 
             #endregion

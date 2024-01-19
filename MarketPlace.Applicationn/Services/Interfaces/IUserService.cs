@@ -14,6 +14,7 @@ namespace MarketPlace.Applicationn.Services.Interfaces
         Task<LoginUserResult> GetUserForLogin(LoginUserDTO login);
         Task<User> GetUserByMobile(string mobile);
         Task<ForgotPasswordResult> RecoverUserPassword(ForgotPasswordDTO forget);
+        Task<bool> ActivateMobile(ActivateMobileDTO activate);
 
 
 
