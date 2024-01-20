@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using MarketPlace.DataLayerr.Entities.Account;
+using MarketPlace.DataLayerr.Entities.ContactUs;
 using MarketPlace.DataLayerr.Entities.Site;
 using Microsoft.EntityFrameworkCore;
 
@@ -19,6 +20,9 @@ namespace MarketPlace.DataLayerr.Context
 
         public DbSet<SiteSetting> SiteSettings { get; set; }
 
+        #endregion
+        #region contacts
+        public DbSet<ContactUs> ContactUs { get; set; }
         #endregion
 
         #region on model creating
