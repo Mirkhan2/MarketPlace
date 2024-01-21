@@ -1,56 +1,11 @@
-﻿@{
+﻿@using MarketPlace.DataLayerr.Entities.Site;
+@using MarketPlace.Applicationn.EntitiesExtensions
+@{
     ViewData["Title"] = "صفحه ی اصلی";
+    var banners = ViewBag.banners as List<SiteBanner>;
 }
 
-<!--slider area start-->
-<section class="slider_section mb-70">
-    <div class="slider_area owl-carousel">
-        <div class="single_slider d-flex align-items-center" data-bgimg="/img/slider/slider1.jpg">
-            <div class="container">
-                <div class="row">
-                    <div class="col-12">
-                        <div class="slider_content">
-                            <h1> طراحی زیبا</h1>
-                            <h2>تلویزیون 85 اینچ</h2>
-                            <p>پیشنهاد ویژه <span> 20% تخفیف </span> این هفته</p>
-                            <a class="button" href="shop.html">اکنون بخرید</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-        </div>
-        <div class="single_slider d-flex align-items-center" data-bgimg="/img/slider/slider2.jpg">
-            <div class="container">
-                <div class="row">
-                    <div class="col-12">
-                        <div class="slider_content">
-                            <h1>دوربین دوگانه</h1>
-                            <h2>کیفیت 20MP</h2>
-                            <p>پیشنهاد ویژه <span> 20% تخفیف </span> این هفته</p>
-                            <a class="button" href="shop.html">اکنون بخرید</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="single_slider d-flex align-items-center" data-bgimg="/img/slider/slider3.jpg">
-            <div class="container">
-                <div class="row">
-                    <div class="col-12">
-                        <div class="slider_content">
-                            <h1>عجله کنید!</h1>
-                            <h2>محصولات برتر سال</h2>
-                            <p>پیشنهاد ویژه <span> 20% تخفیف </span> این هفته</p>
-                            <a class="button" href="shop.html">اکنون بخرید</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-<!--slider area end-->
+@await Component.InvokeAsync("HomeSlider")
 <!--shipping area start-->
 <section class="shipping_area mb-70">
     <div class="container">
@@ -103,35 +58,30 @@
     </div>
 </section>
 <!--shipping area end-->
-<!--banner area start-->
-<div class="banner_area mb-40">
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-3 col-md-3">
-                <div class="single_banner mb-30">
-                    <div class="banner_thumb">
-                        <a href="shop.html"><img src="/img/bg/banner1.jpg" alt=""></a>
+@if (banners != null && banners.Any(s => s.BannerPlacement == BannerPlacement.Home_1))
+{
+    <!--banner area start-->
+    <div class="banner_area mb-40">
+        <div class="container">
+            <div class="row">
+
+                @foreach (var banner in banners.Where(s => s.BannerPlacement == BannerPlacement.Home_1))
+                {
+                    <div class="@banner.ColSize">
+                        <div class="single_banner mb-30">
+                            <div class="banner_thumb">
+                                <a href="@banner.Url">
+                                    <img src="@banner.GetBannerMainImageAddress()" style="width: 100%">
+                                </a>
+                            </div>
+                        </div>
                     </div>
-                </div>
-            </div>
-            <div class="col-lg-6 col-md-6">
-                <div class="single_banner mb-30">
-                    <div class="banner_thumb">
-                        <a href="shop.html"><img src="/img/bg/banner2.jpg" alt=""></a>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-3 col-md-3">
-                <div class="single_banner mb-30">
-                    <div class="banner_thumb">
-                        <a href="shop.html"><img src="/img/bg/banner3.jpg" alt=""></a>
-                    </div>
-                </div>
+                }
             </div>
         </div>
     </div>
-</div>
-<!--banner area end-->
+    <!--banner area end-->
+}
 <!--product area start-->
 <section class="product_area mb-46">
     <div class="container">
@@ -382,20 +332,18 @@
 <div class="banner_area mb-40">
     <div class="container">
         <div class="row">
-            <div class="col-lg-6 col-md-6">
-                <div class="single_banner mb-30">
-                    <div class="banner_thumb">
-                        <a href="shop.html"><img src="/img/bg/banner4.jpg" alt=""></a>
+            @foreach (var banner in banners.Where(s => s.BannerPlacement == BannerPlacement.Home_2))
+            {
+                <div class="@banner.ColSize">
+                    <div class="single_banner mb-30">
+                        <div class="banner_thumb">
+                            <a href="@banner.Url">
+                                <img src="@banner.GetBannerMainImageAddress()" style="width: 100%">
+                            </a>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="col-lg-6 col-md-6">
-                <div class="single_banner mb-30">
-                    <div class="banner_thumb">
-                        <a href="shop.html"><img src="/img/bg/banner5.jpg" alt=""></a>
-                    </div>
-                </div>
-            </div>
+            }
         </div>
     </div>
 </div>
@@ -996,20 +944,18 @@
 <div class="banner_area mb-40">
     <div class="container">
         <div class="row">
-            <div class="col-lg-9 col-md-9">
-                <div class="single_banner mb-30">
-                    <div class="banner_thumb">
-                        <a href="shop.html"><img src="/img/bg/banner6.jpg" alt=""></a>
+            @foreach (var banner in banners.Where(s => s.BannerPlacement == BannerPlacement.Home_3))
+            {
+                <div class="@banner.ColSize">
+                    <div class="single_banner mb-30">
+                        <div class="banner_thumb">
+                            <a href="@banner.Url">
+                                <img src="@banner.GetBannerMainImageAddress()" style="width: 100%">
+                            </a>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="col-lg-3 col-md-3">
-                <div class="single_banner mb-30">
-                    <div class="banner_thumb">
-                        <a href="shop.html"><img src="/img/bg/banner7.jpg" alt=""></a>
-                    </div>
-                </div>
-            </div>
+            }
         </div>
     </div>
 </div>

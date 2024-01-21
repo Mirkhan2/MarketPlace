@@ -19,6 +19,8 @@ namespace MarketPlace.DataLayerr.Context
         #region site
 
         public DbSet<SiteSetting> SiteSettings { get; set; }
+        public DbSet<Slider> Sliders { get; set; }
+        public DbSet<SiteBanner> SiteBanners { get; set; }
 
         #endregion
         #region contacts

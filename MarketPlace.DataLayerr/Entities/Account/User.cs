@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using MarketPlace.DataLayerr.Entities.Commen;
+using MarketPlace.DataLayerr.Entities.ContactUs;
+using System.Collections.Generic;
 
 namespace MarketPlace.DataLayerr.Entities.Account
 {
@@ -56,11 +58,13 @@ namespace MarketPlace.DataLayerr.Entities.Account
         [Display(Name = "بلاک شده / نشده")]
         public bool IsBlocked { get; set; }
 
-		#endregion
+        #endregion
 
-		#region relations
-		public ICollection<ContactUs> ContactUses { get; set; }
-		#endregion
+        #region relations
 
-	}
+        public ICollection<ContactUs> ContactUses { get; set; }
+
+        #endregion
+
+    }
 }
