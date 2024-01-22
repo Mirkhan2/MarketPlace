@@ -78,7 +78,8 @@ namespace MarketPlace.Applicationn.Services.Implementations
             var newPassword = new Random().Next(1000000, 999999999).ToString();
             user.Password = _passwordHelper.EncodePasswordMd5(newPassword);
             _userRepository.EditEntity(user);
-            // todo: send new password to user with sms
+            await _smsService.SendUserPasswordSms(user.Mobile, newPassword);    
+
             await _userRepository.SaveChanges();
 
             return ForgotPasswordResult.Success;

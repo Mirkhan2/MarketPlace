@@ -7,11 +7,22 @@ namespace MarketPlace.Applicationn.Services.Implementations
 	{
 		private string apiKey = "کد ارسال پیام";
 
+        public async Task SendVerificationSms(string mobile, string activationCode)
+        {
 
-		public async Task SendVerificationSms(string mobile, string activationCode)
-		{
-			Kavenegar.KavenegarApi api = new Kavenegar.KavenegarApi(apiKey);
-			await api.VerifyLookup(mobile, activationCode, "GetWork");
-		}
-	}
+            Kavenegar.KavenegarApi api = new Kavenegar.KavenegarApi(apiKey);
+            await api.VerifyLookup(mobile, activationCode, "Verification");
+
+        }
+
+        public async Task SendUserPasswordSms(string mobile, string password)
+        {
+
+            Kavenegar.KavenegarApi api = new Kavenegar.KavenegarApi(apiKey);
+            await api.VerifyLookup(mobile, password, "Verification");
+
+        }
+
+      
+    }
 }
