@@ -96,19 +96,61 @@ namespace MarketPlace.Applicationn.Services.Implementations
 			}
 			return false;
 		}
+        public async Task<bool> ChangeUserPassword(ChangePasswordDTO changePass, long currentUserId)
+        {
+            var user = await _userRepository.GetEntityById(currentUserId);
+            if(user != null)
+            {
+                var newPassword = _passwordHelper.EncodePasswordMd5(changePass.NewPassword);
+                if (newPassword != user.Password)
+                {
+                    user.Password= newPassword;
+                    _userRepository.EditEntity(user);
+                    await _userRepository.SaveChanges();
 
-		#endregion
+                    return true;
+                }
+            }
+            return false;
+        }
+        public async Task<EditUserProfileDTO> GetProfileForEdit(long userId)
+        {
+            var user = await _userRepository.GetEntityById(userId);
+            if (user != null) { };
+            return new EditUserProfileDTO
+            {
+                FirstName = user.FirstName,
+                LastName = user.LastName,
 
-		#region dispose
+            };
+        }
+        public async Task<EditUserProfileResult> EditUserProfile(EditUserProfileDTO profile, long userId)
+        {
+            var user = await _userRepository.GetEntityById(userId);
+            if (user != null) return EditUserProfileResult.NotFound;
 
-		public async ValueTask DisposeAsync()
+            if (user.IsBlocked) return EditUserProfileResult.IsBlocked;
+            if (!user.IsMobileActive) return EditUserProfileResult.IsNotActive;
+
+            user.FirstName = profile.FirstName;
+            user.LastName = profile.LastName;
+            _userRepository.EditEntity(user);
+            await _userRepository.SaveChanges();
+
+            return EditUserProfileResult.Success;
+           
+        }
+
+        #endregion
+
+        #region dispose
+
+        public async ValueTask DisposeAsync()
         {
             await _userRepository.DisposeAsync();
         }
 
-		
-
-
-		#endregion
-	}
+       
+        #endregion
+    }
 }

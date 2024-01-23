@@ -7,21 +7,28 @@ using System.Threading.Tasks;
 
 namespace MarketPlace.DataLayerr.DTO.Account
 {
-    public class ChangePasswordDTO
+    public class EditUserProfileDTO
     {
-        [Display(Name = "کلمه ی عبور فعلی")]
+        [Display(Name = "نام")]
         [Required(ErrorMessage = "لطفا {0} را وارد کنید")]
         [MaxLength(200, ErrorMessage = "{0} نمی تواند بیشتر از {1} کاراکتر باشد")]
-        public string CurrentPassword { get; set; }
+        public string FirstName { get; set; }
 
-        [Display(Name = "کلمه ی عبور جدید")]
+        [Display(Name = "نام خانوادگی")]
         [Required(ErrorMessage = "لطفا {0} را وارد کنید")]
         [MaxLength(200, ErrorMessage = "{0} نمی تواند بیشتر از {1} کاراکتر باشد")]
-        public string NewPassword { get; set; }
+        public string LastName { get; set; }
 
-        [Display(Name = "تکرار کلمه ی عبور جدید")]
-        [Required(ErrorMessage = "لطفا {0} را وارد کنید")]
+        [Display(Name = "تصویر آواتار")]
         [MaxLength(200, ErrorMessage = "{0} نمی تواند بیشتر از {1} کاراکتر باشد")]
-        public string ConfirmNewPassword { get; set; }
+        public string Avatar { get; set; }
+    }
+
+    public enum EditUserProfileResult
+    {
+        NotFound,
+        IsBlocked,
+        IsNotActive,
+        Success
     }
 }

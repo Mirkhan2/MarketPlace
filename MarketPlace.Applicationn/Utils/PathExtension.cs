@@ -8,6 +8,16 @@ namespace MarketPlace.Applicationn.Utils
 {
     public static class PathExtension
     {
+        #region default image
+
+        public static string DefaultAvatar = "/img/defaults/avatar.jpg";
+
+        #endregion
+
+        #region user avatar
+        public static string USerAvatarOrigin = "/Content/Images/Useravatar/origin/";
+
+        #endregion
         #region slider
 
         public static string SliderOrigin = "/img/slider/";
