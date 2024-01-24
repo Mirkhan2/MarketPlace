@@ -1,10 +1,14 @@
 ﻿using System;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using MarketPlace.Applicationn.Extensions;
 using MarketPlace.Applicationn.Services.Interfaces;
+using MarketPlace.Applicationn.Utils;
 using MarketPlace.DataLayerr.DTO.Account;
 using MarketPlace.DataLayerr.Entities.Account;
 using MarketPlace.DataLayerr.Repository;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Data.SqlClient.Server;
 using Microsoft.EntityFrameworkCore;
 
@@ -121,24 +125,32 @@ namespace MarketPlace.Applicationn.Services.Implementations
             {
                 FirstName = user.FirstName,
                 LastName = user.LastName,
+                Avatar = user.Avatar
 
             };
         }
-        public async Task<EditUserProfileResult> EditUserProfile(EditUserProfileDTO profile, long userId)
+        public async Task<EditUserProfileResult> EditUserProfile(EditUserProfileDTO profile, long userId, IFormFile avatarImage)
         {
             var user = await _userRepository.GetEntityById(userId);
-            if (user != null) return EditUserProfileResult.NotFound;
+            if (user == null) return EditUserProfileResult.NotFound;
 
             if (user.IsBlocked) return EditUserProfileResult.IsBlocked;
             if (!user.IsMobileActive) return EditUserProfileResult.IsNotActive;
 
             user.FirstName = profile.FirstName;
             user.LastName = profile.LastName;
+
+            if (avatarImage != null && avatarImage.IsImage())
+            {
+                var imageName = Guid.NewGuid().ToString("N") + Path.GetExtension(avatarImage.FileName);
+                avatarImage.AddImageToServer(imageName, PathExtension.UserAvatarOriginServer, 100, 100, PathExtension.UserAvatarThumbServer, user.Avatar);
+                user.Avatar = imageName;
+            }
+
             _userRepository.EditEntity(user);
             await _userRepository.SaveChanges();
 
             return EditUserProfileResult.Success;
-           
         }
 
         #endregion
