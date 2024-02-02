@@ -2,7 +2,7 @@
 using MarketPlace.DataLayerr.Entities.Account;
 using MarketPlace.DataLayerr.Entities.Commen;
 
-namespace MarketPlace.DataLayerr.Entities.ContactUs
+namespace MarketPlace.DataLayerr.Entities.Contacts
 {
 	public class ContactUs : BaseEntity
 	{

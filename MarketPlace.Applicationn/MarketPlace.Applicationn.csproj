@@ -10,8 +10,6 @@
 
   <ItemGroup>
 	  <PackageReference Include="Kavenegar" Version="1.2.4" />
-	  <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.2.0" />
-	  <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
 	  <PackageReference Include="Microsoft.AspNetCore.Http" Version="2.2.2" />
 
 <PackageReference Include="LazZiya.ImageReSize" Version="2.0.0" />

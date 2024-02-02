@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using MarketPlace.DataLayerr.Entities.Commen;
-using MarketPlace.DataLayerr.Entities.ContactUs;
-using System.Collections.Generic;
+using MarketPlace.DataLayerr.Entities.Contacts;
+
 
 namespace MarketPlace.DataLayerr.Entities.Account
 {

@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using MarketPlace.Applicationn.Services.Interfaces;
 using MarketPlace.DataLayerr.DTO.Contacts;
-using MarketPlace.DataLayerr.Entities.ContactUs;
+using MarketPlace.DataLayerr.Entities.Contacts;
 using MarketPlace.DataLayerr.Repository;
 
 namespace MarketPlace.Applicationn.Services.Implementations

@@ -1,6 +1,6 @@
 ﻿using System.Linq;
 using MarketPlace.DataLayerr.Entities.Account;
-using MarketPlace.DataLayerr.Entities.ContactUs;
+using MarketPlace.DataLayerr.Entities.Contacts;
 using MarketPlace.DataLayerr.Entities.Site;
 using Microsoft.EntityFrameworkCore;
 
