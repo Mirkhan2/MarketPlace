@@ -11,7 +11,8 @@ namespace MarketPlace.Applicationn.Services.Implementations
         {
 
             Kavenegar.KavenegarApi api = new Kavenegar.KavenegarApi(apiKey);
-            await api.VerifyLookup(mobile, activationCode, "Verification");
+            api.VerifyLookup(mobile, activationCode, "Verification");
+       ;
 
         }
 
@@ -19,7 +20,7 @@ namespace MarketPlace.Applicationn.Services.Implementations
         {
 
             Kavenegar.KavenegarApi api = new Kavenegar.KavenegarApi(apiKey);
-            await api.VerifyLookup(mobile, password, "Verification");
+             api.VerifyLookup(mobile, password, "Verification");
 
         }
 
