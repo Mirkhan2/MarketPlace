@@ -1,7 +1,7 @@
 ﻿using System.Threading.Tasks;
-using MarketPlace.Applicationn.Services.Implementations;
-using MarketPlace.Applicationn.Services.Interfaces;
-using MarketPlace.DataLayerr.Entities.Site;
+using MarketPlace.App.Services.Implementations;
+using MarketPlace.App.Services.Interfaces;
+using MarketPlace.Data.Entities.Site;
 using Microsoft.AspNetCore.Mvc;
 
 namespace MarketPlace.Web.ViewComponents

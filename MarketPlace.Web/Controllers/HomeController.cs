@@ -1,8 +1,8 @@
 ﻿using System.Threading.Tasks;
 using GoogleReCaptcha.V3.Interface;
-using MarketPlace.Applicationn.Services.Interfaces;
-using MarketPlace.DataLayerr.DTO.Contacts;
-using MarketPlace.DataLayerr.Entities.Site;
+using MarketPlace.App.Services.Interfaces;
+using MarketPlace.Data.DTO.Contacts;
+using MarketPlace.Data.Entities.Site;
 using MarketPlace.Web.PresentationExtensions;
 using Microsoft.AspNetCore.Mvc;
 
@@ -29,7 +29,7 @@ namespace MarketPlace.Web.Controllers
 
 		public async Task<IActionResult> Index()
 		{
-			ViewBag.banners = await _siteService.GetSiteBannersByPlacement(new System.Collections.Generic.List<DataLayerr.Entities.Site.BannerPlacement>
+			ViewBag.banners = await _siteService.GetSiteBannersByPlacement(new System.Collections.Generic.List<Data.Entities.Site.BannerPlacement>
 			{ 
 				BannerPlacement.Home_1,
 				BannerPlacement.Home_2,

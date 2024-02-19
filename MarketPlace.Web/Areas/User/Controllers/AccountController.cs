@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
-using MarketPlace.Applicationn.Services.Interfaces;
-using MarketPlace.DataLayerr.DTO.Account;
+using MarketPlace.App.Services.Interfaces;
+using MarketPlace.Data.DTO.Account;
 using MarketPlace.Web.PresentationExtensions;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http;

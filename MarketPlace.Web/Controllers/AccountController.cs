@@ -4,8 +4,8 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
-using MarketPlace.Applicationn.Services.Interfaces;
-using MarketPlace.DataLayerr.DTO.Account;
+using MarketPlace.App.Services.Interfaces;
+using MarketPlace.Data.DTO.Account;
 using GoogleReCaptcha.V3.Interface;
 
 namespace MarketPlace.Web.Controllers

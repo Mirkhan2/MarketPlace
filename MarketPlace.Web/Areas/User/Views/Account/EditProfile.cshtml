@@ -1,4 +1,4 @@
-﻿@model MarketPlace.DataLayerr.DTO.Account.EditUserProfileDTO
+﻿@model MarketPlace.Data.DTO.Account.EditUserProfileDTO
 @{
     ViewData["Title"] = "ویرایش اطلاعات";
 }
@@ -53,7 +53,7 @@
                                                 <input type="file" name="avatarImage" />
                                             </div>
                                             <div class="col-md-3">
-                                                <img style="border-radius:50%; width:150px" src="@(!string.IsNullOrEmpty(Model.Avatar) ? MarketPlace.Applicationn.Utils.PathExtension.UserAvatarOrigin + Model.Avatar : MarketPlace.Applicationn.Utils.PathExtension.DefaultAvatar)" alt="Alternate Text" />
+                                                <img style="border-radius:50%; width:150px" src="@(!string.IsNullOrEmpty(Model.Avatar) ? MarketPlace.App.Utils.PathExtension.UserAvatarOrigin + Model.Avatar : MarketPlace.App.Utils.PathExtension.DefaultAvatar)" alt="Alternate Text" />
                                             </div>
 
                                             <div class="save_button primary_btn default_button">
