@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 using MarketPlace.Data.Entities.Commen;
+using MarketPlace.Data.Entities.Contacts;
 
 namespace MarketPlace.Data.Repository
 {
@@ -16,5 +17,6 @@ namespace MarketPlace.Data.Repository
 		void DeletePermanent(TEntity entity);
 		Task DeletePermanent(long entityId);
 		Task SaveChanges();
-	}
+        Task AddEntity(Ticket newTicket);
+    }
 }

@@ -9,6 +9,12 @@ namespace MarketPlace.App.Services.Interfaces
 {
 	public interface IContactService : IAsyncDisposable
 	{
-		Task CreateContactUs(CreateContactUsDTO contact, string userIp, long? userId);
-	}
+        #region contact us
+        Task CreateContactUs(CreateContactUsDTO contact, string userIp, long? userId);
+        #endregion
+        #region ticket
+        Task<AddTicketResult> AddUserTicket(AddTicketViewModel ticket , long userId );
+
+        #endregion
+    }
 }
