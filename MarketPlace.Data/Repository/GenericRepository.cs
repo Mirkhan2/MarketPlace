@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using MarketPlace.Data.Context;
 using MarketPlace.Data.Entities.Commen;
+using MarketPlace.Data.Entities.Contacts;
 using Microsoft.EntityFrameworkCore;
 
 namespace MarketPlace.Data.Repository
@@ -79,5 +80,10 @@ namespace MarketPlace.Data.Repository
 				await _context.DisposeAsync();
 			}
 		}
-	}
+
+        public Task AddEntity(Ticket newTicket)
+        {
+            throw new NotImplementedException();
+        }
+    }
 }

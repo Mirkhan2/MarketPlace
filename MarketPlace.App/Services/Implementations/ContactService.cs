@@ -7,6 +7,7 @@ using MarketPlace.App.Services.Interfaces;
 using MarketPlace.Data.DTO.Contacts;
 using MarketPlace.Data.Entities.Contacts;
 using MarketPlace.Data.Repository;
+using Microsoft.EntityFrameworkCore;
 
 namespace MarketPlace.App.Services.Implementations
 {
@@ -75,6 +76,55 @@ namespace MarketPlace.App.Services.Implementations
             return AddTicketResult.Success;
         }
 
+        public async Task<FilterTicketDTO> FilterTickets(FilterTicketDTO filter)
+        {
+
+            var query = _ticketRepository.GetQuery().AsQueryable();
+
+            #region state
+
+            switch (filter.FilterTicketState)
+            {
+                case FilterTicketState.All:
+                    break;
+                case FilterTicketState.Deleted:
+                    query = query.Where(s => s.IsDelete);
+                    break;
+                case FilterTicketState.NotDeleted:
+                    query = query.Where(s => !s.IsDelete);
+                    break;
+               
+            }
+            switch (filter.OrderBy)
+            {
+                case FilterTicketOder.CreateDate_ASC:
+                    query = query.OrderBy(s => s.CreateDate);
+                    break;
+                case FilterTicketOder.CreateDate_DES:
+                    query = query.OrderByDescending(s => s.CreateDate);
+                    break;
+   
+            }
+            #endregion
+
+            #region filter
+
+            if (filter.TicketSection != null)
+                query = query.Where(s => s.TicketSection == filter.TicketSection.Value);
+                
+            if (filter.TicketPriority != null)
+                query = query.Where(s => s.TicketPriority == filter.TicketPriority.Value);
+
+            if (filter.UserId !=null && filter.UserId !=0)
+                query = query.Where(s => s.OwnerId == filter.UserId.Value);
+
+            if (!string.IsNullOrEmpty(filter.Title))
+                query = query.Where(s => EF.Functions.Like(s.Title, $"%{filter.Title}"));
+            #endregion
+
+            return filter;
+        }
+
 
         #endregion
         #region dispose
@@ -82,6 +132,8 @@ namespace MarketPlace.App.Services.Implementations
         {
             await _contactUsRepository.DisposeAsync();
         }
+
+       
         #endregion
     }
 }

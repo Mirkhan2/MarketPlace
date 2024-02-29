@@ -25,6 +25,8 @@ namespace MarketPlace.Data.Context
         #endregion
         #region contacts
         public DbSet<ContactUs> ContactUs { get; set; }
+        public DbSet<Ticket> Ticket { get; set; }
+        public DbSet<TicketMessage> TicketMessages { get; set; }
         #endregion
 
         #region on model creating
@@ -33,10 +35,22 @@ namespace MarketPlace.Data.Context
 		{
 			foreach (var relationship in modelBuilder.Model.GetEntityTypes().SelectMany(s => s.GetForeignKeys()))
 			{
-				relationship.DeleteBehavior = DeleteBehavior.Cascade;
+                relationship.DeleteBehavior = DeleteBehavior.Restrict;
 			}
 
-			base.OnModelCreating(modelBuilder);
+            modelBuilder.Entity<User>()
+                .HasMany(s => s.TicketMessages)
+                .WithOne(s => s.Sender)
+                .HasForeignKey(s => s.SenderId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<User>()
+                    .HasMany(s => s.Tickets)
+                .WithOne(s => s.Owner)
+                .HasForeignKey(s => s.OwnerId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            base.OnModelCreating(modelBuilder);
 		}
 
 		#endregion

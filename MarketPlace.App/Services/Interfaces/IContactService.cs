@@ -12,8 +12,11 @@ namespace MarketPlace.App.Services.Interfaces
         #region contact us
         Task CreateContactUs(CreateContactUsDTO contact, string userIp, long? userId);
         #endregion
+
+
         #region ticket
         Task<AddTicketResult> AddUserTicket(AddTicketViewModel ticket , long userId );
+        Task<FilterTicketDTO> FilterTickets(FilterTicketDTO filter);
 
         #endregion
     }

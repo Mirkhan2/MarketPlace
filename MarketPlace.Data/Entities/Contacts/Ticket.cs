@@ -35,7 +35,10 @@ namespace MarketPlace.Data.Entities.Contacts
 
         #endregion
 
-
+        #region
+        public User Owner { get; set; }
+        public ICollection<TicketMessage> TicketMessages { get; set; }
+        #endregion
     }
     public enum TicketSection
     {
