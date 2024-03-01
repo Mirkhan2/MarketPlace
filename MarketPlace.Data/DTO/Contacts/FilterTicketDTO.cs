@@ -1,11 +1,13 @@
 ﻿
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using MarketPlace.Data.DTO.Paging;
+using MarketPlace.Data.Entities.Commen;
 using MarketPlace.Data.Entities.Contacts;
 
 namespace MarketPlace.Data.DTO.Contacts
 {
-    public class FilterTicketDTO
+    public class FilterTicketDTO : BasePaging
     {
         #region properties
 
@@ -19,6 +21,29 @@ namespace MarketPlace.Data.DTO.Contacts
         public TicketPriority? TicketPriority { get; set; }
         public FilterTicketOder OrderBy { get; set; }
         public List<Ticket> Tickets { get; set; }
+
+        #endregion
+
+        #region methods
+        public FilterTicketDTO SetTickets(List<Ticket> tickets)
+        {
+            this.Tickets = tickets;
+            return this;
+        }
+        public FilterTicketDTO SetPaging(BasePaging paging)
+        {
+            this.PageId = paging.PageId;
+            this.AllEntitiesCount = paging.AllEntitiesCount;
+            this.StartPage = paging.StartPage;
+            this.EndPage = paging.EndPage;
+            this.HowManyShowPageAfterAndBefore = paging.HowManyShowPageAfterAndBefore;
+            this.TakeEntity = paging.TakeEntity;
+            this.SkipEntity = paging.SkipEntity;
+            this.PageCount = paging.PageCount;  
+
+
+            return this;
+        }
 
         #endregion
 

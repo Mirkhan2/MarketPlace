@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using MarketPlace.App.Services.Interfaces;
 using MarketPlace.Data.DTO.Contacts;
+using MarketPlace.Data.DTO.Paging;
 using MarketPlace.Data.Entities.Contacts;
 using MarketPlace.Data.Repository;
 using Microsoft.EntityFrameworkCore;
@@ -122,11 +123,22 @@ namespace MarketPlace.App.Services.Implementations
                 query = query.Where(s => EF.Functions.Like(s.Title, $"%{filter.Title}"));
             #endregion
 
-            return filter;
+            #region Paging
+
+
+            var  pager = Pager.Build(filter.PageId, await query.CountAsync(), filter.TakeEntity, filter.HowManyShowPageAfterAndBefore);
+            var allEntities = await query.Paging(pager).ToListAsync();
+
+            #endregion
+
+
+            #endregion
+
+            return filter.SetPaging(pager).SetTickets(allEntities);
         }
 
 
-        #endregion
+       
         #region dispose
         public async ValueTask DisposeAsync()
         {
