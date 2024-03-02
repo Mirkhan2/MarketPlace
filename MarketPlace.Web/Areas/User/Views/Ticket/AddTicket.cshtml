@@ -1,5 +1,5 @@
 ﻿@using MarketPlace.Data.Entities.Contacts
-@model MarketPlace.Data.DTO.Contacts.AddTicketViewModel
+@model MarketPlace.Data.DTO.Contacts.AddTicketDTO
 @{
     ViewData["Title"] = "ثبت تیکت جدید";
 }
@@ -10,6 +10,16 @@
 @section scripts
     {
     <partial name="_JqueryValidators" />
+    <script src="~/js/ckeditor.js"></script>
+    <script>
+        ClassicEditor.create(document.getElementById('Text'), {
+        })
+        .then(editor => {
+            window.editor = editor;
+        }).catch(err => {
+            console.error(err);
+        })
+    </script>
 }
 
 <div class="breadcrumbs_area">

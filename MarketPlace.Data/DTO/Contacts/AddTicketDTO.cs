@@ -8,7 +8,7 @@ using MarketPlace.Data.Entities.Contacts;
 
 namespace MarketPlace.Data.DTO.Contacts
 {
-    public class AddTicketViewModel
+    public class AddTicketDTO
     {
       
         [Display(Name = "عنوان")]

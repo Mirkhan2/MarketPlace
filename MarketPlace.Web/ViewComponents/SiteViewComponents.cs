@@ -11,14 +11,22 @@ namespace MarketPlace.Web.ViewComponents
     public class SiteHeaderViewComponent : ViewComponent
     {
         private readonly ISiteService _siteService;
-        public SiteHeaderViewComponent(ISiteService siteService)
+        private readonly IUserService _userService;
+
+        public SiteHeaderViewComponent(ISiteService siteService, IUserService userService)
         {
             _siteService = siteService;
+            _userService = userService;
         }
         public async Task<IViewComponentResult> InvokeAsync()
         {
             ViewBag.siteSetting = await _siteService.GetDefaultSiteSetting();
+            ViewBag.user = await _userService.GetUserByMobile(User.Identity.Name);
+            if (User.Identity.IsAuthenticated )
+            {
+                ViewBag.user = await _userService.GetUserByMobile(User.Identity.Name);
 
+            }
             return View("SiteHeader");
         }
     }
