@@ -35,11 +35,11 @@ namespace MarketPlace.Web
 			services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
 			services.AddScoped<IUserService, UserService>();
            services.AddScoped<ISiteService, SiteService>();
-            //services.AddScoped<IPasswordHelper, IPasswordHelper>();
+            //services.AddScoped<IPasswordHelper, PasswordHelper>();
             services.AddHttpClient<ICaptchaValidator, GoogleReCaptchaValidator>();
 			services.AddScoped<ISmsService, SmsService>();
 			services.AddScoped<IContactService, ContactService>();
-		
+		services.AddScoped<ISellerService , SellerService>();
 
             #endregion
 

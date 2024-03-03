@@ -48,6 +48,7 @@ namespace MarketPlace.App.Services.Implementations
 		}
 
 		#endregion
+
 		#region ticket
 
 		public async Task<AddTicketResult> AddUserTicket(AddTicketDTO ticket, long userId)
@@ -157,16 +158,40 @@ namespace MarketPlace.App.Services.Implementations
 					.Where(s => s.TicketId == ticketId && !s.IsDelete).ToListAsync()
 			};
 		}
+        public async Task<AnswerTicketResult> AnswerTicket(AnswerTicketDTO answer, long userId)
+        {
+			var ticket = await _ticketRepository.GetEntityById(answer.Id);
+			if (ticket == null) return AnswerTicketResult.NotFound;
+			if (ticket.OwnerId != userId) return AnswerTicketResult.NotForUser;
 
-		#region dispose
-		public async ValueTask DisposeAsync()
+			var ticketMessage = new TicketMessage
+			{
+				TicketId = ticket.Id,
+				SenderId = userId,
+				Text = answer.Text
+			};
+
+			await _ticketMessageRepository.AddEntity(ticketMessage);
+			await _ticketMessageRepository.SaveChanges();
+
+			ticket.IsReadByAdmin = false;
+			ticket.IsReadByOwner = true;
+			await _ticketRepository.SaveChanges();
+			return AnswerTicketResult.Success;
+
+        }
+
+        #region dispose
+        public async ValueTask DisposeAsync()
 		{
 			await _contactUsRepository.DisposeAsync();
 		}
 
+      
 
 
 
-		#endregion
-	}
+
+        #endregion
+    }
 }

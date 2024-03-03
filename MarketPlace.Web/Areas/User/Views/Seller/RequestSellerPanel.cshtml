@@ -1,10 +1,11 @@
-﻿@model MarketPlace.Data.DTO.Account.EditUserProfileDTO
+﻿@model MarketPlace.Data.DTO.Seller.RequestSellerDTO
 @{
-    ViewData["Title"] = "ویرایش اطلاعات";
+    ViewData["Title"] = "درخواست پنل فروشندگی";
 }
 
+
 @section scripts
-{
+    {
     <partial name="_JqueryValidators" />
 }
 
@@ -38,24 +39,21 @@
                             <div class="login">
                                 <div class="login_form_container">
                                     <div class="account_login_form">
-                                        <form asp-area="User" asp-controller="Account" asp-action="EditProfile">
-                                            <label>نام</label>
-                                            <input type="text" asp-for="FirstName">
-                                            <span class="text-danger" asp-validation-for="FirstName"></span>
+                                        <form asp-area="User" asp-controller="Seller" asp-action="RequestSellerPanel">
+                                            <label>نام فروشگاه</label>
+                                            <input type="text" asp-for="StoreName">
+                                            <span class="text-danger" asp-validation-for="StoreName"></span>
                                             <br />
-                                            <label>نام خانوادگی</label>
-                                            <input type="text" asp-for="LastName">
-                                            <span class="text-danger" asp-validation-for="LastName"></span>
+                                            <label>تلفن تماس فروشگاه</label>
+                                            <input type="text" asp-for="Phone">
+                                            <span class="text-danger" asp-validation-for="Phone"></span>
                                             <br />
-                                            <div class="col-md-9">
-                                                <input type="file" name="avatarImage" />
-                                            </div>
-                                            <div class="col-md-3">
-                                                <img style="border-radius:50%; width:150px" src="@(!string.IsNullOrEmpty(Model.Avatar) ? MarketPlace.App.Utils.PathExtension.UserAvatarOrigin + Model.Avatar : MarketPlace.App.Utils.PathExtension.DefaultAvatar)" alt="Alternate Text" />
-                                            </div>
+                                            <label>آدرس فروشگاه</label>
+                                            <textarea asp-for="Address" class="form-control" rows="12"></textarea>
+                                            <span class="text-danger" asp-validation-for="Address"></span>
 
                                             <div class="save_button primary_btn default_button">
-                                                <button type="submit">ویرایش</button>
+                                                <button type="submit">ثبت اطلاعات</button>
                                             </div>
                                         </form>
                                     </div>

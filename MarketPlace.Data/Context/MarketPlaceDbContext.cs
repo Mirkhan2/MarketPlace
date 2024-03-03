@@ -2,6 +2,7 @@
 using MarketPlace.Data.Entities.Account;
 using MarketPlace.Data.Entities.Contacts;
 using MarketPlace.Data.Entities.Site;
+using MarketPlace.Data.Entities.Store;
 using Microsoft.EntityFrameworkCore;
 
 namespace MarketPlace.Data.Context
@@ -27,6 +28,12 @@ namespace MarketPlace.Data.Context
         public DbSet<ContactUs> ContactUs { get; set; }
         public DbSet<Ticket> Ticket { get; set; }
         public DbSet<TicketMessage> TicketMessages { get; set; }
+
+        #endregion
+
+        #region store
+
+        public DbSet<Seller> Sellers { get; set; }
         #endregion
 
         #region on model creating
