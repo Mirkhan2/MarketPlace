@@ -107,6 +107,34 @@ namespace MarketPlace.App.Services.Implementations
             #endregion
             return filter;
         }
+        public async Task<EditRequestSellerDTO> GetRequestSellerForEdit(long id , long currentUserId)
+        {
+            var seller = await _sellerRepository.GetEntityById(id);
+            if(seller == null || seller.UserId != currentUserId) return null;
+            return new EditRequestSellerDTO
+            {
+                Id = seller.Id,
+                Phone = seller.Phone,   
+                Address = seller.Address,
+                StoreName = seller.StoreName
+            };
+        }
+        public async Task<EditRequestSellerResult> EditRequestSeller(EditRequestSellerDTO request, long currentUserId)
+        {
+           var seller = await _sellerRepository.GetEntityById(request.Id);
+            if (seller == null || seller.UserId != currentUserId) return EditRequestSellerResult.NotFound;
+
+            seller.Phone = request.Phone;
+            seller.Address = request.Address;
+            seller.StoreName = request.StoreName;
+            //kheyli mohem
+            seller.StoreAcceptanceState = StoreAcceptanceState.UnderProgress;
+            _sellerRepository.EditEntity(seller);
+            await _sellerRepository.SaveChanges();
+
+            return EditRequestSellerResult.Success;
+        }
+
 
         #endregion
         #region dispose
@@ -114,6 +142,10 @@ namespace MarketPlace.App.Services.Implementations
         {
             await _sellerRepository.DisposeAsync();
         }
+
+       
+
+
 
 
         #endregion
