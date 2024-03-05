@@ -1,0 +1,7 @@
+﻿@model MarketPlace.Data.DTO.Common.RejectItemDTO
+<input type="hidden" asp-for="Id"/>
+<div class="form-group">
+	<label for="definpu">Dein Matn</label>
+	<textarea class="form-control" asp-for="RejectedMessage" rows="10"></textarea>
+	<span class="text-danger" asp-validation-for="RejectedMessage"></span>
+</div>

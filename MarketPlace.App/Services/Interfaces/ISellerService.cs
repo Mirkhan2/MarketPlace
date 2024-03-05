@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using MarketPlace.Data.DTO.Common;
 using MarketPlace.Data.DTO.Seller;
 
 namespace MarketPlace.App.Services.Interfaces
@@ -15,6 +16,8 @@ namespace MarketPlace.App.Services.Interfaces
         Task<FilterSellerDTO> FilterSellers(FilterSellerDTO filter);
         Task<EditRequestSellerDTO> GetRequestSellerForEdit(long id ,long currentUserId);
         Task<EditRequestSellerResult> EditRequestSeller(EditRequestSellerDTO request, long currentUserId) ;
+        Task<bool> AcceptSellerRequest(long requestId);
+        Task<bool> RejectSellerRequest(RejectItemDTO reject);
 
 
         #endregion

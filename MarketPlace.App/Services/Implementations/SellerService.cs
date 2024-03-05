@@ -6,6 +6,7 @@ using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
 using MarketPlace.App.Services.Interfaces;
+using MarketPlace.Data.DTO.Common;
 using MarketPlace.Data.DTO.Paging;
 using MarketPlace.Data.DTO.Seller;
 using MarketPlace.Data.Entities.Account;
@@ -135,6 +136,37 @@ namespace MarketPlace.App.Services.Implementations
             return EditRequestSellerResult.Success;
         }
 
+        public async Task<bool> AcceptSellerRequest(long requestId)
+        {   
+            var sellerRequest = await _sellerRepository.GetEntityById(requestId);
+            if (sellerRequest == null) 
+            {
+                sellerRequest.StoreAcceptanceState = StoreAcceptanceState.Accepted;
+                sellerRequest.StoreAcceptanceDescription = "Your Data Submited";
+                _sellerRepository.EditEntity(sellerRequest);
+                await _sellerRepository.SaveChanges();
+
+                return true;
+            } 
+            return false;
+        }
+
+
+        public async Task<bool> RejectSellerRequest(RejectItemDTO reject)
+        {
+            var seller = await _sellerRepository.GetEntityById(reject.Id);
+            if (seller != null)
+            {
+                seller.StoreAcceptanceState = StoreAcceptanceState.Rejected;
+                seller.StoreAcceptanceDescription = reject.RejectedMessage;
+                _sellerRepository.EditEntity(seller);
+                await _sellerRepository.SaveChanges();
+                return true;
+
+            }
+            return false;
+        }
+
 
         #endregion
         #region dispose
@@ -142,11 +174,6 @@ namespace MarketPlace.App.Services.Implementations
         {
             await _sellerRepository.DisposeAsync();
         }
-
-       
-
-
-
 
         #endregion
 
