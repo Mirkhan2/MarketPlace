@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using MarketPlace.Data.Entities.Account;
+using MarketPlace.Data.Entities.Account.Products;
 using MarketPlace.Data.Entities.Contacts;
 using MarketPlace.Data.Entities.Site;
 using MarketPlace.Data.Entities.Store;
@@ -34,6 +35,11 @@ namespace MarketPlace.Data.Context
         #region store
 
         public DbSet<Seller> Sellers { get; set; }
+        #endregion
+
+        #region products
+        public DbSet<ProductCategory> ProductCatagories { get; set; }
+        public DbSet<Product> Products { get; set; }
         #endregion
 
         #region on model creating

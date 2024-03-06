@@ -4,147 +4,22 @@ using MarketPlace.Data.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace MarketPlace.Data.Migrations
 {
     [DbContext(typeof(MarketPlaceDbContext))]
-    partial class MarketPlaceDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240306201110_AddProductModels")]
+    partial class AddProductModels
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("ProductVersion", "5.0.17")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-            modelBuilder.Entity("MarketPlace.Data.Entities.Account.Products.Product", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<DateTime>("CreateDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ImageName")
-                        .IsRequired()
-                        .HasMaxLength(300)
-                        .HasColumnType("nvarchar(300)");
-
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("IsDelete")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTime>("LastUpdateDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("Price")
-                        .HasColumnType("int");
-
-                    b.Property<string>("ProductAcceptOrRejectDescription")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("ProductAcceptanceState")
-                        .HasColumnType("int");
-
-                    b.Property<long>("SellerId")
-                        .HasColumnType("bigint");
-
-                    b.Property<string>("ShortDescription")
-                        .IsRequired()
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
-
-                    b.Property<string>("Title")
-                        .IsRequired()
-                        .HasMaxLength(300)
-                        .HasColumnType("nvarchar(300)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("SellerId");
-
-                    b.ToTable("Products");
-                });
-
-            modelBuilder.Entity("MarketPlace.Data.Entities.Account.Products.ProductCategory", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<DateTime>("CreateDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("IsDelete")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTime>("LastUpdateDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<long?>("ParentId")
-                        .HasColumnType("bigint");
-
-                    b.Property<string>("Title")
-                        .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
-
-                    b.Property<string>("UrlName")
-                        .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ParentId");
-
-                    b.ToTable("ProductCatagories");
-                });
-
-            modelBuilder.Entity("MarketPlace.Data.Entities.Account.Products.ProductSelectedCategory", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<DateTime>("CreateDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<bool>("IsDelete")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTime>("LastUpdateDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<long>("ProductCategoryId")
-                        .HasColumnType("bigint");
-
-                    b.Property<long>("ProductId")
-                        .HasColumnType("bigint");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ProductCategoryId");
-
-                    b.HasIndex("ProductId");
-
-                    b.ToTable("ProductSelectedCategory");
-                });
 
             modelBuilder.Entity("MarketPlace.Data.Entities.Account.User", b =>
                 {
@@ -345,6 +220,36 @@ namespace MarketPlace.Data.Migrations
                     b.ToTable("TicketMessages");
                 });
 
+            modelBuilder.Entity("MarketPlace.Data.Entities.ProductCategory", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<DateTime>("CreateDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsDelete")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("LastUpdateDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Title")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UrlName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ProductCatagories");
+                });
+
             modelBuilder.Entity("MarketPlace.Data.Entities.Site.SiteBanner", b =>
                 {
                     b.Property<long>("Id")
@@ -481,6 +386,59 @@ namespace MarketPlace.Data.Migrations
                     b.ToTable("Sliders");
                 });
 
+            modelBuilder.Entity("MarketPlace.Data.Entities.Store.Product", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<DateTime>("CreateDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsDelete")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("LastUpdateDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("Price")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ProductAcceptOrRejectDescription")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("ProductAcceptanseState")
+                        .HasColumnType("int");
+
+                    b.Property<long>("ProductCategoryId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long?>("ProductId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("SellerId")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("ShortDescription")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Title")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProductId");
+
+                    b.ToTable("Products");
+                });
+
             modelBuilder.Entity("MarketPlace.Data.Entities.Store.Seller", b =>
                 {
                     b.Property<long>("Id")
@@ -538,46 +496,6 @@ namespace MarketPlace.Data.Migrations
                     b.ToTable("Sellers");
                 });
 
-            modelBuilder.Entity("MarketPlace.Data.Entities.Account.Products.Product", b =>
-                {
-                    b.HasOne("MarketPlace.Data.Entities.Store.Seller", "Seller")
-                        .WithMany()
-                        .HasForeignKey("SellerId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("Seller");
-                });
-
-            modelBuilder.Entity("MarketPlace.Data.Entities.Account.Products.ProductCategory", b =>
-                {
-                    b.HasOne("MarketPlace.Data.Entities.Account.Products.ProductCategory", "Parent")
-                        .WithMany()
-                        .HasForeignKey("ParentId")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.Navigation("Parent");
-                });
-
-            modelBuilder.Entity("MarketPlace.Data.Entities.Account.Products.ProductSelectedCategory", b =>
-                {
-                    b.HasOne("MarketPlace.Data.Entities.Account.Products.ProductCategory", "ProductCategory")
-                        .WithMany("ProductSelectedCategories")
-                        .HasForeignKey("ProductCategoryId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("MarketPlace.Data.Entities.Account.Products.Product", "Product")
-                        .WithMany("ProductSelectedCategories")
-                        .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("Product");
-
-                    b.Navigation("ProductCategory");
-                });
-
             modelBuilder.Entity("MarketPlace.Data.Entities.Contacts.ContactUs", b =>
                 {
                     b.HasOne("MarketPlace.Data.Entities.Account.User", "User")
@@ -618,6 +536,14 @@ namespace MarketPlace.Data.Migrations
                     b.Navigation("Ticket");
                 });
 
+            modelBuilder.Entity("MarketPlace.Data.Entities.Store.Product", b =>
+                {
+                    b.HasOne("MarketPlace.Data.Entities.Store.Product", null)
+                        .WithMany("products")
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Restrict);
+                });
+
             modelBuilder.Entity("MarketPlace.Data.Entities.Store.Seller", b =>
                 {
                     b.HasOne("MarketPlace.Data.Entities.Account.User", "User")
@@ -627,16 +553,6 @@ namespace MarketPlace.Data.Migrations
                         .IsRequired();
 
                     b.Navigation("User");
-                });
-
-            modelBuilder.Entity("MarketPlace.Data.Entities.Account.Products.Product", b =>
-                {
-                    b.Navigation("ProductSelectedCategories");
-                });
-
-            modelBuilder.Entity("MarketPlace.Data.Entities.Account.Products.ProductCategory", b =>
-                {
-                    b.Navigation("ProductSelectedCategories");
                 });
 
             modelBuilder.Entity("MarketPlace.Data.Entities.Account.User", b =>
@@ -653,6 +569,11 @@ namespace MarketPlace.Data.Migrations
             modelBuilder.Entity("MarketPlace.Data.Entities.Contacts.Ticket", b =>
                 {
                     b.Navigation("TicketMessages");
+                });
+
+            modelBuilder.Entity("MarketPlace.Data.Entities.Store.Product", b =>
+                {
+                    b.Navigation("products");
                 });
 #pragma warning restore 612, 618
         }
