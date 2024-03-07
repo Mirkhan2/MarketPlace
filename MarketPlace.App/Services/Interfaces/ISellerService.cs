@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using MarketPlace.Data.DTO.Common;
 using MarketPlace.Data.DTO.Seller;
+using MarketPlace.Data.Entities.Store;
 
 namespace MarketPlace.App.Services.Interfaces
 {
@@ -19,6 +20,7 @@ namespace MarketPlace.App.Services.Interfaces
         Task<bool> AcceptSellerRequest(long requestId);
         Task<bool> RejectSellerRequest(RejectItemDTO reject);
 
+        Task<Seller> GetLastActiveSellerByUserId(long userId);
 
         #endregion
     }

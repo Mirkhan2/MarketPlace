@@ -1,7 +1,7 @@
 ﻿using System.Linq;
 using MarketPlace.Data.Entities.Account;
-using MarketPlace.Data.Entities.Account.Products;
 using MarketPlace.Data.Entities.Contacts;
+using MarketPlace.Data.Entities.Products;
 using MarketPlace.Data.Entities.Site;
 using MarketPlace.Data.Entities.Store;
 using Microsoft.EntityFrameworkCore;

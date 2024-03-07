@@ -28,6 +28,10 @@ namespace MarketPlace.App.Services.Implementations
 
 
         }
+        #endregion
+
+        #region seller
+
 
         public async Task<RequestSellerResult> AddNewSellerRequest(RequestSellerDTO seller, long userId)
         {
@@ -168,12 +172,22 @@ namespace MarketPlace.App.Services.Implementations
         }
 
 
+        public async Task<Seller> GetLastActiveSellerByUserId(long userId)
+        {
+            return await _sellerRepository.GetQuery()
+                .OrderByDescending(s => s.CreateDate)
+                .FirstOrDefaultAsync(s =>
+                s.UserId == userId&& s.StoreAcceptanceState == StoreAcceptanceState.Accepted);
+        }
+
         #endregion
+
         #region dispose
         public async ValueTask DisposeAsync()
         {
             await _sellerRepository.DisposeAsync();
         }
+
 
         #endregion
 

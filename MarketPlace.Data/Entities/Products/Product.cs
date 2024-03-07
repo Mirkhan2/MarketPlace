@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using MarketPlace.Data.Entities.Commen;
 using MarketPlace.Data.Entities.Store;
 
-namespace MarketPlace.Data.Entities.Account.Products
+namespace MarketPlace.Data.Entities.Products
 {
     public class Product : BaseEntity
     {

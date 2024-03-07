@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using MarketPlace.Data.Entities.Commen;
 
-namespace MarketPlace.Data.Entities.Account.Products
+namespace MarketPlace.Data.Entities.Products
 {
     public class ProductCategory : BaseEntity
     {
