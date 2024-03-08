@@ -60,8 +60,11 @@ namespace MarketPlace.Data.Entities.Products
 
     public enum ProductAcceptanceState
     {
+        [Display(Name ="Dar Hale Barresi")]
         UnderProgress,
+        [Display(Name = "TaeidShode")]
         Accepted,
+        [Display(Name = "RadShode")]
         Rejected
     }
 

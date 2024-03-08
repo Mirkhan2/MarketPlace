@@ -18,6 +18,17 @@ namespace MarketPlace.App.Utils
         public static string UploadImage = "/img/upload/";
         public static string UploadImageServer = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/img/upload/");
         #endregion
+        #region products
+        public static string ProductImage = "/content/images/product/origin";
+        public static string ProductImageServer = Path.Combine(Directory.GetCurrentDirectory(),
+            "/content/images/product/origin/");
+
+        public static string ProductThumbnailImage = "wwwroot/content/images/product/thumb";
+
+        public static string ProductThumbnailImageServer =
+            Path.Combine(Directory.GetCurrentDirectory(),
+            "wwwroot/content/images/product/thumb/");
+        #endregion
         #region user avatar
 
         public static string UserAvatarOrigin = "/Content/Images/UserAvatar/origin/";
