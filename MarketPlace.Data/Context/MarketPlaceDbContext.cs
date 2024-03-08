@@ -40,6 +40,8 @@ namespace MarketPlace.Data.Context
         #region products
         public DbSet<ProductCategory> ProductCatagories { get; set; }
         public DbSet<Product> Products { get; set; }
+        public DbSet<ProductSelectedCategory> ProductSelectedCategory { get; set; }
+        public DbSet<ProductColor> ProductColors { get; set; }
         #endregion
 
         #region on model creating

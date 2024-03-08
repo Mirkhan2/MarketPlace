@@ -1,6 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using MarketPlace.Data.DTO.Paging;
+using MarketPlace.Data.Entities.Commen;
 using MarketPlace.Data.Entities.Products;
 
 namespace MarketPlace.Data.DTO.Products
@@ -15,7 +19,7 @@ namespace MarketPlace.Data.DTO.Products
 
         public FilterProductState FilterProductState { get; set; }
 
-       public List<Product> Products { get; set; }
+        public List<Product> Products { get; set; }
 
         #endregion
 
@@ -40,11 +44,8 @@ namespace MarketPlace.Data.DTO.Products
             return this;
         }
 
-      
-
         #endregion
     }
-
     public enum FilterProductState
     {
         UnderProgress,
@@ -53,4 +54,5 @@ namespace MarketPlace.Data.DTO.Products
         Active,
         NotActive
     }
+
 }

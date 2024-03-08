@@ -62,3 +62,7 @@ $(document).ready(function () {
         });
     }
 });
+function FillPageId(pageId) {
+    $('#PageId').val(page);
+    $('#filter-form').submit();
+}

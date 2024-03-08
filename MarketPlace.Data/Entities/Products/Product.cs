@@ -52,7 +52,7 @@ namespace MarketPlace.Data.Entities.Products
         #region relations
 
         public ICollection<ProductSelectedCategory> ProductSelectedCategories { get; set; }
-
+        public ICollection<ProductColor> ProductColors { get; set; }
         public Seller Seller { get; set; }
 
         #endregion

@@ -1,5 +1,6 @@
 ﻿@using MarketPlace.Data.Entities.Products
-@model MarketPlace.Data.DTO.Product.CreateProductDTO
+@model MarketPlace.Data.DTO.Products.CreateProductDTO
+
 @{
     ViewData["Title"] = "ثبت محصول";
     var categories = ViewBag.Categories as List<ProductCategory>;
@@ -7,8 +8,8 @@
 
 
 @section scripts
-{
-<partial name="_JqueryValidators" />
+    {
+    <partial name="_JqueryValidators" />
 }
 
 <div class="breadcrumbs_area">
@@ -108,4 +109,7 @@
         </div>
     </div>
 </section>
+
+
+
 

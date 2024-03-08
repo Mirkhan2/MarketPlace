@@ -75,10 +75,55 @@ namespace MarketPlace.App.Services.Implementations
 
             return filter.SetProducts(allEntities).SetPaging(pager);
         }
+        public async Task<CreateProductResult> CreateProduct(CreateProductDTO product, string imageName, long sellerId)
+        {
+
+            var newProduct = new Product
+            {
+                Title = product.Title,
+                Price = product.Price,
+                ShortDescription = product.ShortDescription,
+                Description = product.Description,
+                IsActive = product.IsActive,
+                SellerId = sellerId,
+                ImageName = imageName,
+
+
+            };
+
+            await _productRepository.AddEntity(newProduct);
+            await _productRepository.SaveChanges();
+
+            return CreateProductResult.Success;
+        }
 
         #endregion
 
+        #region product categories
+        public async Task<List<ProductCategory>> GetAllProductCategoriesByParentId(long? parentId)
+        {
+            if (parentId == null && parentId == 0)
+            {
+                return await _productCategoryRepository.GetQuery()
+                    .AsQueryable()
+                    .Where(s => !s.IsDelete && s.IsActive && s.ParentId == null)
+                    .ToListAsync();
+            }
+            return await _productCategoryRepository.GetQuery()
+                  .AsQueryable()
+                  .Where(s => !s.IsDelete && s.IsActive && s.ParentId == parentId)
+                  .ToListAsync();
 
+
+        }
+
+        public async Task<List<ProductCategory>> GetallActiveProductCategories()
+        {
+            return await _productCategoryRepository.GetQuery().AsQueryable()
+                .Where(s => s.IsActive && !s.IsDelete).ToListAsync();
+        }
+
+        #endregion
 
         #region dispose
 
@@ -90,7 +135,7 @@ namespace MarketPlace.App.Services.Implementations
             await _productRepository.DisposeAsync();
         }
 
-
+       
 
         #endregion
 
