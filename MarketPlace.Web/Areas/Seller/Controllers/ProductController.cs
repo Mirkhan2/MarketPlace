@@ -1,6 +1,7 @@
 ﻿using System.Threading.Tasks;
 using MarketPlace.App.Services.Interfaces;
 using MarketPlace.Data.DTO.Products;
+using MarketPlace.Web.Http;
 using MarketPlace.Web.PresentationExtensions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -24,7 +25,7 @@ namespace MarketPlace.Web.Areas.Seller.Controllers
 
         #region list
 
-        [HttpGet("list")]
+        [HttpGet("products-list")]
         public async Task<IActionResult> Index(FilterProductDTO filter)
         {
             var seller = await _sellerService.GetLastActiveSellerByUserId(User.GetUserId());
@@ -53,6 +54,16 @@ namespace MarketPlace.Web.Areas.Seller.Controllers
             }
             ViewBag.MainCategories = await _productService.GetallActiveProductCategories();
             return View();   
+        }
+        #endregion
+
+        #region product categories
+        [HttpGet("product-categories/{parentId}")]
+        public async Task<IActionResult> GetProductCategoriesByParent(long parentId)
+        {
+            var categories = await _productService.GetAllProductCategoriesByParentId(parentId); 
+
+            return JsonResponseStatus.SendStatus(JsonResponsStatusType.Success, "INfomauoin" , categories);
         }
         #endregion
     }
