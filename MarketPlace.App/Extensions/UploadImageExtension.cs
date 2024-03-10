@@ -43,7 +43,11 @@ namespace MarketPlace.App.Extensions
                     if (width != null && height != null)
                         resizer.ImageResizer(orginalPath + fileName, thumbPath + fileName, width, height);
                 }
+               // return true;
+
             }
+
+            //return false;
         }
 
         public static void DeleteImage(this string imageName, string OriginPath, string ThumbPath)

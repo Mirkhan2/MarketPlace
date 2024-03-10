@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using MarketPlace.App.Extensions;
 using MarketPlace.App.Services.Interfaces;
 using MarketPlace.Data.DTO.Products;
 using MarketPlace.Web.Http;
@@ -30,7 +31,7 @@ namespace MarketPlace.Web.Areas.Seller.Controllers
         {
             var seller = await _sellerService.GetLastActiveSellerByUserId(User.GetUserId());
             filter.SellerId = seller.Id;
-            filter.FilterProductState = FilterProductState.Active;
+            filter.FilterProductState = FilterProductState.All;
             return View(await _productService.FilterProducts(filter));
     
         }
@@ -50,9 +51,26 @@ namespace MarketPlace.Web.Areas.Seller.Controllers
         {
             if (ModelState.IsValid)
             {
+                var seller = await _sellerService.GetLastActiveSellerByUserId(User.GetUserId());
+                var res = await _productService.CreateProduct(product,seller.Id,productImage);
 
+                switch (res)
+                {
+                    case CreateProductResult.HasNoImage:
+                        TempData[WarningMessage] = "aks";
+                        break;
+                    case CreateProductResult.Error:
+                        TempData[ErrorMessage] = "Eror";
+                        break;
+                    case CreateProductResult.Success:
+                        TempData[SuccessMessage] = "success{}";
+                        return RedirectToAction("Index");
+                        
+                   
+                }
             }
             ViewBag.MainCategories = await _productService.GetallActiveProductCategories();
+
             return View();   
         }
         #endregion

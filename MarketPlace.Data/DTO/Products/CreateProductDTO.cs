@@ -36,6 +36,7 @@ namespace MarketPlace.Data.DTO.Products
     public enum CreateProductResult
     {
         Success,
-        Error
+        Error,
+        HasNoImage
     }
 }

@@ -33,8 +33,14 @@ namespace MarketPlace.Data.Repository
 			entity.LastUpdateDate = entity.CreateDate;
 			await _dbSet.AddAsync(entity);
 		}
-
-		public async Task<TEntity> GetEntityById(long entityId)
+        public async Task AddRangeEntities(List<TEntity> entities)
+        {
+			foreach (var entity in entities)
+			{
+				await AddEntity(entity);
+			}
+        }
+        public async Task<TEntity> GetEntityById(long entityId)
 		{
 			return await _dbSet.SingleOrDefaultAsync(s => s.Id == entityId);
 		}
@@ -81,9 +87,11 @@ namespace MarketPlace.Data.Repository
 			}
 		}
 
-        public Task AddEntity(Ticket newTicket)
-        {
-            throw new NotImplementedException();
-        }
+        //public Task AddEntity(Ticket newTicket)
+        //{
+        //    throw new NotImplementedException();
+        //}
+
+       
     }
 }
