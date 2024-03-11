@@ -11,8 +11,8 @@ namespace MarketPlace.App.EntitiExtensions
     public static class BannerExtension
     {
         public static string GetBannerMainImageAddress(this SiteBanner banner)
-        {
-            return PathExtension.BannerOrgin + banner.ImageName;
+        { 
+            return PathExtension.BannerOrigin + banner.ImageName;
         }
     }
 }

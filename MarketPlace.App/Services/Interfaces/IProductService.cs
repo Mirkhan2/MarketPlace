@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using MarketPlace.Data.DTO.Common;
 using MarketPlace.Data.DTO.Products;
 using MarketPlace.Data.Entities.Products;
 using Microsoft.AspNetCore.Http;
@@ -15,6 +16,9 @@ namespace MarketPlace.App.Services.Interfaces
 
         Task<FilterProductDTO> FilterProducts(FilterProductDTO filter);
         Task<CreateProductResult> CreateProduct(CreateProductDTO product, long sellerId,IFormFile productImage);
+        Task<bool> AcceptSellerProduct(long productId);
+
+        Task<bool> RejectSellerProduct(RejectItemDTO reject);
 
 
         #endregion
@@ -22,8 +26,8 @@ namespace MarketPlace.App.Services.Interfaces
         #region product categories
 
         Task<List<ProductCategory>> GetAllProductCategoriesByParentId(long? parentId);
-        Task<List<ProductCategory>> GetallActiveProductCategories();
+        Task<List<ProductCategory>> GetAllActiveProductCategories();
 
-           #endregion
+        #endregion
     }
 }

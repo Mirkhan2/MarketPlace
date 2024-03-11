@@ -16,12 +16,13 @@ namespace MarketPlace.Web.Areas.Seller.Controllers
 
         private readonly IProductService _productService;
         private readonly ISellerService _sellerService;
+
         public ProductController(IProductService productService, ISellerService sellerService)
         {
             _productService = productService;
             _sellerService = sellerService;
-
         }
+
         #endregion
 
         #region list
@@ -33,56 +34,72 @@ namespace MarketPlace.Web.Areas.Seller.Controllers
             filter.SellerId = seller.Id;
             filter.FilterProductState = FilterProductState.All;
             return View(await _productService.FilterProducts(filter));
-    
         }
+
         #endregion
 
         #region create product
+
         [HttpGet("create-product")]
         public async Task<IActionResult> CreateProduct()
         {
-            ViewBag.MainCategories = await _productService.GetallActiveProductCategories();
+            ViewBag.Categories = await _productService.GetAllActiveProductCategories();
 
             return View();
         }
-        [HttpPost("create-product"), ValidateAntiForgeryToken]
 
-        public async Task<IActionResult> CreateProduct(CreateProductDTO product ,IFormFile productImage)
+        [HttpPost("create-product"), ValidateAntiForgeryToken]
+        public async Task<IActionResult> CreateProduct(CreateProductDTO product, IFormFile productImage)
         {
             if (ModelState.IsValid)
             {
                 var seller = await _sellerService.GetLastActiveSellerByUserId(User.GetUserId());
-                var res = await _productService.CreateProduct(product,seller.Id,productImage);
+                var res = await _productService.CreateProduct(product, seller.Id, productImage);
 
                 switch (res)
                 {
                     case CreateProductResult.HasNoImage:
-                        TempData[WarningMessage] = "aks";
+                        TempData[WarningMessage] = "لطفا تصویر محصول را وارد نمایید";
                         break;
                     case CreateProductResult.Error:
-                        TempData[ErrorMessage] = "Eror";
+                        TempData[ErrorMessage] = "عملیات ثبت محصول با خطا مواجه شد";
                         break;
                     case CreateProductResult.Success:
-                        TempData[SuccessMessage] = "success{}";
+                        TempData[SuccessMessage] = $"محصول مورد نظر با عنوان {product.Title} با موفقیت ثبت شد";
                         return RedirectToAction("Index");
-                        
-                   
                 }
             }
-            ViewBag.MainCategories = await _productService.GetallActiveProductCategories();
 
-            return View();   
+            ViewBag.Categories = await _productService.GetAllActiveProductCategories();
+
+            return View(product);
         }
+
         #endregion
 
+        //#region edit product
+
+        //[HttpGet("edit-product/{productId}")]
+        //public async Task<IActionResult> EditProduct(long productId)
+        //{
+        //    var product = await _productService.GetProductForEdit(productId);
+        //    if (product == null) return NotFound();
+        //    ViewBag.Categories = await _productService.GetAllActiveProductCategories();
+        //    return View(product);
+        //}
+
+        //#endregion
+
         #region product categories
+
         [HttpGet("product-categories/{parentId}")]
         public async Task<IActionResult> GetProductCategoriesByParent(long parentId)
         {
-            var categories = await _productService.GetAllProductCategoriesByParentId(parentId); 
+            var categories = await _productService.GetAllProductCategoriesByParentId(parentId);
 
-            return JsonResponseStatus.SendStatus(JsonResponsStatusType.Success, "INfomauoin" , categories);
+            return JsonResponseStatus.SendStatus(JsonResponsStatusType.Success, "اطلاعات دسته بندی ها", categories);
         }
+
         #endregion
     }
 }

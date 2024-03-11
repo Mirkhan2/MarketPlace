@@ -49,137 +49,136 @@ namespace MarketPlace.App.Services.Implementations
 
 		#endregion
 
-		#region ticket
+	   #region ticket
 
-		public async Task<AddTicketResult> AddUserTicket(AddTicketDTO ticket, long userId)
-		{
-			if (string.IsNullOrEmpty(ticket.Text)) return AddTicketResult.Error;
+        public async Task<AddTicketResult> AddUserTicket(AddTicketDTO ticket, long userId)
+        {
+            if (string.IsNullOrEmpty(ticket.Text)) return AddTicketResult.Error;
 
-			//add icket
-			var newTicket = new Ticket
-			{
-				OwnerId = userId,
-				IsReadByOwner = true,
-				TicketPriority = ticket.TicketPriority,
-				Title = ticket.Title,
-				TicketSection = ticket.TicketSection,
-				TicketState = TicketState.UnderProgress
-			};
-			await _ticketMessageRepository.AddEntity(newTicket);
-			await _ticketMessageRepository.SaveChanges();
+            // add ticket
+            var newTicket = new Ticket
+            {
+                OwnerId = userId,
+                IsReadByOwner = true,
+                TicketPriority = ticket.TicketPriority,
+                Title = ticket.Title,
+                TicketSection = ticket.TicketSection,
+                TicketState = TicketState.UnderProgress
+            };
 
-			//add ticket message
-			var newMessage = new TicketMessage
-			{
-				TicketId = newTicket.Id,
-				Text = ticket.Text,
-				SenderId = userId
-			};
+            await _ticketRepository.AddEntity(newTicket);
+            await _ticketRepository.SaveChanges();
 
-			await _ticketMessageRepository.AddEntity(newMessage);
-			await _ticketMessageRepository.SaveChanges();
+            // add ticket message
+            var newMessage = new TicketMessage
+            {
+                TicketId = newTicket.Id,
+                Text = ticket.Text,
+                SenderId = userId,
+            };
 
-			return AddTicketResult.Success;
-		}
+            await _ticketMessageRepository.AddEntity(newMessage);
+            await _ticketMessageRepository.SaveChanges();
 
-		public async Task<FilterTicketDTO> FilterTickets(FilterTicketDTO filter)
-		{
+            return AddTicketResult.Success;
+        }
 
-			var query = _ticketRepository.GetQuery().AsQueryable();
+        public async Task<FilterTicketDTO> FilterTickets(FilterTicketDTO filter)
+        {
+            var query = _ticketRepository.GetQuery().AsQueryable();
 
-			#region state
+            #region state
 
-			switch (filter.FilterTicketState)
-			{
-				case FilterTicketState.All:
-					break;
-				case FilterTicketState.Deleted:
-					query = query.Where(s => s.IsDelete);
-					break;
-				case FilterTicketState.NotDeleted:
-					query = query.Where(s => !s.IsDelete);
-					break;
+            switch (filter.FilterTicketState)
+            {
+                case FilterTicketState.All:
+                    break;
+                case FilterTicketState.Deleted:
+                    query = query.Where(s => s.IsDelete);
+                    break;
+                case FilterTicketState.NotDeleted:
+                    query = query.Where(s => !s.IsDelete);
+                    break;
+            }
 
-			}
-			switch (filter.OrderBy)
-			{
-				case FilterTicketOder.CreateDate_ASC:
-					query = query.OrderBy(s => s.CreateDate);
-					break;
-				case FilterTicketOder.CreateDate_DES:
-					query = query.OrderByDescending(s => s.CreateDate);
-					break;
+            switch (filter.OrderBy)
+            {
+                case FilterTicketOder.CreateDate_ASC:
+                    query = query.OrderBy(s => s.CreateDate);
+                    break;
+                case FilterTicketOder.CreateDate_DES:
+                    query = query.OrderByDescending(s => s.CreateDate);
+                    break;
+            }
 
-			}
-			#endregion
+            #endregion
 
-			#region filter
+            #region filter
 
-			if (filter.TicketSection != null)
-				query = query.Where(s => s.TicketSection == filter.TicketSection.Value);
+            if (filter.TicketSection != null)
+                query = query.Where(s => s.TicketSection == filter.TicketSection.Value);
 
-			if (filter.TicketPriority != null)
-				query = query.Where(s => s.TicketPriority == filter.TicketPriority.Value);
+            if (filter.TicketPriority != null)
+                query = query.Where(s => s.TicketPriority == filter.TicketPriority.Value);
 
-			if (filter.UserId != null && filter.UserId != 0)
-				query = query.Where(s => s.OwnerId == filter.UserId.Value);
+            if (filter.UserId != null && filter.UserId != 0)
+                query = query.Where(s => s.OwnerId == filter.UserId.Value);
 
-			if (!string.IsNullOrEmpty(filter.Title))
-				query = query.Where(s => EF.Functions.Like(s.Title, $"%{filter.Title}"));
-			#endregion
+            if (!string.IsNullOrEmpty(filter.Title))
+                query = query.Where(s => EF.Functions.Like(s.Title, $"%{filter.Title}%"));
 
-			#region Paging
+            #endregion
 
+            #region paging
 
-			var pager = Pager.Build(filter.PageId, await query.CountAsync(), filter.TakeEntity, filter.HowManyShowPageAfterAndBefore);
-			var allEntities = await query.Paging(pager).ToListAsync();
+            var pager = Pager.Build(filter.PageId, await query.CountAsync(), filter.TakeEntity, filter.HowManyShowPageAfterAndBefore);
+            var allEntities = await query.Paging(pager).ToListAsync();
 
-			#endregion
+            #endregion
 
+            return filter.SetPaging(pager).SetTickets(allEntities);
+        }
 
-			#endregion
+        public async Task<TicketDetailDTO> GetTicketForShow(long ticketId, long userId)
+        {
+            var ticket = await _ticketRepository.GetQuery().AsQueryable()
+                .Include(s => s.Owner)
+                .SingleOrDefaultAsync(s => s.Id == ticketId);
 
-			return filter.SetPaging(pager).SetTickets(allEntities);
-		}
+            if (ticket == null || ticket.OwnerId != userId) return null;
 
-		public async Task<TicketDetailDTO> GetTicketForShow(long ticketId, long userId)
-		{
-			var ticket = await _ticketRepository.GetQuery().AsQueryable()
-			  .Include(s => s.Owner)
-			  .SingleOrDefaultAsync(s => s.Id == ticketId);
+            return new TicketDetailDTO
+            {
+                Ticket = ticket,
+                TicketMessages = await _ticketMessageRepository.GetQuery().AsQueryable()
+                    .OrderByDescending(s => s.CreateDate)
+                    .Where(s => s.TicketId == ticketId && !s.IsDelete).ToListAsync()
+            };
+        }
 
-			if (ticket == null || ticket.OwnerId != userId) return null;
-
-			return new TicketDetailDTO
-			{
-				Ticket = ticket,
-				TicketMessages = await _ticketMessageRepository.GetQuery().AsQueryable()
-					.OrderByDescending(s => s.CreateDate)
-					.Where(s => s.TicketId == ticketId && !s.IsDelete).ToListAsync()
-			};
-		}
         public async Task<AnswerTicketResult> AnswerTicket(AnswerTicketDTO answer, long userId)
         {
-			var ticket = await _ticketRepository.GetEntityById(answer.Id);
-			if (ticket == null) return AnswerTicketResult.NotFound;
-			if (ticket.OwnerId != userId) return AnswerTicketResult.NotForUser;
+            var ticket = await _ticketRepository.GetEntityById(answer.Id);
+            if (ticket == null) return AnswerTicketResult.NotFound;
+            if (ticket.OwnerId != userId) return AnswerTicketResult.NotForUser;
 
-			var ticketMessage = new TicketMessage
-			{
-				TicketId = ticket.Id,
-				SenderId = userId,
-				Text = answer.Text
-			};
+            var ticketMessage = new TicketMessage
+            {
+                TicketId = ticket.Id,
+                SenderId = userId,
+                Text = answer.Text
+            };
 
-			await _ticketMessageRepository.AddEntity(ticketMessage);
-			await _ticketMessageRepository.SaveChanges();
+            await _ticketMessageRepository.AddEntity(ticketMessage);
+            await _ticketMessageRepository.SaveChanges();
 
-			ticket.IsReadByAdmin = false;
-			ticket.IsReadByOwner = true;
-			await _ticketRepository.SaveChanges();
-			return AnswerTicketResult.Success;
-
+            ticket.IsReadByAdmin = false;
+            ticket.IsReadByOwner = true;
+            await _ticketRepository.SaveChanges();
+            return AnswerTicketResult.Success;
         }
+
+        #endregion
 
         #region dispose
         public async ValueTask DisposeAsync()

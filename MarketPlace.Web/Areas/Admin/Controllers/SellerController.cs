@@ -30,6 +30,7 @@ namespace MarketPlace.Web.Areas.Admin.Controllers
         #endregion
 
         #region accept seller request
+        [HttpPost , ValidateAntiForgeryToken]
         public async Task<IActionResult> AcceptSellerRequest(long requestId)
         {
             var result = await _sellerService.AcceptSellerRequest(requestId);

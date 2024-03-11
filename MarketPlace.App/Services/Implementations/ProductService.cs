@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using MarketPlace.App.Extensions;
 using MarketPlace.App.Services.Interfaces;
 using MarketPlace.App.Utils;
+using MarketPlace.Data.DTO.Common;
 using MarketPlace.Data.DTO.Paging;
 using MarketPlace.Data.DTO.Products;
 using MarketPlace.Data.Entities.Products;
@@ -35,7 +36,7 @@ namespace MarketPlace.App.Services.Implementations
 
         #region products
 
-      
+
 
         public async Task<CreateProductResult> CreateProduct(CreateProductDTO product, long sellerId, IFormFile productImage)
         {
@@ -99,6 +100,38 @@ namespace MarketPlace.App.Services.Implementations
 
             return CreateProductResult.Error;
         }
+        public async Task<bool> AcceptSellerProduct(long productId)
+        {
+            var product = await _productRepository.GetEntityById(productId);
+            if (product != null)
+            {
+                product.ProductAcceptanceState = ProductAcceptanceState.Accepted;
+                product.ProductAcceptOrRejectDescription = $"محصول مورد نظر در تاریخ {DateTime.Now.ToShamsi()} مورد تایید سایت قرار گرفت";
+                _productRepository.EditEntity(product);
+                await _productRepository.SaveChanges();
+                return true;
+            }
+
+            return false;
+        }
+        public async Task<bool> RejectSellerProduct(RejectItemDTO reject)
+        {
+            var product = await _productRepository.GetEntityById(reject.Id);
+            if (product != null)
+            {
+                product.ProductAcceptanceState = ProductAcceptanceState.Rejected;
+                product.ProductAcceptOrRejectDescription = reject.RejectedMessage;
+                _productRepository.EditEntity(product);
+                await _productRepository.SaveChanges();
+                return true;
+            }
+            return false;
+                
+        }
+
+
+
+
         public async Task<FilterProductDTO> FilterProducts(FilterProductDTO filter)
         {
             var query = _productRepository.GetQuery().AsQueryable();
@@ -175,6 +208,11 @@ namespace MarketPlace.App.Services.Implementations
             return await _productCategoryRepository.GetQuery().AsQueryable()
                 .Where(s => s.IsActive && !s.IsDelete).ToListAsync();
         }
+        public async Task<List<ProductCategory>> GetAllActiveProductCategories()
+        {
+            return await _productCategoryRepository.GetQuery().AsQueryable()
+                .Where(s => s.IsActive && !s.IsDelete).ToListAsync();
+        }
 
         #endregion
 
@@ -188,8 +226,7 @@ namespace MarketPlace.App.Services.Implementations
             await _productRepository.DisposeAsync();
         }
 
-
-
+       
         #endregion
 
     }
