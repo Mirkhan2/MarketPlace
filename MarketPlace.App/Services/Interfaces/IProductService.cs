@@ -17,9 +17,8 @@ namespace MarketPlace.App.Services.Interfaces
         Task<FilterProductDTO> FilterProducts(FilterProductDTO filter);
         Task<CreateProductResult> CreateProduct(CreateProductDTO product, long sellerId,IFormFile productImage);
         Task<bool> AcceptSellerProduct(long productId);
-
         Task<bool> RejectSellerProduct(RejectItemDTO reject);
-
+        Task<EditProductDTO> GetProductForEdit(long productId);
 
         #endregion
 

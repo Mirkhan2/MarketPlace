@@ -129,6 +129,29 @@ namespace MarketPlace.App.Services.Implementations
                 
         }
 
+        public async Task<EditProductDTO> GetProductForEdit(long productId)
+        {
+            var product = await _productRepository.GetEntityById(productId);
+            if (product == null) return null;
+
+            return new EditProductDTO
+            {
+                Id = productId,
+                Description = product.Description,
+                ShortDescription = product.ShortDescription,
+                Price = product.Price,
+                IsActive = product.IsActive,
+                Title = product.Title,
+                ProductColors = await _productColorRepository
+                    .GetQuery().AsQueryable()
+                    .Where(s => !s.IsDelete && s.ProductId == productId)
+                    .Select(s => new CreateProductColorDTO { Price = s.Price, ColorName = s.ColorName }).ToListAsync(),
+                SelectedCategories = await _productSelectedCategoryRepository.GetQuery().AsQueryable()
+                    .Where(s => s.ProductId == productId).Select(s => s.ProductCategoryId).ToListAsync()
+            };
+        }
+
+
 
 
 
@@ -226,7 +249,7 @@ namespace MarketPlace.App.Services.Implementations
             await _productRepository.DisposeAsync();
         }
 
-       
+
         #endregion
 
     }
