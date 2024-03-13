@@ -7,6 +7,7 @@ using MarketPlace.Data.DTO.Common;
 using MarketPlace.Data.DTO.Products;
 using MarketPlace.Data.Entities.Products;
 using Microsoft.AspNetCore.Http;
+using static MarketPlace.Data.DTO.Products.EditProductDTO;
 
 namespace MarketPlace.App.Services.Interfaces
 {
@@ -15,10 +16,15 @@ namespace MarketPlace.App.Services.Interfaces
         #region products
 
         Task<FilterProductDTO> FilterProducts(FilterProductDTO filter);
-        Task<CreateProductResult> CreateProduct(CreateProductDTO product, long sellerId,IFormFile productImage);
+        Task<CreateProductResult> CreateProduct(CreateProductDTO product, long sellerId, IFormFile productImage);
         Task<bool> AcceptSellerProduct(long productId);
         Task<bool> RejectSellerProduct(RejectItemDTO reject);
         Task<EditProductDTO> GetProductForEdit(long productId);
+        Task<EditProductResult> EditSellerProduct(EditProductDTO product, long userId, IFormFile productImage);
+        Task RemoveAllProductSelectedCategories(long productId);
+        Task RemoveAllProductSelectedColors(long productId);
+        Task AddProductSelectedColors(long productId, List<CreateProductColorDTO> colors);
+        Task AddProductSelectedCategories(long productId, List<long> selectedCategories);
 
         #endregion
 

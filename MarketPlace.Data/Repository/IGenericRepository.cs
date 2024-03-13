@@ -17,7 +17,7 @@ namespace MarketPlace.Data.Repository
 		void DeleteEntity(TEntity entity);
 		Task DeleteEntity(long entityId);
 		void DeletePermanent(TEntity entity);
-		Task DeletePermanent(long entityId);
+		Task DeletePermanentEntities(List<TEntity> entities);
 		Task SaveChanges();
        // Task AddEntity(Ticket newTicket);
     }

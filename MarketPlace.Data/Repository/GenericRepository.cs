@@ -66,9 +66,15 @@ namespace MarketPlace.Data.Repository
 		public void DeletePermanent(TEntity entity)
 		{
 			_dbSet.Remove(entity);
+
 		}
 
-		public async Task DeletePermanent(long entityId)
+        public Task DeletePermanentEntities(List<TEntity> entities)
+        {
+			_context.RemoveRange(entities);
+        }
+
+        public async Task DeletePermanent(long entityId)
 		{
 			TEntity entity = await GetEntityById(entityId);
 			if (entity != null) DeletePermanent(entity);
@@ -87,11 +93,12 @@ namespace MarketPlace.Data.Repository
 			}
 		}
 
+
         //public Task AddEntity(Ticket newTicket)
         //{
         //    throw new NotImplementedException();
         //}
 
-       
+
     }
 }

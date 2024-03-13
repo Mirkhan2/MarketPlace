@@ -14,29 +14,30 @@ using MarketPlace.Data.Entities.Products;
 using MarketPlace.Data.Repository;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
+using static MarketPlace.Data.DTO.Products.EditProductDTO;
 
 namespace MarketPlace.App.Services.Implementations
 {
     public class ProductService : IProductService
     {
         #region constructor
+
         private readonly IGenericRepository<Product> _productRepository;
         private readonly IGenericRepository<ProductCategory> _productCategoryRepository;
         private readonly IGenericRepository<ProductSelectedCategory> _productSelectedCategoryRepository;
         private readonly IGenericRepository<ProductColor> _productColorRepository;
-        public ProductService(IGenericRepository<Product> productRepository, IGenericRepository<ProductCategory> productCategoryRepository, IGenericRepository<ProductSelectedCategory> productSelectedCategoryRepository, IGenericRepository<ProductColor> productColorRepository)
 
+        public ProductService(IGenericRepository<Product> productRepository, IGenericRepository<ProductCategory> productCategoryRepository, IGenericRepository<ProductSelectedCategory> productSelectedCategoryRepository, IGenericRepository<ProductColor> productColorRepository)
         {
             _productRepository = productRepository;
             _productCategoryRepository = productCategoryRepository;
             _productSelectedCategoryRepository = productSelectedCategoryRepository;
             _productColorRepository = productColorRepository;
         }
+
         #endregion
 
         #region products
-
-
 
         public async Task<CreateProductResult> CreateProduct(CreateProductDTO product, long sellerId, IFormFile productImage)
         {
@@ -64,35 +65,8 @@ namespace MarketPlace.App.Services.Implementations
                 await _productRepository.AddEntity(newProduct);
                 await _productRepository.SaveChanges();
 
-                // create product categories
-                var productSelectedCategories = new List<ProductSelectedCategory>();
-
-                foreach (var categoryId in product.SelectedCategories)
-                {
-                    productSelectedCategories.Add(new ProductSelectedCategory
-                    {
-                        ProductCategoryId = categoryId,
-                        ProductId = newProduct.Id
-                    });
-                }
-
-                await _productSelectedCategoryRepository.AddRangeEntities(productSelectedCategories);
-                await _productSelectedCategoryRepository.SaveChanges();
-
-                // create product colors
-                var productSelectedColors = new List<ProductColor>();
-
-                foreach (var productColor in product.ProductColors)
-                {
-                    productSelectedColors.Add(new ProductColor
-                    {
-                        ColorName = productColor.ColorName,
-                        Price = productColor.Price,
-                        ProductId = newProduct.Id
-                    });
-                }
-
-                await _productColorRepository.AddRangeEntities(productSelectedColors);
+                await AddProductSelectedCategories(newProduct.Id, product.SelectedCategories);
+                await AddProductSelectedColors(newProduct.Id, product.ProductColors);
                 await _productSelectedCategoryRepository.SaveChanges();
 
                 return CreateProductResult.Success;
@@ -100,6 +74,7 @@ namespace MarketPlace.App.Services.Implementations
 
             return CreateProductResult.Error;
         }
+
         public async Task<bool> AcceptSellerProduct(long productId)
         {
             var product = await _productRepository.GetEntityById(productId);
@@ -114,6 +89,7 @@ namespace MarketPlace.App.Services.Implementations
 
             return false;
         }
+
         public async Task<bool> RejectSellerProduct(RejectItemDTO reject)
         {
             var product = await _productRepository.GetEntityById(reject.Id);
@@ -123,10 +99,11 @@ namespace MarketPlace.App.Services.Implementations
                 product.ProductAcceptOrRejectDescription = reject.RejectedMessage;
                 _productRepository.EditEntity(product);
                 await _productRepository.SaveChanges();
+
                 return true;
             }
+
             return false;
-                
         }
 
         public async Task<EditProductDTO> GetProductForEdit(long productId)
@@ -141,6 +118,7 @@ namespace MarketPlace.App.Services.Implementations
                 ShortDescription = product.ShortDescription,
                 Price = product.Price,
                 IsActive = product.IsActive,
+                ImageName = product.ImageName,
                 Title = product.Title,
                 ProductColors = await _productColorRepository
                     .GetQuery().AsQueryable()
@@ -151,21 +129,113 @@ namespace MarketPlace.App.Services.Implementations
             };
         }
 
+        public async Task<EditProductResult> EditSellerProduct(EditProductDTO product, long userId, IFormFile productImage)
+        {
+            var mainProduct = await _productRepository.GetQuery().AsQueryable()
+                .Include(s => s.Seller)
+                .SingleOrDefaultAsync(s => s.Id == product.Id);
+            if (mainProduct == null) return EditProductResult.NotFound;
+            if (mainProduct.Seller.UserId != userId) return EditProductResult.NotForUser;
 
+            mainProduct.Title = product.Title;
+            mainProduct.ShortDescription = product.ShortDescription;
+            mainProduct.Description = product.Description;
+            mainProduct.IsActive = product.IsActive;
+            mainProduct.Price = product.Price;
+            mainProduct.ProductAcceptanceState = ProductAcceptanceState.UnderProgress;
 
+            if (productImage != null)
+            {
+                var imageName = Guid.NewGuid().ToString("N") + Path.GetExtension(productImage.FileName);
 
+                var res = productImage.AddImageToServer(imageName, PathExtension.ProductImageImageServer, 150, 150,
+                    PathExtension.ProductThumbnailImageImageServer, mainProduct.ImageName);
+
+                if (res)
+                {
+                    mainProduct.ImageName = imageName;
+                }
+            }
+
+            await RemoveAllProductSelectedCategories(product.Id);
+            await AddProductSelectedCategories(product.Id, product.SelectedCategories);
+            await _productSelectedCategoryRepository.SaveChanges();
+            await RemoveAllProductSelectedColors(product.Id);
+            await AddProductSelectedColors(product.Id, product.ProductColors);
+            await _productColorRepository.SaveChanges();
+
+            return EditProductResult.Success;
+        }
+
+        public async Task RemoveAllProductSelectedCategories(long productId)
+        {
+            _productSelectedCategoryRepository.DeletePermanentEntities(await _productSelectedCategoryRepository.GetQuery().AsQueryable().Where(s => s.ProductId == productId).ToListAsync());
+        }
+
+        public async Task RemoveAllProductSelectedColors(long productId)
+        {
+            _productColorRepository.DeletePermanentEntities(await _productColorRepository.GetQuery().AsQueryable().Where(s => s.ProductId == productId).ToListAsync());
+        }
+
+        public async Task AddProductSelectedColors(long productId, List<CreateProductColorDTO> colors)
+        {
+            if (colors != null && colors.Any())
+            {
+                var productSelectedColors = new List<ProductColor>();
+
+                foreach (var productColor in colors)
+                {
+                    productSelectedColors.Add(new ProductColor
+                    {
+                        ColorName = productColor.ColorName,
+                        Price = productColor.Price,
+                        ProductId = productId
+                    });
+                }
+
+                await _productColorRepository.AddRangeEntities(productSelectedColors);
+            }
+        }
+
+        public async Task AddProductSelectedCategories(long productId, List<long> selectedCategories)
+        {
+            if (selectedCategories != null && selectedCategories.Any())
+            {
+                var productSelectedCategories = new List<ProductSelectedCategory>();
+
+                foreach (var categoryId in selectedCategories)
+                {
+                    productSelectedCategories.Add(new ProductSelectedCategory
+                    {
+                        ProductCategoryId = categoryId,
+                        ProductId = productId
+                    });
+                }
+                await _productSelectedCategoryRepository.AddRangeEntities(productSelectedCategories);
+            }
+        }
+ 
+
+        //public void RemoveAllProductSelectedColors(long productId, List<CreateProductColorDTO> colors)
+        //{
+        //    throw new NotImplementedException();
+        //}
+
+        //public void RemoveAllProductSelectedCategories(long productId, List<long> selectedCategories)
+        //{
+        //    throw new NotImplementedException();
+        //}
 
         public async Task<FilterProductDTO> FilterProducts(FilterProductDTO filter)
         {
             var query = _productRepository.GetQuery().AsQueryable();
 
             #region state
+
             switch (filter.FilterProductState)
             {
                 case FilterProductState.All:
                     break;
-
-
                 case FilterProductState.Active:
                     query = query.Where(s => s.IsActive && s.ProductAcceptanceState == ProductAcceptanceState.Accepted);
                     break;
@@ -176,12 +246,13 @@ namespace MarketPlace.App.Services.Implementations
                     query = query.Where(s => s.ProductAcceptanceState == ProductAcceptanceState.Accepted);
                     break;
                 case FilterProductState.Rejected:
-                    query = query.Where(s => s.IsActive && s.ProductAcceptanceState == ProductAcceptanceState.Rejected);
+                    query = query.Where(s => s.ProductAcceptanceState == ProductAcceptanceState.Rejected);
                     break;
                 case FilterProductState.UnderProgress:
-                    query = query.Where(s => s.IsActive && s.ProductAcceptanceState == ProductAcceptanceState.UnderProgress);
+                    query = query.Where(s => s.ProductAcceptanceState == ProductAcceptanceState.UnderProgress);
                     break;
             }
+
             #endregion
 
             #region filter
@@ -192,7 +263,6 @@ namespace MarketPlace.App.Services.Implementations
             if (filter.SellerId != null && filter.SellerId != 0)
                 query = query.Where(s => s.SellerId == filter.SellerId.Value);
 
-
             #endregion
 
             #region paging
@@ -202,40 +272,36 @@ namespace MarketPlace.App.Services.Implementations
 
             #endregion
 
-
             return filter.SetProducts(allEntities).SetPaging(pager);
         }
 
         #endregion
 
         #region product categories
+
         public async Task<List<ProductCategory>> GetAllProductCategoriesByParentId(long? parentId)
         {
-            if (parentId == null && parentId == 0)
+            if (parentId == null || parentId == 0)
             {
                 return await _productCategoryRepository.GetQuery()
                     .AsQueryable()
                     .Where(s => !s.IsDelete && s.IsActive && s.ParentId == null)
                     .ToListAsync();
             }
+
             return await _productCategoryRepository.GetQuery()
-                  .AsQueryable()
-                  .Where(s => !s.IsDelete && s.IsActive && s.ParentId == parentId)
-                  .ToListAsync();
-
-
+                .AsQueryable()
+                .Where(s => !s.IsDelete && s.IsActive && s.ParentId == parentId)
+                .ToListAsync();
         }
 
-        public async Task<List<ProductCategory>> GetallActiveProductCategories()
-        {
-            return await _productCategoryRepository.GetQuery().AsQueryable()
-                .Where(s => s.IsActive && !s.IsDelete).ToListAsync();
-        }
         public async Task<List<ProductCategory>> GetAllActiveProductCategories()
         {
             return await _productCategoryRepository.GetQuery().AsQueryable()
                 .Where(s => s.IsActive && !s.IsDelete).ToListAsync();
         }
+
+
 
         #endregion
 
@@ -244,14 +310,13 @@ namespace MarketPlace.App.Services.Implementations
         public async ValueTask DisposeAsync()
         {
             await _productCategoryRepository.DisposeAsync();
-            await _productSelectedCategoryRepository.DisposeAsync();
-
             await _productRepository.DisposeAsync();
+            await _productSelectedCategoryRepository.DisposeAsync();
         }
 
+     
 
         #endregion
-
     }
 }
 
