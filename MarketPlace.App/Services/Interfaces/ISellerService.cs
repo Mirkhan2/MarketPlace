@@ -19,8 +19,8 @@ namespace MarketPlace.App.Services.Interfaces
         Task<EditRequestSellerResult> EditRequestSeller(EditRequestSellerDTO request, long currentUserId) ;
         Task<bool> AcceptSellerRequest(long requestId);
         Task<bool> RejectSellerRequest(RejectItemDTO reject);
-
         Task<Seller> GetLastActiveSellerByUserId(long userId);
+        Task<bool> HasUserAnyActiveSellerPanel(long userId);
 
         #endregion
     }

@@ -45,6 +45,7 @@ namespace MarketPlace.Web
 			services.AddScoped<IProductService, ProductService>();
 
 			#endregion
+
 			#region data protection
 
 			services.AddDataProtection()

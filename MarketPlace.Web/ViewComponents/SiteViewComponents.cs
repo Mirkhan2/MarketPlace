@@ -12,11 +12,13 @@ namespace MarketPlace.Web.ViewComponents
     {
         private readonly ISiteService _siteService;
         private readonly IUserService _userService;
+        private readonly IProductService _productService;
 
-        public SiteHeaderViewComponent(ISiteService siteService, IUserService userService)
+        public SiteHeaderViewComponent(ISiteService siteService, IUserService userService , IProductService productService )
         {
             _siteService = siteService;
             _userService = userService;
+            _productService = productService;
         }
         public async Task<IViewComponentResult> InvokeAsync()
         {
@@ -27,6 +29,7 @@ namespace MarketPlace.Web.ViewComponents
                 ViewBag.user = await _userService.GetUserByMobile(User.Identity.Name);
 
             }
+            ViewBag.ProductCategories = await _productService.GetAllActiveProductCategories();
             return View("SiteHeader");
         }
     }
