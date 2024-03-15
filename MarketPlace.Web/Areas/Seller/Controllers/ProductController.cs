@@ -25,6 +25,8 @@ namespace MarketPlace.Web.Areas.Seller.Controllers
 
         #endregion
 
+        #region product
+
         #region list
 
         [HttpGet("products-list")]
@@ -90,9 +92,37 @@ namespace MarketPlace.Web.Areas.Seller.Controllers
 
         #endregion
 
-        #region product categories
 
-        [HttpGet("product-categories/{parentId}")]
+        #endregion
+
+        #region product galleries
+
+        #region list
+        [HttpGet("product-galleries/{id}")]
+        public async Task<IActionResult> GetProductGalleries(long id)
+        {
+            ViewBag.productId = id;
+            return View(await _productService.GetAllProductGalleriesInSellerPanel(id , User.GetUserId()));
+        }
+
+        #endregion
+
+        #region create
+        [HttpGet("create-product-gallery/{productId}")] 
+        public async Task<IActionResult> CreateProductGallery(long productId)
+        {
+            var product = await _productService.GetProductBySellerOwnerId(productId , User.GetUserId());
+            if (product == null) return NotFound();
+            ViewBag.product = product;
+            return View();
+        }
+		#endregion
+
+		#endregion
+
+		#region product categories
+
+		[HttpGet("product-categories/{parentId}")]
         public async Task<IActionResult> GetProductCategoriesByParent(long parentId)
         {
             var categories = await _productService.GetAllProductCategoriesByParentId(parentId);

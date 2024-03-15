@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using MarketPlace.Data.DTO.Products;
 using MarketPlace.Data.Entities.Account;
 using MarketPlace.Data.Entities.Contacts;
 using MarketPlace.Data.Entities.Products;
@@ -40,6 +41,7 @@ namespace MarketPlace.Data.Context
         #region products
         public DbSet<ProductCategory> ProductCatagories { get; set; }
         public DbSet<Product> Products { get; set; }
+        public DbSet<ProductGallery > ProductGalleries { get; set; }
         public DbSet<ProductSelectedCategory> ProductSelectedCategory { get; set; }
         public DbSet<ProductColor> ProductColors { get; set; }
         #endregion

@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using MarketPlace.Data.DTO.Products;
 using MarketPlace.Data.Entities.Commen;
 using MarketPlace.Data.Entities.Store;
 
@@ -26,7 +27,6 @@ namespace MarketPlace.Data.Entities.Products
         public string ImageName { get; set; }
 
         [Display(Name = "قیمت محصول")]
-        [Required(ErrorMessage = "لطفا {0} را وارد کنید")]
         public int Price { get; set; }
 
         [Display(Name = "توضیحات کوتاه")]
@@ -53,6 +53,7 @@ namespace MarketPlace.Data.Entities.Products
 
         public ICollection<ProductSelectedCategory> ProductSelectedCategories { get; set; }
         public ICollection<ProductColor> ProductColors { get; set; }
+        public ICollection<ProductGallery> ProductGalleries { get; set; }
         public Seller Seller { get; set; }
 
         #endregion
@@ -60,12 +61,11 @@ namespace MarketPlace.Data.Entities.Products
 
     public enum ProductAcceptanceState
     {
-       
-        [Display(Name ="Dar Hale Barresi")]
+        [Display(Name = "در حال بررسی")]
         UnderProgress,
-        [Display(Name = "TaeidShode")]
+        [Display(Name = "تایید شده")]
         Accepted,
-        [Display(Name = "RadShode")]
+        [Display(Name = "رد شده")]
         Rejected
     }
 
