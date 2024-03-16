@@ -257,11 +257,21 @@ namespace MarketPlace.App.Services.Implementations
 			if (filter.SellerId != null && filter.SellerId != 0)
 				query = query.Where(s => s.SellerId == filter.SellerId.Value);
 
-			#endregion
+            var expensiveProduct = await query.OrderByDescending(s => s.Price).FirstOrDefaultAsync();
+            filter.FilterMaxPrice = expensiveProduct.Price;
 
-			#region paging
+			if (filter.SelectedMaxPrice == 0) filter.SelectedMaxPrice = expensiveProduct.Price;
+           
 
-			var pager = Pager.Build(filter.PageId, await query.CountAsync(), filter.TakeEntity, filter.HowManyShowPageAfterAndBefore);
+            query = query.Where(s => s.Price >= filter.SelectedMinPrice);
+			query = query.Where(s => s.Price >= filter.SelectedMaxPrice);
+		
+
+            #endregion
+
+            #region paging
+
+            var pager = Pager.Build(filter.PageId, await query.CountAsync(), filter.TakeEntity, filter.HowManyShowPageAfterAndBefore);
 			var allEntities = await query.Paging(pager).ToListAsync();
 
 			#endregion
