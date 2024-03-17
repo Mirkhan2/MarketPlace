@@ -17,12 +17,10 @@ namespace MarketPlace.Web.Controllers
 
         #endregion
 
-
-
-
         #region filter products
 
         [HttpGet("products")]
+        [HttpGet("product/{Category}")]
         public async Task<IActionResult> FilterProducts(FilterProductDTO filter)
         {
             filter.TakeEntity = 9;
@@ -36,10 +34,17 @@ namespace MarketPlace.Web.Controllers
 
 
 
-        #region constructor
+        #region show product detail
+        [HttpGet ("products/{productsId}/{title}")]
+        public async Task<IActionResult> ProductDetail(long productId , string title)
+        {
+            var product = await _productService.GetProductDetailById(productId);
+            if (product == null) return NotFound();
+            return View(product);
+        }
+
         #endregion
-        #region constructor
-        #endregion
+       
 
     }
 }

@@ -222,7 +222,10 @@ namespace MarketPlace.App.Services.Implementations
 
 		public async Task<FilterProductDTO> FilterProducts(FilterProductDTO filter)
 		{
-			var query = _productRepository.GetQuery().AsQueryable();
+			var query = _productRepository.GetQuery()
+				.Include(s => s.ProductSelectedCategories)
+				.ThenInclude(s=> s.ProductCategory)
+				.AsQueryable();
 
 			#region state
 
@@ -247,6 +250,26 @@ namespace MarketPlace.App.Services.Implementations
 					break;
 			}
 
+			switch (filter.OrderBy)
+			{
+				case FilterProductOrderBy.CreateDate_Des:
+					query = query.OrderByDescending(s => s.CreateDate);
+					break;
+				case FilterProductOrderBy.CreateDate_Acs:
+                    query = query.OrderByDescending(s => s.CreateDate);
+
+                    break;
+				case FilterProductOrderBy.Price_Des:
+                    query = query.OrderByDescending(s => s.Price);
+
+                    break;
+				case FilterProductOrderBy.Price_Acs:
+                    query = query.OrderByDescending(s => s.Price);
+
+                    break;
+				default:
+					break;
+			}
 			#endregion
 
 			#region filter
@@ -265,7 +288,11 @@ namespace MarketPlace.App.Services.Implementations
 
             query = query.Where(s => s.Price >= filter.SelectedMinPrice);
 			query = query.Where(s => s.Price >= filter.SelectedMaxPrice);
-		
+
+			if (!string.IsNullOrEmpty(filter.Category))
+				query = query.Where(s => s.ProductSelectedCategories.Any(f => f.ProductCategory.UrlName == filter.Category));
+
+							
 
             #endregion
 
@@ -364,12 +391,42 @@ namespace MarketPlace.App.Services.Implementations
 			await _productGalleryRepository.SaveChanges();
 			return CreateOrEditProductGalleryResult.Success;
 		}
+        public async Task<ProductDetailDTO> GetProductDetailById(long productId)
+        {
+			var product = await _productRepository.GetQuery()
+				.AsQueryable()
+				.Include(s => s.Seller)
+				.ThenInclude(s => s.User)
+				.Include(s => s.ProductSelectedCategories)
+				.ThenInclude(s => s.ProductCategory)
+				.Include(s => s.ProductGalleries)
+				.Include(s => s.ProductColors)
+				.SingleOrDefaultAsync(s => s.Id == productId);
+				
+				
+			if (product == null) return null;
+			return new ProductDetailDTO
+			{
+				Price = product.Price,
+				ImageName = product.ImageName,
+				Description = product.Description,
+				ShortDescription = product.ShortDescription,
+				Seller = product.Seller,
+				ProductCategories = product.ProductSelectedCategories.Select(s => s.ProductCategory).ToList(),
+				ProductGalleries = product.ProductGalleries.ToList(),
+				Title = product.Title,
+				ProductColors = product.ProductColors.ToList(),
+				SellerId = product.SellerId
 
-		#endregion
+			};
+        }
 
-		#region product categories
 
-		public async Task<List<ProductCategory>> GetAllProductCategoriesByParentId(long? parentId)
+        #endregion
+
+        #region product categories
+
+        public async Task<List<ProductCategory>> GetAllProductCategoriesByParentId(long? parentId)
 		{
 			if (parentId == null || parentId == 0)
 			{
@@ -404,8 +461,9 @@ namespace MarketPlace.App.Services.Implementations
 			await _productSelectedCategoryRepository.DisposeAsync();
 		}
 
+     
 
-		#endregion
-	}
+        #endregion
+    }
 }
 

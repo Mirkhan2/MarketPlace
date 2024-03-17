@@ -63,6 +63,9 @@ $(document).ready(function () {
     }
 });
 
+
+
+
 function FillPageId(pageId) {
     $('#PageId').val(pageId);
     $('#filter-form').submit();
@@ -113,3 +116,9 @@ function removeProductColor(index) {
     $('[color-price-hidden-input="' + index + '"]').remove();
     $('[color-table-item="' + index + '"]').remove();
 }
+
+$('#OrderBy').on('change',
+    function () {
+        $('#filter-form').submit();
+    
+});
