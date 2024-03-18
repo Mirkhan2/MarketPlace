@@ -24,6 +24,7 @@ namespace MarketPlace.Web.Controllers
         public async Task<IActionResult> FilterProducts(FilterProductDTO filter)
         {
             filter.TakeEntity = 9;
+            filter.FilterProductState = FilterProductState.Accepted;
             filter = await _productService.FilterProducts(filter);
             var products = await _productService.FilterProducts(filter);
             ViewBag.ProductsCategories = await _productService.GetAllActiveProductCategories();

@@ -191,9 +191,12 @@ namespace MarketPlace.App.Services.Implementations
 					{
 						productSelectedColors.Add(new ProductColor
 						{
+
 							ColorName = productColor.ColorName,
 							Price = productColor.Price,
-							ProductId = productId
+							ProductId = productId,
+							ColorCode	= productColor.ColorCode
+							
 						});
 					}
 				}
@@ -226,10 +229,12 @@ namespace MarketPlace.App.Services.Implementations
 				.Include(s => s.ProductSelectedCategories)
 				.ThenInclude(s=> s.ProductCategory)
 				.AsQueryable();
+            var expensiveProduct = await query.OrderByDescending(s => s.Price).FirstOrDefaultAsync();
+            filter.FilterMaxPrice = expensiveProduct.Price;
 
-			#region state
+            #region state
 
-			switch (filter.FilterProductState)
+            switch (filter.FilterProductState)
 			{
 				case FilterProductState.All:
 					break;
@@ -280,8 +285,7 @@ namespace MarketPlace.App.Services.Implementations
 			if (filter.SellerId != null && filter.SellerId != 0)
 				query = query.Where(s => s.SellerId == filter.SellerId.Value);
 
-            var expensiveProduct = await query.OrderByDescending(s => s.Price).FirstOrDefaultAsync();
-            filter.FilterMaxPrice = expensiveProduct.Price;
+         
 
 			if (filter.SelectedMaxPrice == 0) filter.SelectedMaxPrice = expensiveProduct.Price;
            
