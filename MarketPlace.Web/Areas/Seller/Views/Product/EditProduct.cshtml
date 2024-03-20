@@ -9,7 +9,6 @@
 
 
 
-
 <div class="breadcrumbs_area">
     <div class="container">
         <div class="row">
@@ -54,6 +53,18 @@
                                                     index += 1;
                                                 }
                                             }
+
+                                            @if (Model.ProductFeatures != null && Model.ProductFeatures.Any())
+                                            {
+                                                var index = 0;
+                                                foreach (var feature in Model.ProductFeatures)
+                                                {
+                                                    <input type="hidden" value="@feature.Feature" name="ProductFeatures[@index].Feature" color-name-hidden-input="@feature.Feature-@feature.FeatureValue">
+                                                    <input type="hidden" value="@feature.FeatureValue" name="ProductFeatures[@index].FeatureValue" color-code-hidden-input="@feature.Feature-@feature.FeatureValue">
+                                                    index += 1;
+                                                }
+                                            }
+
                                             <label>نام محصول</label>
                                             <input asp-for="Title">
                                             <span class="text-danger" asp-validation-for="Title"></span>
@@ -124,7 +135,6 @@
                                             <input type="color" id="product_color_code_input">
                                             <label>قیمت مضاف رنگ محصول</label>
                                             <input type="number" placeholder="قیمت مضاف رنگ محصول" id="product_color_price_input">
-
                                             <button class="btn btn-success" id="add_color_button">افزودن رنگ</button>
                                             <br />
                                             <br />
@@ -150,6 +160,40 @@
                                                                         <div style="border-radius: 50%;width: 40px; height: 40px; background-color:@color.ColorCode"></div>
                                                                     </td>
                                                                     <td> <a class="btn btn-danger text-white" onclick="removeProductColor('@color.ColorName-@color.Price')">حذف</a> </td>
+                                                                </tr>
+                                                            }
+                                                        }
+                                                    </tbody>
+                                                </table>
+                                            </div>
+
+                                            <hr />
+
+                                            <label>ویژگی محصول</label>
+                                            <input type="text" placeholder="ویژگی محصول" id="product_feature_input">
+                                            <label> مقدار ویژگی محصول</label>
+                                            <input type="text" placeholder="مقدار ویژگی محصول" id="product_feature_value_input">
+
+                                            <button class="btn btn-success" id="add_feature_button">افزودن ویژگی</button>
+
+                                            <div class="table-responsive">
+                                                <table class="table">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>نام ویژگی</th>
+                                                            <th>مقدار ویژگی</th>
+                                                            <th>دستورات</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody id="list_of_product_features">
+                                                        @if (Model.ProductFeatures != null && Model.ProductFeatures.Any())
+                                                        {
+                                                            foreach (var feature in Model.ProductFeatures)
+                                                            {
+                                                                <tr color-table-item="@feature.Feature-@feature.FeatureValue">
+                                                                    <td> @feature.Feature </td>
+                                                                    <td> @feature.FeatureValue </td>
+                                                                    <td> <a class="btn btn-danger text-white" onclick="removeProductColor('@feature.Feature-@feature.FeatureValue')">حذف</a> </td>
                                                                 </tr>
                                                             }
                                                         }

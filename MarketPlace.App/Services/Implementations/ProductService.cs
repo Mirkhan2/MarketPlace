@@ -18,8 +18,8 @@ using static MarketPlace.Data.DTO.Products.EditProductDTO;
 
 namespace MarketPlace.App.Services.Implementations
 {
-    public class ProductService : IProductService
-    {
+	public class ProductService : IProductService
+	{
 		#region constructor
 
 		private readonly IGenericRepository<Product> _productRepository;
@@ -27,14 +27,16 @@ namespace MarketPlace.App.Services.Implementations
 		private readonly IGenericRepository<ProductSelectedCategory> _productSelectedCategoryRepository;
 		private readonly IGenericRepository<ProductColor> _productColorRepository;
 		private readonly IGenericRepository<ProductGallery> _productGalleryRepository;
+		private readonly IGenericRepository<ProductFeature> _productFeatureRepository;
 
-		public ProductService(IGenericRepository<Product> productRepository, IGenericRepository<ProductCategory> productCategoryRepository, IGenericRepository<ProductSelectedCategory> productSelectedCategoryRepository, IGenericRepository<ProductColor> productColorRepository, IGenericRepository<ProductGallery> productGalleryRepository)
+		public ProductService(IGenericRepository<Product> productRepository, IGenericRepository<ProductCategory> productCategoryRepository, IGenericRepository<ProductSelectedCategory> productSelectedCategoryRepository, IGenericRepository<ProductColor> productColorRepository, IGenericRepository<ProductGallery> productGalleryRepository, IGenericRepository<ProductFeature> productFeatureRepository)
 		{
 			_productRepository = productRepository;
 			_productCategoryRepository = productCategoryRepository;
 			_productSelectedCategoryRepository = productSelectedCategoryRepository;
 			_productColorRepository = productColorRepository;
 			_productGalleryRepository = productGalleryRepository;
+			_productFeatureRepository = productFeatureRepository;
 		}
 
 		#endregion
@@ -195,8 +197,8 @@ namespace MarketPlace.App.Services.Implementations
 							ColorName = productColor.ColorName,
 							Price = productColor.Price,
 							ProductId = productId,
-							ColorCode	= productColor.ColorCode
-							
+							ColorCode = productColor.ColorCode
+
 						});
 					}
 				}
@@ -227,14 +229,14 @@ namespace MarketPlace.App.Services.Implementations
 		{
 			var query = _productRepository.GetQuery()
 				.Include(s => s.ProductSelectedCategories)
-				.ThenInclude(s=> s.ProductCategory)
+				.ThenInclude(s => s.ProductCategory)
 				.AsQueryable();
-            var expensiveProduct = await query.OrderByDescending(s => s.Price).FirstOrDefaultAsync();
-            filter.FilterMaxPrice = expensiveProduct.Price;
+			var expensiveProduct = await query.OrderByDescending(s => s.Price).FirstOrDefaultAsync();
+			filter.FilterMaxPrice = expensiveProduct.Price;
 
-            #region state
+			#region state
 
-            switch (filter.FilterProductState)
+			switch (filter.FilterProductState)
 			{
 				case FilterProductState.All:
 					break;
@@ -261,17 +263,17 @@ namespace MarketPlace.App.Services.Implementations
 					query = query.OrderByDescending(s => s.CreateDate);
 					break;
 				case FilterProductOrderBy.CreateDate_Acs:
-                    query = query.OrderByDescending(s => s.CreateDate);
+					query = query.OrderByDescending(s => s.CreateDate);
 
-                    break;
+					break;
 				case FilterProductOrderBy.Price_Des:
-                    query = query.OrderByDescending(s => s.Price);
+					query = query.OrderByDescending(s => s.Price);
 
-                    break;
+					break;
 				case FilterProductOrderBy.Price_Acs:
-                    query = query.OrderByDescending(s => s.Price);
+					query = query.OrderByDescending(s => s.Price);
 
-                    break;
+					break;
 				default:
 					break;
 			}
@@ -285,24 +287,24 @@ namespace MarketPlace.App.Services.Implementations
 			if (filter.SellerId != null && filter.SellerId != 0)
 				query = query.Where(s => s.SellerId == filter.SellerId.Value);
 
-         
+
 
 			if (filter.SelectedMaxPrice == 0) filter.SelectedMaxPrice = expensiveProduct.Price;
-           
 
-            query = query.Where(s => s.Price >= filter.SelectedMinPrice);
+
+			query = query.Where(s => s.Price >= filter.SelectedMinPrice);
 			query = query.Where(s => s.Price >= filter.SelectedMaxPrice);
 
 			if (!string.IsNullOrEmpty(filter.Category))
 				query = query.Where(s => s.ProductSelectedCategories.Any(f => f.ProductCategory.UrlName == filter.Category));
 
-							
 
-            #endregion
 
-            #region paging
+			#endregion
 
-            var pager = Pager.Build(filter.PageId, await query.CountAsync(), filter.TakeEntity, filter.HowManyShowPageAfterAndBefore);
+			#region paging
+
+			var pager = Pager.Build(filter.PageId, await query.CountAsync(), filter.TakeEntity, filter.HowManyShowPageAfterAndBefore);
 			var allEntities = await query.Paging(pager).ToListAsync();
 
 			#endregion
@@ -395,8 +397,8 @@ namespace MarketPlace.App.Services.Implementations
 			await _productGalleryRepository.SaveChanges();
 			return CreateOrEditProductGalleryResult.Success;
 		}
-        public async Task<ProductDetailDTO> GetProductDetailById(long productId)
-        {
+		public async Task<ProductDetailDTO> GetProductDetailById(long productId)
+		{
 			var product = await _productRepository.GetQuery()
 				.AsQueryable()
 				.Include(s => s.Seller)
@@ -406,8 +408,8 @@ namespace MarketPlace.App.Services.Implementations
 				.Include(s => s.ProductGalleries)
 				.Include(s => s.ProductColors)
 				.SingleOrDefaultAsync(s => s.Id == productId);
-				
-				
+
+
 			if (product == null) return null;
 			return new ProductDetailDTO
 			{
@@ -423,14 +425,14 @@ namespace MarketPlace.App.Services.Implementations
 				SellerId = product.SellerId
 
 			};
-        }
+		}
 
 
-        #endregion
+		#endregion
 
-        #region product categories
+		#region product categories
 
-        public async Task<List<ProductCategory>> GetAllProductCategoriesByParentId(long? parentId)
+		public async Task<List<ProductCategory>> GetAllProductCategoriesByParentId(long? parentId)
 		{
 			if (parentId == null || parentId == 0)
 			{
@@ -454,18 +456,61 @@ namespace MarketPlace.App.Services.Implementations
 
 
 
-		#endregion
+        #endregion
 
-		#region dispose
+        #region product feature
 
-		public async ValueTask DisposeAsync()
+        public async Task CreateProductFeatures(List<CreateProductFeatureDTO> features, long productId)
+        {
+            var newFeatures = new List<ProductFeature>();
+            if (features != null && features.Any())
+            {
+                foreach (var feature in features)
+                {
+                    newFeatures.Add(new ProductFeature()
+                    {
+                        ProductId = productId,
+                        FeatureTitle = feature.FeatureTitle,
+                        FeatureValue = feature.FeatureValue
+                    });
+                }
+
+                await _productFeatureRepository.AddRangeEntities(newFeatures);
+                await _productFeatureRepository.SaveChanges();
+            }
+        }
+
+
+
+
+        public async Task RemoveAllProductFeatures(long productId)
+        {
+            var productFeatures = await _productFeatureRepository.GetQuery()
+                .Where(s => s.ProductId == productId)
+                .ToListAsync();
+
+            _productFeatureRepository.DeletePermanentEntities(productFeatures);
+            await _productFeatureRepository.SaveChanges();
+        }
+
+        #endregion
+
+        #region dispose
+
+        public async ValueTask DisposeAsync()
 		{
 			await _productCategoryRepository.DisposeAsync();
 			await _productRepository.DisposeAsync();
 			await _productSelectedCategoryRepository.DisposeAsync();
+			await _productFeatureRepository.DisposeAsync();
+			await _productCategoryRepository.DisposeAsync();
+			await _productColorRepository.DisposeAsync();
+			
+			
 		}
 
      
+
 
         #endregion
     }

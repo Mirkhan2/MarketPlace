@@ -50,5 +50,12 @@ namespace MarketPlace.App.Services.Interfaces
         Task<List<ProductCategory>> GetAllActiveProductCategories();
 
         #endregion
+
+        #region product feature
+
+        Task CreateProductFeatures(List<CreateProductFeatureDTO> features, long productId);
+        Task RemoveAllProductFeatures(long productId);
+
+        #endregion
     }
 }

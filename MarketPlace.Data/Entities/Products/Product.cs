@@ -55,6 +55,7 @@ namespace MarketPlace.Data.Entities.Products
         public ICollection<ProductColor> ProductColors { get; set; }
         public ICollection<ProductGallery> ProductGalleries { get; set; }
         public Seller Seller { get; set; }
+        public ICollection<ProductFeature> ProductFeatures { get; set; }
 
         #endregion
     }

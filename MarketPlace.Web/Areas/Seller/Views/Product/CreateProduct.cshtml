@@ -5,8 +5,6 @@
     ViewData["Title"] = "ثبت محصول";
     var categories = ViewBag.Categories as List<ProductCategory>;
 }
-
-
 <div class="breadcrumbs_area">
     <div class="container">
         <div class="row">
@@ -101,6 +99,9 @@
 
                                             <label>رنگ محصول</label>
                                             <input type="text" placeholder="رنگ محصول" id="product_color_name_input">
+
+                                            <label>کد رنگ محصول</label>
+                                            <input type="color" id="product_color_code_input">
 
                                             <label>قیمت مضاف رنگ محصول</label>
                                             <input type="number" placeholder="قیمت مضاف رنگ محصول" id="product_color_price_input">
