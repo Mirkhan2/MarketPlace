@@ -129,7 +129,13 @@ namespace MarketPlace.App.Services.Implementations
 					.Where(s => !s.IsDelete && s.ProductId == productId)
 					.Select(s => new CreateProductColorDTO { Price = s.Price, ColorName = s.ColorName }).ToListAsync(),
 				SelectedCategories = await _productSelectedCategoryRepository.GetQuery().AsQueryable()
-					.Where(s => s.ProductId == productId).Select(s => s.ProductCategoryId).ToListAsync()
+					.Where(s =>  !s.IsDelete && s.ProductId == productId).Select(s => s.ProductCategoryId).ToListAsync(),
+					ProductFeatures = await _productFeatureRepository.GetQuery().AsQueryable()
+					.Select(f => new CreateProductFeatureDTO 
+					{
+						FeatureValue = f.FeatureValue,
+						Feature = f.FeatureTitle
+					}).ToListAsync()
 			};
 		}
 
@@ -166,6 +172,8 @@ namespace MarketPlace.App.Services.Implementations
 			await _productSelectedCategoryRepository.SaveChanges();
 			await RemoveAllProductSelectedColors(product.Id);
 			await AddProductSelectedColors(product.Id, product.ProductColors);
+			await RemoveAllProductFeatures(product.Id);
+			await CreateProductFeatures( product.ProductFeatures, product.Id );
 			await _productColorRepository.SaveChanges();
 
 			return EditProductResult.Success;
@@ -407,10 +415,14 @@ namespace MarketPlace.App.Services.Implementations
 				.ThenInclude(s => s.ProductCategory)
 				.Include(s => s.ProductGalleries)
 				.Include(s => s.ProductColors)
+				.Include(s => s.ProductFeatures)
 				.SingleOrDefaultAsync(s => s.Id == productId);
 
 
 			if (product == null) return null;
+
+			var selectedCategoriesIds = product.ProductSelectedCategories.Select( f => f.ProductCategoryId).ToList();
+
 			return new ProductDetailDTO
 			{
 				Price = product.Price,
@@ -422,7 +434,14 @@ namespace MarketPlace.App.Services.Implementations
 				ProductGalleries = product.ProductGalleries.ToList(),
 				Title = product.Title,
 				ProductColors = product.ProductColors.ToList(),
-				SellerId = product.SellerId
+				SellerId = product.SellerId,
+				ProductFeatures	= product.ProductFeatures.ToList(),
+				RelatedProducts = await _productRepository.GetQuery()
+				.Include(s => s.ProductSelectedCategories)
+				.Where(s =>s.ProductSelectedCategories
+				.Any(f => selectedCategoriesIds.Contains(f.ProductCategoryId)) && s.Id != productId  && s.ProductAcceptanceState == ProductAcceptanceState.Accepted )
+				.ToListAsync()
+
 
 			};
 		}
@@ -470,7 +489,7 @@ namespace MarketPlace.App.Services.Implementations
                     newFeatures.Add(new ProductFeature()
                     {
                         ProductId = productId,
-                        FeatureTitle = feature.FeatureTitle,
+                        FeatureTitle = feature.Feature,
                         FeatureValue = feature.FeatureValue
                     });
                 }
