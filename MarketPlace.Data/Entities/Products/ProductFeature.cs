@@ -20,7 +20,7 @@ namespace MarketPlace.Data.Entities.Products
         [Required(ErrorMessage = "لطفا {0} را وارد نمایید")]
         [MaxLength(300, ErrorMessage = "{0} نمیتواند بیشتر از {1} کاراکتر باشد")]
         public string FeatureTitle { get; set; }
-
+        //Goli joawn
         [Display(Name = "مقدار ویژگی")]
         [Required(ErrorMessage = "لطفا {0} را وارد نمایید")]
         [MaxLength(300, ErrorMessage = "{0} نمیتواند بیشتر از {1} کاراکتر باشد")]
