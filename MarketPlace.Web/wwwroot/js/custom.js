@@ -217,3 +217,14 @@ function changeProductPriceBasedOnColor(priceOfColor, colorName) {
     var basePrice = parseInt($('#ProductBasePrice').val(), 0);
     $('.current_price').html((basePrice + priceOfColor) + ' تومان' + ' ( ' + colorName + ' )');
 }
+
+
+function onSuccessAddProductToOrder(res) {
+    console.log(res);
+}
+
+
+
+
+
+
