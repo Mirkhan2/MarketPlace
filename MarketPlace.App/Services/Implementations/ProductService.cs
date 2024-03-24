@@ -425,6 +425,8 @@ namespace MarketPlace.App.Services.Implementations
 
 			return new ProductDetailDTO
 			{
+				ProductId = productId,
+
 				Price = product.Price,
 				ImageName = product.ImageName,
 				Description = product.Description,

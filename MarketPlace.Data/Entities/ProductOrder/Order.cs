@@ -19,7 +19,6 @@ namespace MarketPlace.Data.Entities.ProductOrder
         public bool IsPaid { get; set; }
 
         [Display(Name = "کد پیگیری")]
-        [Required(ErrorMessage = "لطفا {0} را وارد نمایید")]
         [MaxLength(300, ErrorMessage = "{0} نمیتواند بیشتر از {1} کاراکتر باشد")]
         public string TracingCode { get; set; }
 

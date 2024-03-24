@@ -3,6 +3,7 @@ using MarketPlace.App.Services.Interfaces;
 using MarketPlace.Data.DTO.Orders;
 using MarketPlace.Web.Http;
 using MarketPlace.Web.PresentationExtensions;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace MarketPlace.Web.Areas.User.Controllers
@@ -22,13 +23,25 @@ namespace MarketPlace.Web.Areas.User.Controllers
 
         #region add product to open order
         [HttpPost("add-product-to-order")]
+        [AllowAnonymous]
         public async Task<IActionResult> AddProductToOrder(AddProductToOrderDTO order)
         {
             if (!ModelState.IsValid)
             {
-                await _orderService.AddProductToOpenOrder(User.GetUserId(), order);
-                return JsonResponseStatus.SendStatus(JsonResponsStatusType.Success, "Product Succed submit",
+               if(User.Identity.IsAuthenticated)
+                {
+                    await _orderService.AddProductToOpenOrder(User.GetUserId(), order);
+                    return JsonResponseStatus.SendStatus(JsonResponsStatusType.Success,
+                        "Product Succed submit",
+                        null);
+                }
+                else
+                {
+                    return JsonResponseStatus.SendStatus(JsonResponsStatusType.Danger,
+                    "Product  Error First site Handeln",
                     null);
+
+                }
             }
             return JsonResponseStatus.SendStatus(JsonResponsStatusType.Danger,
                 "Error", null);
