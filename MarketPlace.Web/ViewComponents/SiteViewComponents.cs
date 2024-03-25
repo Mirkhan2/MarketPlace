@@ -2,6 +2,7 @@
 using MarketPlace.App.Services.Implementations;
 using MarketPlace.App.Services.Interfaces;
 using MarketPlace.Data.Entities.Site;
+using MarketPlace.Web.PresentationExtensions;
 using Microsoft.AspNetCore.Mvc;
 
 namespace MarketPlace.Web.ViewComponents
@@ -69,5 +70,26 @@ namespace MarketPlace.Web.ViewComponents
             return View("HomeSlider" , sliders);
         }
     }
-	#endregion
+    #endregion
+
+    #region user order
+
+    public class UserOrderViewComponent : ViewComponent
+    {
+        private readonly IOrderService _orderService;
+
+        public UserOrderViewComponent(IOrderService orderService)
+        {
+            _orderService = orderService;
+        }
+
+        public async Task<IViewComponentResult> InvokeAsync()
+        {
+            // var openOrder = await _orderService.GetUserLatestOpenOrder(User.GetUserId());
+            var openOrder = await _orderService.GetUserOpenOrderDetail(User.GetUserId());
+            return View("UserOrder", openOrder);
+        }
+    }
+
+    #endregion
 }

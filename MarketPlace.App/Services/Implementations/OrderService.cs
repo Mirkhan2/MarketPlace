@@ -45,6 +45,9 @@ namespace MarketPlace.App.Services.Implementations
 
             var userOpenOrder = await _orderRepository.GetQuery()
                 .Include(s => s.OrderDetails)
+                .ThenInclude(s => s.ProductColor)
+                .Include(s => s.OrderDetails)
+                .ThenInclude(s =>s.Product)
                 .SingleOrDefaultAsync(s => s.UserId == userId && !s.IsPaid);
 
             return userOpenOrder;
@@ -60,8 +63,8 @@ namespace MarketPlace.App.Services.Implementations
             var openOrder = await GetUserLatestOpenOrder(userId);
 
             var similarOrder = openOrder.OrderDetails.SingleOrDefault(s =>
-                s.ProductId == order.ProductColorId && s.ProductColorId == order.ProductColorId);
-
+                s.ProductId == order.ProductId && s.ProductColorId == order.ProductColorId);
+               
             if (similarOrder == null)
             {
                 var orderDetail = new OrderDetail
