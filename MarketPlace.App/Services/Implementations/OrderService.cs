@@ -1,4 +1,5 @@
 ﻿
+using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
 using MarketPlace.App.Services.Interfaces;
@@ -6,6 +7,7 @@ using MarketPlace.Data.DTO.Orders;
 using MarketPlace.Data.Entities.ProductOrder;
 using MarketPlace.Data.Repository;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace MarketPlace.App.Services.Implementations
 {
@@ -47,7 +49,7 @@ namespace MarketPlace.App.Services.Implementations
                 .Include(s => s.OrderDetails)
                 .ThenInclude(s => s.ProductColor)
                 .Include(s => s.OrderDetails)
-                .ThenInclude(s =>s.Product)
+                .ThenInclude(s => s.Product)
                 .SingleOrDefaultAsync(s => s.UserId == userId && !s.IsPaid);
 
             return userOpenOrder;
@@ -56,7 +58,7 @@ namespace MarketPlace.App.Services.Implementations
         #endregion
 
         #region order detail
-      
+
 
         public async Task AddProductToOpenOrder(long userId, AddProductToOrderDTO order)
         {
@@ -64,7 +66,7 @@ namespace MarketPlace.App.Services.Implementations
 
             var similarOrder = openOrder.OrderDetails.SingleOrDefault(s =>
                 s.ProductId == order.ProductId && s.ProductColorId == order.ProductColorId);
-               
+
             if (similarOrder == null)
             {
                 var orderDetail = new OrderDetail
@@ -84,6 +86,28 @@ namespace MarketPlace.App.Services.Implementations
                 await _orderDetailRepository.SaveChanges();
             }
         }
+        public async Task<UserOpenOrderDTO> GetUserOpenOrderDetail(long userId)
+        {
+            var userOpenOrder = await GetUserLatestOpenOrder(userId);
+
+            return new UserOpenOrderDTO
+            {
+                UserId = userId,
+                Description = userOpenOrder.Description,
+                Details = userOpenOrder.OrderDetails.Select(s => new UserOpenOrderDetailItemDTO
+                {
+                    Count = s.Count,
+                    ColorName = s.ProductColor?.ColorName,
+                    ProductColorId = s.ProductColorId,
+                    ProductColorPrice = s.ProductColor?.Price  ?? 0,
+                    ProductPrice = s.Product.Price,
+                    ProductTitle = s.Product.Title,
+                  //  ProductIamgeName = s.Product.ImageName
+                }).ToList()
+            };
+            return null;
+        }
+
 
         #endregion
 

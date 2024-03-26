@@ -21,6 +21,7 @@ namespace MarketPlace.App.Services.Interfaces
         #region order detail
 
         Task AddProductToOpenOrder(long userId, AddProductToOrderDTO order);
+        Task<UserOpenOrderDTO> GetUserOpenOrderDetail(long userId);
 
         #endregion
 

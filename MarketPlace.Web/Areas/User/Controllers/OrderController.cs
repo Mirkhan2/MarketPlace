@@ -48,5 +48,14 @@ namespace MarketPlace.Web.Areas.User.Controllers
         }
 
         #endregion
+
+        #region open cart
+        [HttpGet("open-order")]
+        public async Task<IActionResult> UserOpenOrder()
+        {
+            var openOrder = await _orderService.GetUserLatestOpenOrder(User.GetUserId());   
+            return View(openOrder);
+        }
+        #endregion
     }
 }
