@@ -15,12 +15,12 @@ namespace MarketPlace.Data.Entities.Wallet
         public int Price { get; set; }
         public TransactionType TransactionType { get; set; }
 
-
+        public string Description { get; set; }
         #endregion
 
         #region relations
         public Seller Seller { get; set; }
-        public ICollection<SellerWallet> SellerWallets { get; set; }
+     //   public ICollection<SellerWallet> SellerWallets { get; set; }
 
         #endregion
     }

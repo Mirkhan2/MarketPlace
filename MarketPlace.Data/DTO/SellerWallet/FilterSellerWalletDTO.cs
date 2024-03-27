@@ -8,18 +8,19 @@ namespace MarketPlace.Data.DTO.SellerWallet
         public long? SellerId { get; set; }
 
         public int? PriceFrom { get; set; }
-        public int? PriceTo { get; set; }
-        public List<Entities.Wallet.SellerWallet> MyProperty { get; set; }
-        public FilterSellerWalletDTO SetSellerWallets (List<Entities.Wallet.SellerWallet> wallets)
-        { 
-            SellerWallets = wallets;
 
-                return this;
+        public int? PriceTo { get; set; }
+
+        public List<Entities.Wallet.SellerWallet> SellerWallets { get; set; }
+
+        public FilterSellerWalletDTO SetSellerWallets(List<Entities.Wallet.SellerWallet> wallets)
+        {
+            SellerWallets = wallets;
+            return this;
         }
 
-            public FilterSellerWalletDTO SetPaging(BasePaging paging )
+        public FilterSellerWalletDTO SetPaging(BasePaging paging)
         {
-
             this.PageId = paging.PageId;
             this.AllEntitiesCount = paging.AllEntitiesCount;
             this.StartPage = paging.StartPage;
