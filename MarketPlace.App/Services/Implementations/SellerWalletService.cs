@@ -21,6 +21,8 @@ namespace MarketPlace.App.Services.Implementations
             _sellerWalletRepository = sellerWalletRepository;
             
         }
+
+    
         #endregion
 
         #region wallet
@@ -52,6 +54,11 @@ namespace MarketPlace.App.Services.Implementations
             var wallets =  await query.Paging(pager).ToListAsync();
 
             return filter.SetSellerWallets(wallets).SetPaging(pager);
+        }
+        public async Task AddWallet(SellerWallet wallet)
+        {
+           _sellerWalletRepository.AddEntity(wallet);
+            await _sellerWalletRepository.SaveChanges();
         }
 
         #endregion

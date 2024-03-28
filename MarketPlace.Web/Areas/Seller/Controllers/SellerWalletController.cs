@@ -31,7 +31,7 @@ namespace MarketPlace.Web.Areas.Seller.Controllers
             var seller = await _sellerService.GetLastActiveSellerByUserId(User.GetUserId());
             if (seller == null) return NotFound();
             filter.SellerId = seller.Id;
-            return View(await _sellerWalletService.FilterSellerWallet(filter));
+            return View(await _sellerWalletService.FilterSellerWalletDTO(filter));
         }
 
         #endregion

@@ -1,13 +1,12 @@
-﻿
-using System.ComponentModel;
+﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
 using MarketPlace.App.Services.Interfaces;
 using MarketPlace.Data.DTO.Orders;
 using MarketPlace.Data.Entities.ProductOrder;
+using MarketPlace.Data.Entities.Wallet;
 using MarketPlace.Data.Repository;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace MarketPlace.App.Services.Implementations
 {
@@ -17,11 +16,13 @@ namespace MarketPlace.App.Services.Implementations
 
         private readonly IGenericRepository<Order> _orderRepository;
         private readonly IGenericRepository<OrderDetail> _orderDetailRepository;
+        private readonly ISellerWalletService _sellerWalletService;
 
-        public OrderService(IGenericRepository<Order> orderRepository, IGenericRepository<OrderDetail> orderDetailRepository)
+        public OrderService(IGenericRepository<Order> orderRepository, IGenericRepository<OrderDetail> orderDetailRepository, ISellerWalletService sellerWalletService)
         {
             _orderRepository = orderRepository;
             _orderDetailRepository = orderDetailRepository;
+            _sellerWalletService = sellerWalletService;
         }
 
         #endregion
@@ -39,7 +40,6 @@ namespace MarketPlace.App.Services.Implementations
             return order.Id;
         }
 
-
         public async Task<Order> GetUserLatestOpenOrder(long userId)
         {
             if (!await _orderRepository.GetQuery().AnyAsync(s => s.UserId == userId && !s.IsPaid))
@@ -50,15 +50,62 @@ namespace MarketPlace.App.Services.Implementations
                 .ThenInclude(s => s.ProductColor)
                 .Include(s => s.OrderDetails)
                 .ThenInclude(s => s.Product)
+                .ThenInclude(s => s.ProductDiscounts)
                 .SingleOrDefaultAsync(s => s.UserId == userId && !s.IsPaid);
 
             return userOpenOrder;
         }
 
+        public async Task<int> GetTotalOrderPriceForPayment(long userId)
+        {
+            var userOpenOrder = await GetUserLatestOpenOrder(userId);
+            int totalPrice = 0;
+
+            foreach (var detail in userOpenOrder.OrderDetails)
+            {
+                var oneProductPrice = detail.ProductColor != null
+                    ? detail.Product.Price + detail.ProductColor.Price
+                    : detail.Product.Price;
+
+                totalPrice += detail.Count * oneProductPrice;
+            }
+
+            return totalPrice;
+        }
+
+        public async Task PayOrderProductPriceToSeller(long userId)
+        {
+            var openOrder = await GetUserLatestOpenOrder(userId);
+
+            foreach (var detail in openOrder.OrderDetails)
+            {
+                var productPrice = detail.Product.Price;
+                var productColorPrice = detail.ProductColor?.Price ?? 0;
+                var discount = 0;
+                var totalPrice = detail.Count * (productPrice + productColorPrice) - discount;
+
+                await _sellerWalletService.AddWallet(new SellerWallet
+                {
+                    SellerId = detail.Product.SellerId,
+                    Price = (int)Math.Ceiling(totalPrice * detail.Product.SiteProfit / (double)100),
+                    TransactionType = TransactionType.Deposit,
+                    Description = $"پرداخت مبلغ {totalPrice} تومان جهت فروش {detail.Product.Title} به تعداد {detail.Count} عدد با سهم تهیین شده ی {100 - detail.Product.SiteProfit} درصد"
+                });
+
+                detail.ProductPrice = totalPrice;
+                detail.ProductColorPrice = productColorPrice;
+                _orderDetailRepository.EditEntity(detail);
+            }
+
+            openOrder.IsPaid = true;
+            // todo: set description and tracing code in order
+            _orderRepository.EditEntity(openOrder);
+            await _orderRepository.SaveChanges();
+        }
+
         #endregion
 
         #region order detail
-
 
         public async Task AddProductToOpenOrder(long userId, AddProductToOrderDTO order)
         {
@@ -86,6 +133,7 @@ namespace MarketPlace.App.Services.Implementations
                 await _orderDetailRepository.SaveChanges();
             }
         }
+
         public async Task<UserOpenOrderDTO> GetUserOpenOrderDetail(long userId)
         {
             var userOpenOrder = await GetUserLatestOpenOrder(userId);
@@ -99,15 +147,17 @@ namespace MarketPlace.App.Services.Implementations
                     Count = s.Count,
                     ColorName = s.ProductColor?.ColorName,
                     ProductColorId = s.ProductColorId,
-                    ProductColorPrice = s.ProductColor?.Price  ?? 0,
+                    ProductColorPrice = s.ProductColor?.Price ?? 0,
+                    ProductId = s.ProductId,
                     ProductPrice = s.Product.Price,
                     ProductTitle = s.Product.Title,
-                  //  ProductIamgeName = s.Product.ImageName
+                    ProductImageName = s.Product.ImageName,
+                    DiscountPercentage = s.Product.ProductDiscounts
+                        .OrderByDescending(a => a.CreateDate)
+                        .FirstOrDefault(a => a.ExpireDate > DateTime.Now)?.Percentage
                 }).ToList()
             };
-            return null;
         }
-
 
         #endregion
 
@@ -119,7 +169,10 @@ namespace MarketPlace.App.Services.Implementations
             await _orderDetailRepository.DisposeAsync();
         }
 
-        
+        public Task<int> GetTotalOrderPriceFOrPayement(long userId)
+        {
+            throw new NotImplementedException();
+        }
 
         #endregion
     }

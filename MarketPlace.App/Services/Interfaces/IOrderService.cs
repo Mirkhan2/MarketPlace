@@ -15,6 +15,8 @@ namespace MarketPlace.App.Services.Interfaces
 
         Task<long> AddOrderForUser(long userId);
         Task<Order> GetUserLatestOpenOrder(long userId);
+        Task<int> GetTotalOrderPriceFOrPayement(long userId);
+        Task PayOrderProductPriceToSeller(long userId);
 
         #endregion
 
