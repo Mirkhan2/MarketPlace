@@ -13,7 +13,7 @@ namespace MarketPlace.Data.DTO.Orders
         public string Description { get; set; }
 
         public List<UserOpenOrderDetailItemDTO> Details { get; set; }
-            
+
         public int GetTotalPrice()
         {
             return Details.Sum(s => (s.ProductPrice + s.ProductColorPrice) * s.Count);

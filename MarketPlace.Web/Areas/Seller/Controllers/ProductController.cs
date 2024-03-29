@@ -6,7 +6,6 @@ using MarketPlace.Web.Http;
 using MarketPlace.Web.PresentationExtensions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using static MarketPlace.Data.DTO.Products.EditProductDTO;
 
 namespace MarketPlace.Web.Areas.Seller.Controllers
 {
@@ -116,6 +115,15 @@ namespace MarketPlace.Web.Areas.Seller.Controllers
             return View(product);
         }
 
+        #endregion
+        #region get product Json
+        [HttpGet("Product-json")]
+        public async Task<IActionResult> GetSellerProductJson(string productName)
+        {
+            var seller = await _sellerService.GetLastActiveSellerByUserId(User.GetUserId());
+
+            return JsonResponseStatus.SendStatus(JsonResponsStatusType.Success, "", null);
+        }
         #endregion
 
         #endregion

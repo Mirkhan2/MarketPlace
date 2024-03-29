@@ -233,7 +233,14 @@ namespace MarketPlace.App.Services.Implementations
 			}
 		}
 
-		public async Task<FilterProductDTO> FilterProducts(FilterProductDTO filter)
+        public async Task<List<Product>> GetPproductsForSellerByProductName(long sellerId, string productName)
+        {
+			return await _productRepository.GetQuery()
+				.AsQueryable().Where(s => s.SellerId == sellerId && EF.Functions.Like(s.Title,$"%{productName}"))
+        }
+
+
+        public async Task<FilterProductDTO> FilterProducts(FilterProductDTO filter)
 		{
 			var query = _productRepository.GetQuery()
 				.Include(s => s.ProductSelectedCategories)
@@ -525,12 +532,8 @@ namespace MarketPlace.App.Services.Implementations
 			await _productSelectedCategoryRepository.DisposeAsync();
 			await _productFeatureRepository.DisposeAsync();
 			await _productCategoryRepository.DisposeAsync();
-			await _productColorRepository.DisposeAsync();
-			
-			
+			await _productColorRepository.DisposeAsync();	
 		}
-
-     
 
 
         #endregion

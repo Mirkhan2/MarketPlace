@@ -62,7 +62,7 @@ namespace MarketPlace.Data.Entities.Products
             public Seller Seller { get; set; }
             public ICollection<ProductFeature> ProductFeatures { get; set; }
             public ICollection<OrderDetail> OrderDetails { get; set; }
-           // public ICollection<ProductDiscount> ProductDiscounts { get; set; }
+            public ICollection<ProductDiscount> ProductDiscounts { get; set; }
 
             #endregion
         }

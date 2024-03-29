@@ -10,12 +10,11 @@ namespace MarketPlace.App.Services.Interfaces
 {
     public interface IOrderService  : IAsyncDisposable
     {
-
         #region order
 
         Task<long> AddOrderForUser(long userId);
         Task<Order> GetUserLatestOpenOrder(long userId);
-        Task<int> GetTotalOrderPriceFOrPayement(long userId);
+        Task<int> GetTotalOrderPriceForPayment(long userId);
         Task PayOrderProductPriceToSeller(long userId);
 
         #endregion
@@ -23,6 +22,7 @@ namespace MarketPlace.App.Services.Interfaces
         #region order detail
 
         Task AddProductToOpenOrder(long userId, AddProductToOrderDTO order);
+
         Task<UserOpenOrderDTO> GetUserOpenOrderDetail(long userId);
 
         #endregion
