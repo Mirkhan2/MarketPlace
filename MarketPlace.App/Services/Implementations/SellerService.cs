@@ -18,20 +18,20 @@ namespace MarketPlace.App.Services.Implementations
 {
     public class SellerService : ISellerService
     {
-        #region constructor
-        private readonly IGenericRepository<User> _userRepository;
+        #region constcutor
+
         private readonly IGenericRepository<Seller> _sellerRepository;
+        private readonly IGenericRepository<User> _userRepository;
+
         public SellerService(IGenericRepository<Seller> sellerRepository, IGenericRepository<User> userRepository)
         {
             _sellerRepository = sellerRepository;
             _userRepository = userRepository;
-
-
         }
+
         #endregion
 
         #region seller
-
 
         public async Task<RequestSellerResult> AddNewSellerRequest(RequestSellerDTO seller, long userId)
         {
@@ -40,7 +40,7 @@ namespace MarketPlace.App.Services.Implementations
             if (user.IsBlocked) return RequestSellerResult.HasNotPermission;
 
             var hasUnderProgressRequest = await _sellerRepository.GetQuery().AsQueryable().AnyAsync(s =>
-            s.UserId == userId && s.StoreAcceptanceState == StoreAcceptanceState.UnderProgress);
+                s.UserId == userId && s.StoreAcceptanceState == StoreAcceptanceState.UnderProgress);
 
             if (hasUnderProgressRequest) return RequestSellerResult.HasUnderProgressRequest;
 
@@ -52,6 +52,7 @@ namespace MarketPlace.App.Services.Implementations
                 Phone = seller.Phone,
                 StoreAcceptanceState = StoreAcceptanceState.UnderProgress
             };
+
             await _sellerRepository.AddEntity(newSeller);
             await _sellerRepository.SaveChanges();
 
@@ -110,29 +111,32 @@ namespace MarketPlace.App.Services.Implementations
             var allEntities = await query.Paging(pager).ToListAsync();
 
             #endregion
-            return filter;
+
+            return filter.SetPaging(pager).SetSellers(allEntities);
         }
-        public async Task<EditRequestSellerDTO> GetRequestSellerForEdit(long id , long currentUserId)
+
+        public async Task<EditRequestSellerDTO> GetRequestSellerForEdit(long id, long currentUserId)
         {
             var seller = await _sellerRepository.GetEntityById(id);
-            if(seller == null || seller.UserId != currentUserId) return null;
+            if (seller == null || seller.UserId != currentUserId) return null;
+
             return new EditRequestSellerDTO
             {
                 Id = seller.Id,
-                Phone = seller.Phone,   
+                Phone = seller.Phone,
                 Address = seller.Address,
                 StoreName = seller.StoreName
             };
         }
+
         public async Task<EditRequestSellerResult> EditRequestSeller(EditRequestSellerDTO request, long currentUserId)
         {
-           var seller = await _sellerRepository.GetEntityById(request.Id);
+            var seller = await _sellerRepository.GetEntityById(request.Id);
             if (seller == null || seller.UserId != currentUserId) return EditRequestSellerResult.NotFound;
 
             seller.Phone = request.Phone;
             seller.Address = request.Address;
             seller.StoreName = request.StoreName;
-            //kheyli mohem
             seller.StoreAcceptanceState = StoreAcceptanceState.UnderProgress;
             _sellerRepository.EditEntity(seller);
             await _sellerRepository.SaveChanges();
@@ -141,20 +145,20 @@ namespace MarketPlace.App.Services.Implementations
         }
 
         public async Task<bool> AcceptSellerRequest(long requestId)
-        {   
+        {
             var sellerRequest = await _sellerRepository.GetEntityById(requestId);
-            if (sellerRequest == null) 
+            if (sellerRequest != null)
             {
                 sellerRequest.StoreAcceptanceState = StoreAcceptanceState.Accepted;
-                sellerRequest.StoreAcceptanceDescription = "Your Data Submited";
+                sellerRequest.StoreAcceptanceDescription = "اطلاعات پنل فروشندگی شما تایید شده است";
                 _sellerRepository.EditEntity(sellerRequest);
                 await _sellerRepository.SaveChanges();
 
                 return true;
-            } 
+            }
+
             return false;
         }
-
 
         public async Task<bool> RejectSellerRequest(RejectItemDTO reject)
         {
@@ -166,37 +170,36 @@ namespace MarketPlace.App.Services.Implementations
                 _sellerRepository.EditEntity(seller);
                 await _sellerRepository.SaveChanges();
                 return true;
-
             }
+
             return false;
         }
-
 
         public async Task<Seller> GetLastActiveSellerByUserId(long userId)
         {
             return await _sellerRepository.GetQuery()
                 .OrderByDescending(s => s.CreateDate)
                 .FirstOrDefaultAsync(s =>
-                s.UserId == userId&& s.StoreAcceptanceState == StoreAcceptanceState.Accepted);
+                    s.UserId == userId && s.StoreAcceptanceState == StoreAcceptanceState.Accepted);
         }
 
         public async Task<bool> HasUserAnyActiveSellerPanel(long userId)
         {
-           return await _sellerRepository.GetQuery()
+            return await _sellerRepository.GetQuery()
                 .OrderByDescending(s => s.CreateDate)
                 .AnyAsync(s =>
-                s.UserId == userId && s.StoreAcceptanceState == StoreAcceptanceState.Accepted);
+                    s.UserId == userId && s.StoreAcceptanceState == StoreAcceptanceState.Accepted);
         }
-
-
 
         #endregion
 
         #region dispose
+
         public async ValueTask DisposeAsync()
         {
             await _sellerRepository.DisposeAsync();
         }
+
         #endregion
 
     }

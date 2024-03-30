@@ -15,8 +15,8 @@ namespace MarketPlace.App.Services.Interfaces
 
         Task<RequestSellerResult> AddNewSellerRequest(RequestSellerDTO seller, long userId);
         Task<FilterSellerDTO> FilterSellers(FilterSellerDTO filter);
-        Task<EditRequestSellerDTO> GetRequestSellerForEdit(long id ,long currentUserId);
-        Task<EditRequestSellerResult> EditRequestSeller(EditRequestSellerDTO request, long currentUserId) ;
+        Task<EditRequestSellerDTO> GetRequestSellerForEdit(long id, long currentUserId);
+        Task<EditRequestSellerResult> EditRequestSeller(EditRequestSellerDTO request, long currentUserId);
         Task<bool> AcceptSellerRequest(long requestId);
         Task<bool> RejectSellerRequest(RejectItemDTO reject);
         Task<Seller> GetLastActiveSellerByUserId(long userId);

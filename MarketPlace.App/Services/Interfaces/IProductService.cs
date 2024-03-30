@@ -25,36 +25,33 @@ namespace MarketPlace.App.Services.Interfaces
         Task RemoveAllProductSelectedColors(long productId);
         Task AddProductSelectedColors(long productId, List<CreateProductColorDTO> colors);
         Task AddProductSelectedCategories(long productId, List<long> selectedCategories);
-        Task<List<Product>> GetPproductsForSellerByProductName(long sellerId,string productName);
+        Task<List<Product>> FilterProductsForSellerByProductName(long sellerId, string productName);
 
-		#endregion
+        #endregion
 
-		#region product gallery
+        #region product gallery
 
-
-		Task<List<ProductGallery>> GetAllProductGalleries(long productId);
-		Task<Product> GetProductBySellerOwnerId(long productId, long userId);
-		Task<List<ProductGallery>> GetAllProductGalleriesInSellerPanel(long productId, long sellerId);
-		Task<CreateOrEditProductGalleryResult> CreateProductGallery(CreateOrEditProductGalleryDTO gallery, long productId, long sellerId);
-		Task<CreateOrEditProductGalleryDTO> GetProductGalleryForEdit(long galleryId, long sellerId);
-
-		Task<CreateOrEditProductGalleryResult> EditProductGallery(long galleryId, long sellerId,
-			CreateOrEditProductGalleryDTO gallery);
-
+        Task<List<ProductGallery>> GetAllProductGalleries(long productId);
+        Task<Product> GetProductBySellerOwnerId(long productId, long userId);
+        Task<List<ProductGallery>> GetAllProductGalleriesInSellerPanel(long productId, long sellerId);
+        Task<CreateOrEditProductGalleryResult> CreateProductGallery(CreateOrEditProductGalleryDTO gallery, long productId, long sellerId);
+        Task<CreateOrEditProductGalleryDTO> GetProductGalleryForEdit(long galleryId, long sellerId);
+        Task<CreateOrEditProductGalleryResult> EditProductGallery(long galleryId, long sellerId,
+            CreateOrEditProductGalleryDTO gallery);
         Task<ProductDetailDTO> GetProductDetailById(long productId);
 
-		#endregion
+        #endregion
 
-		#region product categories
+        #region product categories
 
-		Task<List<ProductCategory>> GetAllProductCategoriesByParentId(long? parentId);
+        Task<List<ProductCategory>> GetAllProductCategoriesByParentId(long? parentId);
         Task<List<ProductCategory>> GetAllActiveProductCategories();
 
         #endregion
 
         #region product feature
 
-        Task CreateProductFeatures(List<CreateProductFeatureDTO> features, long productId);
+        Task CreateProductFeatures(long productId, List<CreateProductFeatureDTO> features);
         Task RemoveAllProductFeatures(long productId);
 
         #endregion

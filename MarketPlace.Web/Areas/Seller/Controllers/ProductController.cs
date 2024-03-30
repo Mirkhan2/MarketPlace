@@ -116,6 +116,7 @@ namespace MarketPlace.Web.Areas.Seller.Controllers
         }
 
         #endregion
+
         #region get product Json
         [HttpGet("Product-json")]
         public async Task<IActionResult> GetSellerProductJson(string productName)
