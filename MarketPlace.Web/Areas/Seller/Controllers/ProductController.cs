@@ -122,7 +122,7 @@ namespace MarketPlace.Web.Areas.Seller.Controllers
         public async Task<IActionResult> GetSellerProductJson(string productName)
         {
             var seller = await _sellerService.GetLastActiveSellerByUserId(User.GetUserId());
-
+         //   var data = await _productService.FilterProductsForSellerByProductName(seller.Id , productName); 
             return JsonResponseStatus.SendStatus(JsonResponsStatusType.Success, "", null);
         }
         #endregion

@@ -24,5 +24,6 @@ namespace MarketPlace.Data.DTO.Orders
 
         public string ColorName { get; set; }
         public string ProductIamgeName { get; set; }
+        public int?  DiscountPercentage { get; set; }
     }
 }
