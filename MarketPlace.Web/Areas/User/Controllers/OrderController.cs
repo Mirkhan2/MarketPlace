@@ -57,5 +57,25 @@ namespace MarketPlace.Web.Areas.User.Controllers
             return View(openOrder);
         }
         #endregion
+
+        #region remove product from order
+        [HttpGet("remove-order-item/{detailId}")]
+        public async Task<IActionResult> RemoveProductFromOrder(long detailId)
+        {
+            var res = await _orderService.RemoveOrderDetail(detailId, User.GetUserId());
+            if (res)
+            {
+                TempData[SuccessMessage] = "Remove Successfully";
+                return JsonResponseStatus.SendStatus(JsonResponsStatusType.Success,
+              "Remove Product", null);
+
+            }
+            TempData[ErrorMessage]= ""
+            return JsonResponseStatus.SendStatus(JsonResponsStatusType.Danger,
+              "Remove NOt Product", null);
+
+        }
+
+        #endregion
     }
 }

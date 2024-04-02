@@ -15,7 +15,7 @@ namespace MarketPlace.App.Services.Interfaces
         Task<long> AddOrderForUser(long userId);
         Task<Order> GetUserLatestOpenOrder(long userId);
         Task<int> GetTotalOrderPriceForPayment(long userId);
-        Task PayOrderProductPriceToSeller(long userId);
+        Task PayOrderProductPriceToSeller(long userId , long refId);
 
         #endregion
 
@@ -24,6 +24,7 @@ namespace MarketPlace.App.Services.Interfaces
         Task AddProductToOpenOrder(long userId, AddProductToOrderDTO order);
 
         Task<UserOpenOrderDTO> GetUserOpenOrderDetail(long userId);
+        Task<bool> RemoveOrderDetail(long detilId , long sellerId);
 
         #endregion
 

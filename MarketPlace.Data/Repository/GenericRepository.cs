@@ -73,6 +73,7 @@ namespace MarketPlace.Data.Repository
         public void DeletePermanentEntities(List<TEntity> entities)
         {
             _context.RemoveRange(entities);
+
         }
 
         public async Task DeletePermanent(long entityId)

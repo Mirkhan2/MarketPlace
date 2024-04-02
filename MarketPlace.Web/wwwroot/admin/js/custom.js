@@ -107,3 +107,8 @@ function OnSuccessRejectItem(res) {
         $('.close').click();
     }
 }
+function removeProductFromOrder(detailId) {
+    $.get('/user/remove-order*item/' + detailId).then(res => {
+        location.reload();
+    });
+}
