@@ -206,6 +206,27 @@ namespace MarketPlace.App.Services.Implementations
             return true;
         }
 
+        public async Task ChangeOrderDetailCount(long detailId, int userId ,int count )
+        {
+            var userOpenOrder = await GetUserLatestOpenOrder(userId);
+            var detail = userOpenOrder.OrderDetails.SingleOrDefault(s => s.Id == detailId);
+            if (detail != null)
+            {
+              if(count >0)
+                {
+                    detail.Count = count;
+                }
+              else
+                {
+
+                    _orderDetailRepository.DeleteEntity(detail);
+                }
+              await _orderDetailRepository.SaveChanges();
+            }
+        }
+
+
+
         #endregion
 
         #region dispose
@@ -216,7 +237,6 @@ namespace MarketPlace.App.Services.Implementations
             await _orderDetailRepository.DisposeAsync();
         }
 
-      
 
         #endregion
     }

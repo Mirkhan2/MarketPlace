@@ -58,22 +58,33 @@ namespace MarketPlace.Web.Areas.User.Controllers
         }
         #endregion
 
+        #region open order partial
+
+        [HttpGet("change-detail-count/{detailId}/{count}")]
+        public async Task<IActionResult> ChangeDetailCount(long detailId, int count)
+        {
+            // await Task.Delay(500);
+            await _orderService.ChangeOrderDetailCount(detailId, User.GetUserId(), count);
+            var openOrder = await _orderService.GetUserOpenOrderDetail(User.GetUserId());
+            return PartialView(openOrder);
+        }
+
+        #endregion
+
         #region remove product from order
+
         [HttpGet("remove-order-item/{detailId}")]
         public async Task<IActionResult> RemoveProductFromOrder(long detailId)
         {
             var res = await _orderService.RemoveOrderDetail(detailId, User.GetUserId());
             if (res)
             {
-                TempData[SuccessMessage] = "Remove Successfully";
-                return JsonResponseStatus.SendStatus(JsonResponsStatusType.Success,
-              "Remove Product", null);
-
+                TempData[SuccessMessage] = "محصول مورد نظر با موفقیت از سبد خرید حذف شد";
+                return JsonResponseStatus.SendStatus(JsonResponsStatusType.Success, "محصول مورد نظر با موفقیت از سبد خرید حذف شد", null);
             }
-            TempData[ErrorMessage]= ""
-            return JsonResponseStatus.SendStatus(JsonResponsStatusType.Danger,
-              "Remove NOt Product", null);
 
+            TempData[ErrorMessage] = "محصول مورد نظر در سبد خرید شما یافت نشد";
+            return JsonResponseStatus.SendStatus(JsonResponsStatusType.Danger, "محصول مورد نظر در سبد خرید شما یافت نشد", null);
         }
 
         #endregion

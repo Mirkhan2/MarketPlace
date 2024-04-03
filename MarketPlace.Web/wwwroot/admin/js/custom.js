@@ -112,3 +112,11 @@ function removeProductFromOrder(detailId) {
         location.reload();
     });
 }
+function changeOpenOrderDetailCount(event, detailId) {
+    open_waiting();
+    console.log(detailId);
+    $.get('/user/change-detail-count/' + detailId + '/' + event.target.value).then(res => {
+        $('#user-open-order-wrapper').html(res);
+        close_waiting();
+    });
+}
