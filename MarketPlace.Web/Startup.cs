@@ -46,6 +46,7 @@ namespace MarketPlace.Web
 			services.AddScoped<IOrderService, OrderService>();
 			services.AddScoped<ISellerWalletService, SellerWalletService>();
 			services.AddScoped<IProductDiscountService, ProductDiscountService>();
+			services.AddScoped<IPayementService , PayementService>();
 			#endregion
 
 			#region data protection

@@ -15,19 +15,23 @@ namespace MarketPlace.Web.Controllers
 		private readonly IContactService _contactService;
 		private readonly ICaptchaValidator _captchaValidator;
 		private readonly ISiteService _siteService;
+		private readonly IUserService _userService;
+		private readonly IPayementService _payementService;
 
-		public HomeController(IContactService contactService, ICaptchaValidator captchaValidator , ISiteService siteService)
-		{
-			_contactService = contactService;
-			_captchaValidator = captchaValidator;
-			_siteService = siteService;
-		}
+        public HomeController(IContactService contactService, ICaptchaValidator captchaValidator, ISiteService siteService, IUserService userService, IPayementService payementService)
+        {
+            _contactService = contactService;
+            _captchaValidator = captchaValidator;
+            _siteService = siteService;
+            _userService = userService;
+            _payementService = payementService;
+        }
 
-		#endregion
+        #endregion
 
-		#region index
+        #region index
 
-		public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index()
 		{
 			ViewBag.banners = await _siteService.GetSiteBannersByPlacement(new System.Collections.Generic.List<Data.Entities.Site.BannerPlacement>
 			{ 
@@ -36,6 +40,20 @@ namespace MarketPlace.Web.Controllers
 				BannerPlacement.Home_3
 
 			});
+			string redirectUrl = "";
+			//cal back url ip safhe asli 
+			_payementService.CreatePayementRequest(null, 1000,
+				"INfo", 
+				"",
+				ref redirectUrl, 
+				"test@test.com",
+				"09123456789");
+
+			if (result == PayementStatus.S100)
+			{
+				return Redirect(redirectUrl);
+			}
+
 			return View();
 		}
 
