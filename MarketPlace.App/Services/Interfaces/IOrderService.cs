@@ -23,7 +23,9 @@ namespace MarketPlace.App.Services.Interfaces
         #region order detail
 
         Task ChangeOrderDetailCount(long detailId , long userId , int count);
-        
+
+        //Task<Order> GetOrderById(long id);
+
         Task AddProductToOpenOrder(long userId, AddProductToOrderDTO order);
 
         Task<UserOpenOrderDTO> GetUserOpenOrderDetail(long userId);
