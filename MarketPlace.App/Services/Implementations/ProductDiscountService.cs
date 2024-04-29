@@ -16,8 +16,8 @@ namespace MarketPlace.App.Services.Implementations
 {
     public  class ProductDiscountService : IProductDiscountService
     {
-        #region constructor
 
+        #region constructor
         private readonly IGenericRepository<ProductDiscount> _productDiscountRepository;
         private readonly IGenericRepository<ProductDiscountUse> _productDiscountUseRepository;
         private readonly IGenericRepository<Product> _productRepository;
@@ -58,6 +58,7 @@ namespace MarketPlace.App.Services.Implementations
 
             return filter.SetPaging(pager).SetDiscounts(allEntities);
         }
+
         public async Task<CreateDiscountResult> CreateProductDiscount(CreateProductDiscountDto discount, long sellerId)
         {
             var product = await _productRepository.GetEntityById(discount.ProductId);
@@ -78,7 +79,6 @@ namespace MarketPlace.App.Services.Implementations
             return CreateDiscountResult.Success;
         }
 
-
         #endregion
 
         #region dispose
@@ -88,7 +88,6 @@ namespace MarketPlace.App.Services.Implementations
             await _productDiscountRepository.DisposeAsync();
             await _productDiscountUseRepository.DisposeAsync();
         }
-
 
         #endregion
     }

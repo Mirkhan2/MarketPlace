@@ -1,5 +1,8 @@
 ﻿using System.Threading.Tasks;
+using MarketPlace.App.Services.Implementations;
 using MarketPlace.App.Services.Interfaces;
+using MarketPlace.App.Utils;
+using MarketPlace.Data.DTO.Common;
 using MarketPlace.Data.DTO.Orders;
 using MarketPlace.Web.Http;
 using MarketPlace.Web.PresentationExtensions;
@@ -14,49 +17,85 @@ namespace MarketPlace.Web.Areas.User.Controllers
 
         private readonly IOrderService _orderService;
         private readonly IUserService _userService;
-        public OrderController(IOrderService orderService , IUserService userService)
+        private readonly IPaymentService _paymentService;
+
+        public OrderController(IOrderService orderService, IUserService userService, IPaymentService paymentService)
         {
             _orderService = orderService;
             _userService = userService;
+            _paymentService = paymentService;
         }
+
         #endregion
 
         #region add product to open order
-        [HttpPost("add-product-to-order")]
+
         [AllowAnonymous]
+        [HttpPost("add-product-to-order")]
         public async Task<IActionResult> AddProductToOrder(AddProductToOrderDTO order)
         {
-            if (!ModelState.IsValid)
+            if (ModelState.IsValid)
             {
-               if(User.Identity.IsAuthenticated)
+                if (User.Identity.IsAuthenticated)
                 {
                     await _orderService.AddProductToOpenOrder(User.GetUserId(), order);
-                    return JsonResponseStatus.SendStatus(JsonResponsStatusType.Success,
-                        "Product Succed submit",
+                    return JsonResponseStatus.SendStatus(
+                        JsonResponsStatusType.Success,
+                        "محصول مورد نظر با موفقیت ثبت شد",
                         null);
                 }
                 else
                 {
-                    return JsonResponseStatus.SendStatus(JsonResponsStatusType.Danger,
-                    "Product  Error First site Handeln",
-                    null);
-
+                    return JsonResponseStatus.SendStatus(
+                        JsonResponsStatusType.Danger,
+                        "برای ثبت محصول در سبد خرید ابتدا باید وارد سایت شوید",
+                        null);
                 }
             }
+
             return JsonResponseStatus.SendStatus(JsonResponsStatusType.Danger,
-                "Error", null);
+                "در ثبت اطلاعات خطایی رخ داد", null);
         }
 
         #endregion
 
-        #region open cart
+        #region open order
+
         [HttpGet("open-order")]
         public async Task<IActionResult> UserOpenOrder()
         {
-            var openOrder = await _orderService.GetUserLatestOpenOrder(User.GetUserId());   
+            var openOrder = await _orderService.GetUserOpenOrderDetail(User.GetUserId());
             return View(openOrder);
         }
+
         #endregion
+       //#region pay order
+
+       // [HttpGet("pay-order")]
+       // public async Task<IActionResult> PayUserOrderPrice()
+       // {
+       //     var openOrderAmount = await _orderService.GetTotalOrderPriceForPayment(User.GetUserId());
+
+       //     string callbackUrl = PathExtension.DomainAddress + Url.RouteUrl("ZarinpalPaymentResult");
+
+       //     string redirectUrl = "";
+
+       //     var status = _paymentService.CreatePaymentRequest(
+       //         null,
+       //         openOrderAmount,
+       //         "تکمیل فرایند خرید از سایت",
+       //         callbackUrl,
+       //        ref redirectUrl);
+
+       //     if (status == PaymentStatus.St100)
+       //     {
+       //         return Redirect(redirectUrl);
+       //     }
+
+       //     return RedirectToAction("UserOpenOrder");
+       // }
+
+       // #endregion
 
         #region open order partial
 
@@ -67,6 +106,35 @@ namespace MarketPlace.Web.Areas.User.Controllers
             await _orderService.ChangeOrderDetailCount(detailId, User.GetUserId(), count);
             var openOrder = await _orderService.GetUserOpenOrderDetail(User.GetUserId());
             return PartialView(openOrder);
+        }
+
+        #endregion
+        #region call back zarinpal
+
+        [AllowAnonymous]
+        [HttpGet("payment-result", Name = "ZarinpalPaymentResult")]
+        public async Task<IActionResult> CallBackZarinPal()
+        {
+            string authority = _paymentService.GetAuthorityCodeFromCallback(HttpContext);
+            if (authority == "")
+            {
+                TempData[WarningMessage] = "عملیات پرداخت با شکست مواجه شد";
+                return View();
+            }
+
+            var openOrderAmount = await _orderService.GetTotalOrderPriceForPayment(User.GetUserId());
+            long refId = 0;
+            var res = _paymentService.PaymentVerification(null, authority, openOrderAmount, ref refId);
+            if (res == PaymentStatus.St100)
+            {
+                TempData[SuccessMessage] = "پرداخت شما با موفقیت انجام شد";
+                TempData[InfoMessage] = "کد پیگیری شما : " + refId;
+                await _orderService.PayOrderProductPriceToSeller(User.GetUserId(), refId);
+
+                return View();
+            }
+
+            return View();
         }
 
         #endregion

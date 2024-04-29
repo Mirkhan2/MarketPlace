@@ -9,7 +9,7 @@ namespace MarketPlace.Data.Entities.Products
 {
     public  class ProductDiscount
     {
-        private ICollection<ProductDiscountUse> productDiscountUses;
+
         #region properties
 
         public long ProductId { get; set; }
@@ -27,7 +27,7 @@ namespace MarketPlace.Data.Entities.Products
 
         public Product Product { get; set; }
 
-        public ICollection<ProductDiscountUse> ProductDiscountUses { get => productDiscountUses; set => productDiscountUses = value; }
+        public ICollection<ProductDiscountUse> ProductDiscountUses { get; set; }
 
         #endregion
     }

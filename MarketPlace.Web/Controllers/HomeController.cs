@@ -1,6 +1,7 @@
 ﻿using System.Threading.Tasks;
 using GoogleReCaptcha.V3.Interface;
 using MarketPlace.App.Services.Interfaces;
+using MarketPlace.Data.DTO.Common;
 using MarketPlace.Data.DTO.Contacts;
 using MarketPlace.Data.Entities.Site;
 using MarketPlace.Web.PresentationExtensions;
@@ -16,9 +17,9 @@ namespace MarketPlace.Web.Controllers
 		private readonly ICaptchaValidator _captchaValidator;
 		private readonly ISiteService _siteService;
 		private readonly IUserService _userService;
-		private readonly IPayementService _payementService;
+		private readonly IPaymentService _payementService;
 
-        public HomeController(IContactService contactService, ICaptchaValidator captchaValidator, ISiteService siteService, IUserService userService, IPayementService payementService)
+        public HomeController(IContactService contactService, ICaptchaValidator captchaValidator, ISiteService siteService, IUserService userService, IPaymentService payementService)
         {
             _contactService = contactService;
             _captchaValidator = captchaValidator;
@@ -41,15 +42,16 @@ namespace MarketPlace.Web.Controllers
 
 			});
 			string redirectUrl = "";
+			
 			//cal back url ip safhe asli 
-			_payementService.CreatePayementRequest(null, 1000,
+			 var result = _payementService.CreatePaymentRequest(null, 1000,
 				"INfo", 
 				"",
 				ref redirectUrl, 
 				"test@test.com",
 				"09123456789");
 
-			if (result == PayementStatus.S100)
+			if (result == PaymentStatus.St100)
 			{
 				return Redirect(redirectUrl);
 			}

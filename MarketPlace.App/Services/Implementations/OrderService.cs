@@ -188,7 +188,7 @@ namespace MarketPlace.App.Services.Implementations
                         ProductTitle = s.Product.Title,
                         ProductImageName = s.Product.ImageName,
                         DiscountPercentage = s.Product.ProductDiscounts
-                        .OrderByDescending(a => a.CreateDate)
+                        //.OrderByDescending(a => a.CreateDate)
                         .FirstOrDefault(a => a.ExpireDate > DateTime.Now)?.Percentage
                     }).ToList()
             };

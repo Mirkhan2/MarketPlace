@@ -8,7 +8,8 @@ namespace MarketPlace.Data.DTO.Orders
 {
     public class UserOpenOrderDetailItemDTO
     {
-        public long DetailId{ get; set; }
+        public long DetailId { get; set; }
+
         public long ProductId { get; set; }
 
         public string ProductTitle { get; set; }
@@ -24,7 +25,33 @@ namespace MarketPlace.Data.DTO.Orders
         public int ProductColorPrice { get; set; }
 
         public string ColorName { get; set; }
-        public string ProductIamgeName { get; set; }
-        public int?  DiscountPercentage { get; set; }
+
+        public int? DiscountPercentage { get; set; }
+
+        public int GetOrderDetailWithDiscountPriceAmount()
+        {
+            if (this.DiscountPercentage != null)
+            {
+                return (this.ProductPrice + this.ProductColorPrice) * this.DiscountPercentage.Value / 100 * this.Count;
+            }
+
+            return 0;
+        }
+
+        public int GetTotalAmountByDiscount()
+        {
+            return (ProductPrice + ProductColorPrice) * Count - this.GetOrderDetailWithDiscountPriceAmount();
+        }
+
+
+        public string GetOrderDetailWithDiscountPrice()
+        {
+            if (this.DiscountPercentage != null)
+            {
+                return this.GetOrderDetailWithDiscountPriceAmount().ToString("#,0 تومان");
+            }
+
+            return "------";
+        }
     }
 }
