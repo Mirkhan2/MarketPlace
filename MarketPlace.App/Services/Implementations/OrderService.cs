@@ -19,13 +19,15 @@ namespace MarketPlace.App.Services.Implementations
         private readonly IGenericRepository<OrderDetail> _orderDetailRepository;
         private readonly ISellerWalletService _sellerWalletService;
         private readonly IGenericRepository<ProductDiscount> _productDiscountRepository;
+        private readonly IGenericRepository<ProductDiscountUse> _productDiscountUseRepository;
 
-        public OrderService(IGenericRepository<Order> orderRepository, IGenericRepository<OrderDetail> orderDetailRepository, ISellerWalletService sellerWalletService, IGenericRepository<ProductDiscount> productDiscountRepository)
+        public OrderService(IGenericRepository<Order> orderRepository, IGenericRepository<OrderDetail> orderDetailRepository, ISellerWalletService sellerWalletService, IGenericRepository<ProductDiscount> productDiscountRepository, IGenericRepository<ProductDiscountUse> productDiscountUseRepository)
         {
             _orderRepository = orderRepository;
             _orderDetailRepository = orderDetailRepository;
             _sellerWalletService = sellerWalletService;
             _productDiscountRepository = productDiscountRepository;
+            _productDiscountUseRepository = productDiscountUseRepository;
         }
 
         #endregion
@@ -63,6 +65,8 @@ namespace MarketPlace.App.Services.Implementations
         {
             var userOpenOrder = await GetUserLatestOpenOrder(userId);
             int totalPrice = 0;
+            int discount = 0;
+
 
             foreach (var detail in userOpenOrder.OrderDetails)
             {
@@ -70,7 +74,18 @@ namespace MarketPlace.App.Services.Implementations
                     ? detail.Product.Price + detail.ProductColor.Price
                     : detail.Product.Price;
 
-                totalPrice += detail.Count * oneProductPrice;
+                var productDiscount = await _productDiscountRepository.GetQuery()
+    .Include(s => s.ProductDiscountUses)
+                    .OrderByDescending(s => s.CreateDate)
+    .FirstOrDefaultAsync(s =>
+        s.ProductId == detail.ProductId && s.DiscountNumber - s.ProductDiscountUses.Count > 0);
+
+                if (productDiscount != null)
+                {
+                    discount = (int)Math.Ceiling(totalPrice * productDiscount.Percentage / (decimal)100);
+                }
+
+                totalPrice += detail.Count * (oneProductPrice - discount);
             }
 
             return totalPrice;
@@ -88,12 +103,22 @@ namespace MarketPlace.App.Services.Implementations
                 var totalPrice = detail.Count * (productPrice + productColorPrice);
                 var productDiscount = await _productDiscountRepository.GetQuery()
                     .Include(s => s.ProductDiscountUses)
+                    .OrderByDescending(s => s.CreateDate)
                     .FirstOrDefaultAsync(s =>
                         s.ProductId == detail.ProductId && s.DiscountNumber - s.ProductDiscountUses.Count > 0);
 
                 if (productDiscount != null)
                 {
                     discount = (int)Math.Ceiling(totalPrice * productDiscount.Percentage / (decimal)100);
+
+                    var newDiscountUse = new ProductDiscountUse
+                    {
+                        UserId = userId,
+                        ProductDiscountId = productDiscount.Id,
+
+                    };
+                    await _productDiscountUseRepository.AddEntity(newDiscountUse);
+                    //  await _productDiscountUseRepository.SaveChanges();
                 }
 
                 var totalPriceWithDiscount = totalPrice - discount;
@@ -113,6 +138,7 @@ namespace MarketPlace.App.Services.Implementations
 
             openOrder.IsPaid = true;
             openOrder.TracingCode = refId.ToString();
+            openOrder.PaymentDate = DateTime.Now;
             _orderRepository.EditEntity(openOrder);
             await _orderRepository.SaveChanges();
         }
@@ -206,22 +232,33 @@ namespace MarketPlace.App.Services.Implementations
             return true;
         }
 
-        public async Task ChangeOrderDetailCount(long detailId, int userId ,int count )
+        public async Task<bool> CloseUserOpenOrderAfterPayement(long userId, long trackingCode)
+        {
+            var openOrder = await GetUserLatestOpenOrder(userId);
+            openOrder.PaymentDate = DateTime.Now;
+            openOrder.IsPaid = true;
+            _orderRepository.EditEntity(openOrder);
+            await _orderRepository.SaveChanges();
+            return true;
+        }
+
+
+        public async Task ChangeOrderDetailCount(long detailId, int userId, int count)
         {
             var userOpenOrder = await GetUserLatestOpenOrder(userId);
             var detail = userOpenOrder.OrderDetails.SingleOrDefault(s => s.Id == detailId);
             if (detail != null)
             {
-              if(count >0)
+                if (count > 0)
                 {
                     detail.Count = count;
                 }
-              else
+                else
                 {
 
                     _orderDetailRepository.DeleteEntity(detail);
                 }
-              await _orderDetailRepository.SaveChanges();
+                await _orderDetailRepository.SaveChanges();
             }
         }
 

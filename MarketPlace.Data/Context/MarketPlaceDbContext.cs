@@ -16,10 +16,10 @@ namespace MarketPlace.Data.Context
 	{
 		public MarketPlaceDbContext(DbContextOptions<MarketPlaceDbContext> options) : base(options) { }
 
-		#region account
+        #region account
 
-		public DbSet<User> Users { get; set; }
-      
+        public DbSet<User> Users { get; set; }
+
         #endregion
 
         #region site
@@ -31,8 +31,9 @@ namespace MarketPlace.Data.Context
         #endregion
 
         #region contacts
-        public DbSet<ContactUs> ContactUs { get; set; }
-        public DbSet<Ticket> Ticket { get; set; }
+
+        public DbSet<ContactUs> ContactUses { get; set; }
+        public DbSet<Ticket> Tickets { get; set; }
         public DbSet<TicketMessage> TicketMessages { get; set; }
 
         #endregion
@@ -40,15 +41,31 @@ namespace MarketPlace.Data.Context
         #region store
 
         public DbSet<Seller> Sellers { get; set; }
+
         #endregion
 
         #region products
-        public DbSet<ProductCategory> ProductCatagories { get; set; }
+
+        public DbSet<ProductCategory> ProductCategories { get; set; }
+
         public DbSet<Product> Products { get; set; }
-        public DbSet<ProductGallery > ProductGalleries { get; set; }
-        public DbSet<ProductSelectedCategory> ProductSelectedCategory { get; set; }
+
+        public DbSet<ProductGallery> ProductGalleries { get; set; }
+
+        public DbSet<ProductSelectedCategory> ProductSelectedCategories { get; set; }
+
         public DbSet<ProductColor> ProductColors { get; set; }
+
         public DbSet<ProductFeature> ProductFeatures { get; set; }
+
+        #endregion
+
+        #region propduct discount
+
+        public DbSet<ProductDiscount> ProductDiscounts { get; set; }
+
+        public DbSet<ProductDiscountUse> ProductDiscountUses { get; set; }
+
         #endregion
 
         #region order
@@ -68,27 +85,15 @@ namespace MarketPlace.Data.Context
         #region on model creating
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
-		{
-			foreach (var relationship in modelBuilder.Model.GetEntityTypes().SelectMany(s => s.GetForeignKeys()))
-			{
+        {
+            foreach (var relationship in modelBuilder.Model.GetEntityTypes().SelectMany(s => s.GetForeignKeys()))
+            {
                 relationship.DeleteBehavior = DeleteBehavior.Restrict;
-			}
-
-            modelBuilder.Entity<User>()
-                .HasMany(s => s.TicketMessages)
-                .WithOne(s => s.Sender)
-                .HasForeignKey(s => s.SenderId)
-                .OnDelete(DeleteBehavior.Restrict);
-
-            modelBuilder.Entity<User>()
-                    .HasMany(s => s.Tickets)
-                .WithOne(s => s.Owner)
-                .HasForeignKey(s => s.OwnerId)
-                .OnDelete(DeleteBehavior.Restrict);
+            }
 
             base.OnModelCreating(modelBuilder);
-		}
+        }
 
-		#endregion
-	}
+        #endregion
+    }
 }

@@ -107,16 +107,41 @@ function OnSuccessRejectItem(res) {
         $('.close').click();
     }
 }
-function removeProductFromOrder(detailId) {
-    $.get('/user/remove-order*item/' + detailId).then(res => {
-        location.reload();
+
+$('[ajax-url-button]').on('click', function (e) {
+    e.preventDefault();
+    var url = $(this).attr('href');
+    var itemId = $(this).attr('ajax-url-button');
+    swal({
+        title: 'اخطار',
+        text: "آیا از انجام عملیات مورد نظر اطمینان دارید؟",
+        type: "warning",
+        showCancelButton: true,
+        confirmButtonClass: "btn-danger",
+        confirmButtonText: "بله",
+        cancelButtonText: "خیر",
+        closeOnConfirm: false,
+        closeOnCancel: false
+    }).then((result) => {
+        if (result.value) {
+            $.get(url).then(result => {
+                if (result.status === 'Success') {
+                    ShowMessage('موفقیت', result.message);
+                    $('#ajax-url-item-' + itemId).hide(1500);
+                }
+            });
+        } else if (result.dismiss === swal.DismissReason.cancel) {
+            swal('اعلام', 'عملیات لغو شد', 'error');
+        }
     });
-}
-function changeOpenOrderDetailCount(event, detailId) {
-    open_waiting();
-    console.log(detailId);
-    $.get('/user/change-detail-count/' + detailId + '/' + event.target.value).then(res => {
-        $('#user-open-order-wrapper').html(res);
-        close_waiting();
-    });
+});
+
+function OnSuccessRejectItem(res) {
+    if (res.status === 'Success') {
+        ShowMessage('اعلان موفقیت', res.message);
+        $('#ajax-url-item-' + res.data.id).hide(300);
+        $('#reject-modal-' + res.data.id).modal('toggle');
+        $('#reject-modal-' + res.data.id).modal().hide();
+        $('.close').click();
+    }
 }

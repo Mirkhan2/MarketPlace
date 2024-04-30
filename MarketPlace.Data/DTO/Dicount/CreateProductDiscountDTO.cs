@@ -17,9 +17,9 @@ namespace MarketPlace.Data.DTO.Dicount
 
     public enum CreateDiscountResult
     {
-        Success,
-        ProductIsNotForSeller,
+        Error,
         ProductNotFound,
-        Error
+        ProductIsNotForSeller,
+        Success,
     }
 }

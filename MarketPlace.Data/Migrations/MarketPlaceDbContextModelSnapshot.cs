@@ -134,7 +134,7 @@ namespace MarketPlace.Data.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("ContactUs");
+                    b.ToTable("ContactUses");
                 });
 
             modelBuilder.Entity("MarketPlace.Data.Entities.Contacts.Ticket", b =>
@@ -180,7 +180,7 @@ namespace MarketPlace.Data.Migrations
 
                     b.HasIndex("OwnerId");
 
-                    b.ToTable("Ticket");
+                    b.ToTable("Tickets");
                 });
 
             modelBuilder.Entity("MarketPlace.Data.Entities.Contacts.TicketMessage", b =>
@@ -397,7 +397,7 @@ namespace MarketPlace.Data.Migrations
 
                     b.HasIndex("ParentId");
 
-                    b.ToTable("ProductCatagories");
+                    b.ToTable("ProductCategories");
                 });
 
             modelBuilder.Entity("MarketPlace.Data.Entities.Products.ProductColor", b =>
@@ -436,6 +436,72 @@ namespace MarketPlace.Data.Migrations
                     b.HasIndex("ProductId");
 
                     b.ToTable("ProductColors");
+                });
+
+            modelBuilder.Entity("MarketPlace.Data.Entities.Products.ProductDiscount", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<DateTime>("CreateDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("DiscountNumber")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("ExpireDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsDelete")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("LastUpdateDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("Percentage")
+                        .HasColumnType("int");
+
+                    b.Property<long>("ProductId")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProductId");
+
+                    b.ToTable("ProductDiscounts");
+                });
+
+            modelBuilder.Entity("MarketPlace.Data.Entities.Products.ProductDiscountUse", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<DateTime>("CreateDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsDelete")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("LastUpdateDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<long>("ProductDiscountId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("UserId")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProductDiscountId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("ProductDiscountUses");
                 });
 
             modelBuilder.Entity("MarketPlace.Data.Entities.Products.ProductFeature", b =>
@@ -536,7 +602,7 @@ namespace MarketPlace.Data.Migrations
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("ProductSelectedCategory");
+                    b.ToTable("ProductSelectedCategories");
                 });
 
             modelBuilder.Entity("MarketPlace.Data.Entities.Site.SiteBanner", b =>
@@ -865,6 +931,36 @@ namespace MarketPlace.Data.Migrations
                     b.Navigation("Product");
                 });
 
+            modelBuilder.Entity("MarketPlace.Data.Entities.Products.ProductDiscount", b =>
+                {
+                    b.HasOne("MarketPlace.Data.Entities.Products.Product", "Product")
+                        .WithMany("ProductDiscounts")
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Product");
+                });
+
+            modelBuilder.Entity("MarketPlace.Data.Entities.Products.ProductDiscountUse", b =>
+                {
+                    b.HasOne("MarketPlace.Data.Entities.Products.ProductDiscount", "ProductDiscount")
+                        .WithMany("ProductDiscountUses")
+                        .HasForeignKey("ProductDiscountId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("MarketPlace.Data.Entities.Account.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("ProductDiscount");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("MarketPlace.Data.Entities.Products.ProductFeature", b =>
                 {
                     b.HasOne("MarketPlace.Data.Entities.Products.Product", "Product")
@@ -955,6 +1051,8 @@ namespace MarketPlace.Data.Migrations
 
                     b.Navigation("ProductColors");
 
+                    b.Navigation("ProductDiscounts");
+
                     b.Navigation("ProductFeatures");
 
                     b.Navigation("ProductGalleries");
@@ -965,6 +1063,11 @@ namespace MarketPlace.Data.Migrations
             modelBuilder.Entity("MarketPlace.Data.Entities.Products.ProductCategory", b =>
                 {
                     b.Navigation("ProductSelectedCategories");
+                });
+
+            modelBuilder.Entity("MarketPlace.Data.Entities.Products.ProductDiscount", b =>
+                {
+                    b.Navigation("ProductDiscountUses");
                 });
 #pragma warning restore 612, 618
         }

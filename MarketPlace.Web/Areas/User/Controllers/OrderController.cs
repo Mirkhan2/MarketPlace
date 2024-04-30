@@ -69,46 +69,35 @@ namespace MarketPlace.Web.Areas.User.Controllers
         }
 
         #endregion
-       //#region pay order
 
-       // [HttpGet("pay-order")]
-       // public async Task<IActionResult> PayUserOrderPrice()
-       // {
-       //     var openOrderAmount = await _orderService.GetTotalOrderPriceForPayment(User.GetUserId());
+        #region pay order
 
-       //     string callbackUrl = PathExtension.DomainAddress + Url.RouteUrl("ZarinpalPaymentResult");
-
-       //     string redirectUrl = "";
-
-       //     var status = _paymentService.CreatePaymentRequest(
-       //         null,
-       //         openOrderAmount,
-       //         "تکمیل فرایند خرید از سایت",
-       //         callbackUrl,
-       //        ref redirectUrl);
-
-       //     if (status == PaymentStatus.St100)
-       //     {
-       //         return Redirect(redirectUrl);
-       //     }
-
-       //     return RedirectToAction("UserOpenOrder");
-       // }
-
-       // #endregion
-
-        #region open order partial
-
-        [HttpGet("change-detail-count/{detailId}/{count}")]
-        public async Task<IActionResult> ChangeDetailCount(long detailId, int count)
+        [HttpGet("pay-order")]
+        public async Task<IActionResult> PayUserOrderPrice()
         {
-            // await Task.Delay(500);
-            await _orderService.ChangeOrderDetailCount(detailId, User.GetUserId(), count);
-            var openOrder = await _orderService.GetUserOpenOrderDetail(User.GetUserId());
-            return PartialView(openOrder);
+            var openOrderAmount = await _orderService.GetTotalOrderPriceForPayment(User.GetUserId());
+
+            string callbackUrl = PathExtension.DomainAddress + Url.RouteUrl("ZarinpalPaymentResult");
+
+            string redirectUrl = "";
+
+            var status = _paymentService.CreatePaymentRequest(
+                null,
+                openOrderAmount,
+                "تکمیل فرایند خرید از سایت",
+                callbackUrl,
+               ref redirectUrl);
+
+            if (status == PaymentStatus.St100)
+            {
+                return Redirect(redirectUrl);
+            }
+
+            return RedirectToAction("UserOpenOrder");
         }
 
         #endregion
+
         #region call back zarinpal
 
         [AllowAnonymous]
@@ -133,8 +122,25 @@ namespace MarketPlace.Web.Areas.User.Controllers
 
                 return View();
             }
+            else
+            {
+                TempData[WarningMessage] = "عملیات پرداخت با خطا مواجه شد";
+            }
 
             return View();
+        }
+
+        #endregion
+
+        #region open order partial
+
+        [HttpGet("change-detail-count/{detailId}/{count}")]
+        public async Task<IActionResult> ChangeDetailCount(long detailId, int count)
+        {
+            // await Task.Delay(500);
+            await _orderService.ChangeOrderDetailCount(detailId, User.GetUserId(), count);
+            var openOrder = await _orderService.GetUserOpenOrderDetail(User.GetUserId());
+            return PartialView(openOrder);
         }
 
         #endregion

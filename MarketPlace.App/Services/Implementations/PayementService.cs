@@ -41,5 +41,7 @@ namespace MarketPlace.App.Services.Implementations
             string authority = context.Request.Query["Authority"];
             return authority.Length == 36 ? authority : null;
         }
+
+    
     }
 }

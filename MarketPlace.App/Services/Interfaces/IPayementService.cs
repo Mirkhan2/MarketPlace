@@ -14,5 +14,6 @@ namespace MarketPlace.App.Services.Interfaces
             string callbackUrl, ref string redirectUrl, string userEmail = null, string userMobile = null);
         PaymentStatus PaymentVerification(string merchantId, string authority, int amount, ref long refId);
         string GetAuthorityCodeFromCallback(HttpContext context);
+            
     }
 }

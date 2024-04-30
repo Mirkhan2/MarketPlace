@@ -241,3 +241,33 @@ $('#submitOrderForm').on('click', function () {
     $('#addProductToOrderForm').submit();
     open_waiting();
 });
+
+function removeProductFromOrder(detailId) {
+    $.get('/user/remove-order-item/' + detailId).then(res => {
+        location.reload();
+    });
+}
+
+function changeOpenOrderDetailCount(event, detailId) {
+    open_waiting();
+    $.get('/user/change-detail-count/' + detailId + '/' + event.target.value).then(res => {
+        $('#user-open-order-wrapper').html(res);
+        close_waiting();
+    });
+}
+
+function checkDetailCount() {
+    $('input[order-detail-count]').on('change', function (event) {
+        open_waiting();
+        var detailId = $(this).attr('order-detail-count');
+        console.log(detailId);
+        console.log(event);
+        $.get('/user/change-detail-count/' + detailId + '/' + event.target.value).then(res => {
+            $('#user-open-order-wrapper').html(res);
+            close_waiting();
+            checkDetailCount();
+        });
+    });
+}
+
+checkDetailCount();
