@@ -5,3 +5,50 @@
 
 <h2>CallBackZarinPal</h2>
 
+
+<div class="breadcrumbs_area">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <div class="breadcrumb_content">
+                    <ul>
+                        <li><a href="index.html">خانه</a></li>
+                        <li> @ViewData["Title"]</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="customer_login mt-60">
+    <div class="container">
+        <div class="row">
+            <!--register area start-->
+            <div class="col-lg-6 col-md-6 offset-lg-3 offset-md-3">
+                <div class="account_form register">
+                    <h2> @ViewData["Title"]</h2>
+                    @if (TempData["SuccessMessage"] != null)
+                    {
+                        <div class="alert alert-info">
+                            <p>
+                                Ihr Kauf ist sicher
+                            </p>
+                        </div>
+                    }
+                    @if (TempData["ErrorMessage"] != null)
+                    {
+                        <div class="alert alert-danger">
+                            <p>
+                                Ihr Kauf hat fehler
+                            </p>
+                        </div>
+                    }
+                   
+                   
+                </div>
+            </div>
+            <!--register area end-->
+        </div>
+    </div>
+</div>

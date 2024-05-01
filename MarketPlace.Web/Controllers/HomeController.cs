@@ -1,5 +1,6 @@
 ﻿using System.Threading.Tasks;
 using GoogleReCaptcha.V3.Interface;
+using MarketPlace.App.Services.Implementations;
 using MarketPlace.App.Services.Interfaces;
 using MarketPlace.Data.DTO.Common;
 using MarketPlace.Data.DTO.Contacts;
@@ -16,16 +17,14 @@ namespace MarketPlace.Web.Controllers
 		private readonly IContactService _contactService;
 		private readonly ICaptchaValidator _captchaValidator;
 		private readonly ISiteService _siteService;
-		private readonly IUserService _userService;
-		private readonly IPaymentService _payementService;
+		private readonly IProductService _productService;
 
-        public HomeController(IContactService contactService, ICaptchaValidator captchaValidator, ISiteService siteService, IUserService userService, IPaymentService payementService)
+        public HomeController(IContactService contactService, ICaptchaValidator captchaValidator, ISiteService siteService,IProductService productService)
         {
             _contactService = contactService;
             _captchaValidator = captchaValidator;
             _siteService = siteService;
-            _userService = userService;
-            _payementService = payementService;
+			_productService = productService;
         }
 
         #endregion
@@ -41,20 +40,8 @@ namespace MarketPlace.Web.Controllers
 				BannerPlacement.Home_3
 
 			});
-			string redirectUrl = "";
-			
-			//cal back url ip safhe asli 
-			 var result = _payementService.CreatePaymentRequest(null, 1000,
-				"INfo", 
-				"",
-				ref redirectUrl, 
-				"test@test.com",
-				"09123456789");
-
-			if (result == PaymentStatus.St100)
-			{
-				return Redirect(redirectUrl);
-			}
+			ViewData["OffProducts"] = await _productService.GetAllOffProducts(12);
+		
 
 			return View();
 		}

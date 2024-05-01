@@ -51,21 +51,21 @@ namespace MarketPlace.Web.Areas.Seller.Controllers
             {
                 var seller = await _sellerService.GetLastActiveSellerByUserId(User.GetUserId());
                 var res = await _productDiscountService.CreateProductDiscount(discount, seller.Id);
-                switch (res)
-                {
-                    case CreateDiscountResult.Error:
-                        TempData[ErrorMessage] = "عملیات ثبت تخفیف مورد نظر با شکست مواجه شد";
-                        break;
-                    case CreateDiscountResult.ProductNotFound:
-                        TempData[WarningMessage] = "محصول مورد نظر یافت نشد";
-                        break;
-                    case CreateDiscountResult.ProductIsNotForSeller:
-                        TempData[WarningMessage] = "محصول مورد نظر یافت نشد";
-                        break;
-                    case CreateDiscountResult.Success:
-                        TempData[SuccessMessage] = "عملیات ثبت تخفیف برای محصول مورد نظر با موفقیت انجام شد";
-                        return RedirectToAction("FilterDiscounts");
-                }
+                //switch (res)
+                //{
+                //    case CreateDiscountResult.Error:
+                //        TempData[ErrorMessage] = "عملیات ثبت تخفیف مورد نظر با شکست مواجه شد";
+                //        break;
+                //    case CreateDiscountResult.ProductNotFound:
+                //        TempData[WarningMessage] = "محصول مورد نظر یافت نشد";
+                //        break;
+                //    case CreateDiscountResult.ProductIsNotForSeller:
+                //        TempData[WarningMessage] = "محصول مورد نظر یافت نشد";
+                //        break;
+                //    case CreateDiscountResult.Success:
+                //        TempData[SuccessMessage] = "عملیات ثبت تخفیف برای محصول مورد نظر با موفقیت انجام شد";
+                //        return RedirectToAction("FilterDiscounts");
+                //}
             }
 
             return View(discount);

@@ -29,8 +29,9 @@ namespace MarketPlace.App.Services.Implementations
         private readonly IGenericRepository<ProductColor> _productColorRepository;
         private readonly IGenericRepository<ProductGallery> _productGalleryRepository;
         private readonly IGenericRepository<ProductFeature> _productFeatureRepository;
+        private readonly IGenericRepository<ProductDiscount> _productDiscountRepository;
 
-        public ProductService(IGenericRepository<Product> productRepository, IGenericRepository<ProductCategory> productCategoryRepository, IGenericRepository<ProductSelectedCategory> productSelectedCategoryRepository, IGenericRepository<ProductColor> productColorRepository, IGenericRepository<ProductGallery> productGalleryRepository, IGenericRepository<ProductFeature> productFeatureRepository)
+        public ProductService(IGenericRepository<Product> productRepository, IGenericRepository<ProductCategory> productCategoryRepository, IGenericRepository<ProductSelectedCategory> productSelectedCategoryRepository, IGenericRepository<ProductColor> productColorRepository, IGenericRepository<ProductGallery> productGalleryRepository, IGenericRepository<ProductFeature> productFeatureRepository , IGenericRepository<ProductDiscount> productDiscountRepository)
         {
             _productRepository = productRepository;
             _productCategoryRepository = productCategoryRepository;
@@ -38,6 +39,7 @@ namespace MarketPlace.App.Services.Implementations
             _productColorRepository = productColorRepository;
             _productGalleryRepository = productGalleryRepository;
             _productFeatureRepository = productFeatureRepository;
+            _productDiscountRepository = productDiscountRepository;
         }
 
         #endregion
@@ -241,6 +243,20 @@ namespace MarketPlace.App.Services.Implementations
                     s.SellerId == sellerId &&
                     EF.Functions.Like(s.Title, $"%{productName}%")).ToListAsync();
         }
+        public async Task<List<ProductDiscount>> GetAllOffProducts(int take)
+        {
+            return await _productDiscountRepository.GetQuery().AsQueryable()
+                .Include(s => s.Product)
+                .Where(s => s.ExpireDate >= DateTime.Now)
+                    .OrderByDescending(s => s.ExpireDate)
+                    .Skip(0)
+                    .Take(take)
+                
+                .Distinct()
+                .ToListAsync();
+        }
+
+
 
         public async Task<FilterProductDTO> FilterProducts(FilterProductDTO filter)
         {
@@ -321,6 +337,7 @@ namespace MarketPlace.App.Services.Implementations
 
             return filter.SetProducts(allEntities).SetPaging(pager);
         }
+
 
         #endregion
 
@@ -522,7 +539,7 @@ namespace MarketPlace.App.Services.Implementations
             await _productColorRepository.DisposeAsync();
         }
 
-
+       
         #endregion
     }
 }
