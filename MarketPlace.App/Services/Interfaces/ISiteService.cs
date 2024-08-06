@@ -11,13 +11,18 @@ namespace MarketPlace.App.Services.Interfaces
 
 		Task<SiteSetting> GetDefaultSiteSetting();
 
-		#endregion
+        #endregion
 
-		#region slider
+        #region Email
+        Task<EmailSetting?> GetDefaultEmail();
+        #endregion
 
-		Task<List<Slider>> GetAllActiveSliders();
+        #region slider
+
+        Task<List<Slider>> GetAllActiveSliders();
 
         #endregion
+
         #region site banners
         Task<List<SiteBanner>> GetSiteBannersByPlacement(List<BannerPlacement> placements);
         #endregion

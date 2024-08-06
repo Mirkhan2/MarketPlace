@@ -3,6 +3,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using MarketPlace.App.Extensions;
+using MarketPlace.App.Security;
 using MarketPlace.App.Services.Interfaces;
 using MarketPlace.App.Utils;
 using MarketPlace.Data.DTO.Account;
@@ -19,13 +20,13 @@ namespace MarketPlace.App.Services.Implementations
         #region constructor
 
         private readonly IGenericRepository<User> _userRepository;
-      //  private readonly IPasswordHelper _passwordHelper;
+      
 		private readonly ISmsService _smsService;
 
-		public UserService(IGenericRepository<User> userRepository,/* IPasswordHelper passwordHelper*/ ISmsService smsService)
+		public UserService(IGenericRepository<User> userRepository, ISmsService smsService)
         {
             _userRepository = userRepository;
-         //   _passwordHelper = passwordHelper;
+        
 			_smsService = smsService;
 		}
 
@@ -42,7 +43,7 @@ namespace MarketPlace.App.Services.Implementations
                     FirstName = register.FirstName,
                     LastName = register.LastName,
                     Mobile = register.Mobile,
-                    Password = register.Password,
+                    Password = PasswordHelper.EncodePasswordMd5(register.Password),
                     MobileActiveCode = new Random().Next(10000, 999999).ToString(),
                     EmailActiveCode = Guid.NewGuid().ToString("N")
                     

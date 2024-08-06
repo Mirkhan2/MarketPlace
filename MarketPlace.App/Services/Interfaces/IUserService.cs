@@ -22,6 +22,7 @@ namespace MarketPlace.App.Services.Interfaces
 
 
 
+
         #endregion
 
     }

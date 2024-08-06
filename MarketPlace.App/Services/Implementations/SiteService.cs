@@ -51,6 +51,12 @@ namespace MarketPlace.App.Services.Implementations
 
         #endregion
 
+        public Task<EmailSetting> GetDefaultEmail()
+        {
+
+            //return await _context.EmailSettings.FirstOrDefaultAsync(s => !s.IsDelete && s.IsDefault);
+            throw new NotImplementedException();
+        }
         #region dispose
 
         public async ValueTask DisposeAsync()
@@ -63,7 +69,9 @@ namespace MarketPlace.App.Services.Implementations
 			}
 		}
 
-       
+      
+
+
 
         #endregion
     }

@@ -24,7 +24,8 @@ namespace MarketPlace.Data.Entities.Site
 
         [Display(Name = "آدرس نقشه")]
         public string MapScript { get; set; }
-        [Display(Name = "Our ")]
+
+        [Display(Name = "درباره ما")]
         public string AboutUs { get; set; }
 
         [Display(Name = "آدرس")]
