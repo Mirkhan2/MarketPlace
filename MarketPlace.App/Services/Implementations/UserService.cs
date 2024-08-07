@@ -22,11 +22,12 @@ namespace MarketPlace.App.Services.Implementations
         private readonly IGenericRepository<User> _userRepository;
       
 		private readonly ISmsService _smsService;
+        private readonly IEmailService _emailService;
 
-		public UserService(IGenericRepository<User> userRepository, ISmsService smsService)
+		public UserService(IGenericRepository<User> userRepository, ISmsService smsService,IEmailService emailService)
         {
             _userRepository = userRepository;
-        
+            _emailService = emailService;
 			_smsService = smsService;
 		}
 
@@ -43,7 +44,7 @@ namespace MarketPlace.App.Services.Implementations
                     FirstName = register.FirstName,
                     LastName = register.LastName,
                     Mobile = register.Mobile,
-                    Password = PasswordHelper.EncodePasswordMd5(register.Password),
+                 //   Password = PasswordHelper.EncodePasswordMd5(register.Password),
                     MobileActiveCode = new Random().Next(10000, 999999).ToString(),
                     EmailActiveCode = Guid.NewGuid().ToString("N")
                     
@@ -52,6 +53,7 @@ namespace MarketPlace.App.Services.Implementations
                 await _userRepository.AddEntity(user);
                 await _userRepository.SaveChanges();
                 await _smsService.SendVerificationSms(user.Mobile, user.MobileActiveCode );
+             // await _emailService.SendEmail(user.EmailActiveCode,user.Email);
                 return RegisterUserResult.Success;
             }
 

@@ -33,10 +33,10 @@ namespace MarketPlace.Web.Areas.Admin.Controllers
             var result = await _productService.AcceptSellerProduct(id);
             if (result)
             {
-                return JsonResponseStatus.SendStatus( JsonResponsStatusType.Success , "محصول مورد نظر با موفقیت تایید شد", null);
+                return JsonResponseStatus.SendStatus( JsonResponseStatusType.Success , "محصول مورد نظر با موفقیت تایید شد", null);
             }
 
-            return JsonResponseStatus.SendStatus(JsonResponsStatusType.Warning, "محصول مورد نظر یافت نشد", null);
+            return JsonResponseStatus.SendStatus(JsonResponseStatusType.Warning, "محصول مورد نظر یافت نشد", null);
         }
 
         #endregion
@@ -52,15 +52,15 @@ namespace MarketPlace.Web.Areas.Admin.Controllers
                 if (result)
                 {
 
-                    return JsonResponseStatus.SendStatus(JsonResponsStatusType.Success,
+                    return JsonResponseStatus.SendStatus(JsonResponseStatusType.Success,
                         "محصول مورد نظر با موفقیت رد شد", reject);
                 }
 
-                return JsonResponseStatus.SendStatus(JsonResponsStatusType.Danger, "اطلاعات مورد نظر جهت عدم تایید را به درستی وارد نمایید", null);
+                return JsonResponseStatus.SendStatus(JsonResponseStatusType.Danger, "اطلاعات مورد نظر جهت عدم تایید را به درستی وارد نمایید", null);
             }
 
 
-            return JsonResponseStatus.SendStatus(JsonResponsStatusType.Danger, "محصول مورد نظر یافت نشد", null);
+            return JsonResponseStatus.SendStatus(JsonResponseStatusType.Danger, "محصول مورد نظر یافت نشد", null);
         }
 
         #endregion

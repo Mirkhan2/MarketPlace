@@ -5,20 +5,14 @@
 }
 
 
+
+
 @section scripts
     {
     <partial name="_JqueryValidators" />
-    <script src="~/js/ckeditor.js"></script>
-    <script>
-        ClassicEditor.create(document.getElementById('Text'), {
-        })
-        .then(editor => {
-            window.editor = editor;
-        }).catch(err => {
-            console.error(err);
-        })
-    </script>
 }
+
+
 
 <div class="breadcrumbs_area">
     <div class="container">
@@ -64,7 +58,7 @@
                                             <span class="text-danger" asp-validation-for="TicketPriority"></span>
                                             <br />
                                             <label>متن پیام</label>
-                                            <textarea class="form-control" asp-for="Text" rows="10"></textarea>
+                                            <textarea class="form-control" asp-for="Text" rows="10" ckeditor="1"></textarea>
                                             <span class="text-danger" asp-validation-for="Text"></span>
                                             <br />
                                             <div class="save_button primary_btn default_button">
@@ -72,7 +66,7 @@
                                             </div>
                                         </form>
                                     </div>
-                                </div> 
+                                </div>
                             </div>
                         </div>
                     </div>

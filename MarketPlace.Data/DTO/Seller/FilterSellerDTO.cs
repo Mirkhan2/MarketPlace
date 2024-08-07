@@ -49,7 +49,7 @@ namespace MarketPlace.Data.DTO.Seller
     }
     public enum FilterSellerState
     {
-        [Display(Name = "All بررسی")]
+        [Display(Name = "همه بررسی")]
         All,
         [Display(Name = "در حال بررسی")]
         UnderProgress,

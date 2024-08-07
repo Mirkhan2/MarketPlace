@@ -30,7 +30,7 @@ namespace MarketPlace.Data.DTO.Account
         [MaxLength(200, ErrorMessage = "{0} نمی تواند بیشتر از {1} کاراکتر باشد")]
         [Compare("Password", ErrorMessage = "کلمه های عبور مغایرت دارند")]
         public string ConfirmPassword { get; set; }
-        public string Captcha { get; set; }
+     //   public string Captcha { get; set; }
     }
 
     public enum RegisterUserResult

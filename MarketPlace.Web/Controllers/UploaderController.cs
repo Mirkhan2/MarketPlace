@@ -10,6 +10,7 @@ namespace MarketPlace.Web.Controllers
 {
     public class UploaderController : SiteBaseController
     {
+
         [HttpPost]
         public IActionResult UploadImage(IFormFile upload, string CKEditorFuncName, string CKEditor, string langCode)
         {

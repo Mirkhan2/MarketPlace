@@ -1,4 +1,4 @@
-﻿@using MarketPlace.App.Extensions;
+﻿@using MarketPlace.App.Extensions
 @model MarketPlace.Data.DTO.Contacts.FilterTicketDTO
 @{
     ViewData["Title"] = "تیکت ها";
@@ -55,7 +55,7 @@
                                                             @ticket.TicketState.GetEnumName()
                                                         </span>
                                                     </td>
-                                                    <td><a asp-area="User" asp-controller="Ticket" asp-action="TicketDetail " asp-all-route-ticketId="@ticket.Id"  href="#" class="view">نمایش جزییات</a></td>
+                                                    <td><a asp-area="User" asp-controller="Ticket" asp-action="TicketDetail" asp-route-ticketId="@ticket.Id" class="view">نمایش جزییات</a></td>
                                                 </tr>
                                             }
                                         </tbody>
@@ -73,4 +73,3 @@
         </div>
     </div>
 </section>
-

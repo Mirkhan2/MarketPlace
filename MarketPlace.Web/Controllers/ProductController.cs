@@ -10,6 +10,7 @@ namespace MarketPlace.Web.Controllers
         #region constructor
 
         private readonly IProductService _productService;
+
         public ProductController(IProductService productService)
         {
             _productService = productService;
@@ -20,24 +21,23 @@ namespace MarketPlace.Web.Controllers
         #region filter products
 
         [HttpGet("products")]
-        [HttpGet("product/{Category}")]
+        [HttpGet("products/{Category}")]
         public async Task<IActionResult> FilterProducts(FilterProductDTO filter)
         {
             filter.TakeEntity = 9;
             filter.FilterProductState = FilterProductState.Accepted;
             filter = await _productService.FilterProducts(filter);
-            var products = await _productService.FilterProducts(filter);
-            ViewBag.ProductsCategories = await _productService.GetAllActiveProductCategories();
-            if (filter.PageId > filter.GetLastPage()&& filter.GetLastPage() != 0) return NotFound();
+            ViewBag.ProductCategories = await _productService.GetAllActiveProductCategories();
+            if (filter.PageId > filter.GetLastPage() && filter.GetLastPage() != 0) return NotFound();
             return View(filter);
         }
+
         #endregion
 
-
-
         #region show product detail
-        [HttpGet ("products/{productsId}/{title}")]
-        public async Task<IActionResult> ProductDetail(long productId , string title)
+
+        [HttpGet("products/{productId}/{title}")]
+        public async Task<IActionResult> ProductDetail(long productId, string title)
         {
             var product = await _productService.GetProductDetailById(productId);
             if (product == null) return NotFound();
@@ -45,7 +45,6 @@ namespace MarketPlace.Web.Controllers
         }
 
         #endregion
-       
 
     }
 }

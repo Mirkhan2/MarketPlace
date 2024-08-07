@@ -118,14 +118,16 @@ namespace MarketPlace.Web.Areas.Seller.Controllers
 
         #endregion
 
-        #region get product Json
+        #region get products json
+
         [HttpGet("products-autocomplete")]
-        public async Task<IActionResult> GetSellerProductJson(string productName)
+        public async Task<IActionResult> GetSellerProductsJson(string productName)
         {
             var seller = await _sellerService.GetLastActiveSellerByUserId(User.GetUserId());
-         //   var data = await _productService.FilterProductsForSellerByProductName(seller.Id , productName); 
-            return JsonResponseStatus.SendStatus(JsonResponsStatusType.Success, "", null);
+            var data = await _productService.FilterProductsForSellerByProductName(seller.Id, productName);
+            return new JsonResult(data);
         }
+
         #endregion
 
         #endregion
@@ -234,7 +236,7 @@ namespace MarketPlace.Web.Areas.Seller.Controllers
         {
             var categories = await _productService.GetAllProductCategoriesByParentId(parentId);
 
-            return JsonResponseStatus.SendStatus(JsonResponsStatusType.Success, "اطلاعات دسته بندی ها", categories);
+            return JsonResponseStatus.SendStatus(JsonResponseStatusType.Success, "اطلاعات دسته بندی ها", categories);
         }
 
         #endregion

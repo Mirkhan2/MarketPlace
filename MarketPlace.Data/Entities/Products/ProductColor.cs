@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using MarketPlace.Data.Entities.Commen;
+using MarketPlace.Data.Entities.ProductOrder;
 
 namespace MarketPlace.Data.Entities.Products
 {
@@ -30,6 +31,8 @@ namespace MarketPlace.Data.Entities.Products
         #region relations
 
         public Product Product { get; set; }
+        public ICollection<OrderDetail> OrderDetails { get; set; }
+
 
         #endregion
     }

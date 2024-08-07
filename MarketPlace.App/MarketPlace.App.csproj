@@ -5,15 +5,15 @@
   </PropertyGroup>
 
   <ItemGroup>
-	  
-   <!--<PackageReference Include="KavenegarDotNetCore" Version="1.0.7" />-->
-    <PackageReference Include="LazZiya.ImageResize" Version="2.0.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Http" Version="2.2.2" />
-    <PackageReference Include="Newtonsoft.Json" Version="13.0.2" />
-	  <PackageReference Include="SixLabors.ImageSharp" Version="1.0.0" />
-	  <!--<PackageReference Include="Zarinpal" Version="2.0.4" />
-	  <PackageReference Include="ZarinpalSandbox" Version="2.0.4" />-->
-	  
+
+	  <PackageReference Include="KavenegarDotNetCore" Version="1.0.1" />
+	  <PackageReference Include="Microsoft.AspNetCore.Http" Version="2.2.2" />
+	  <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
+
+	  <PackageReference Include="LazZiya.ImageResize" Version="2.0.0" />
+	  <PackageReference Include="SixLabors.ImageSharp" Version="1.0.0-beta0005" />
+	  <PackageReference Include="Zarinpal" Version="2.0.4" />
+	  <PackageReference Include="ZarinpalSandbox" Version="2.0.4" />
   </ItemGroup>
 
   <ItemGroup>
@@ -21,3 +21,8 @@
   </ItemGroup>
 
 </Project>
+
+
+
+
+	

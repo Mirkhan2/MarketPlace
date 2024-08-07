@@ -2,18 +2,15 @@
 @using MarketPlace.Data.DTO.Contacts
 @model MarketPlace.Data.DTO.Contacts.TicketDetailDTO
 @{
-	ViewData["Title"] = Model.Ticket.Title;
+    ViewData["Title"] = Model.Ticket.Title;
 }
 
 @section styles
-{
+    {
     <link rel="stylesheet" href="/css/ChatRoom.css" />
 }
 
-@section scripts
-{
-    <script src="/js/skeditor.js"></script>
-}
+
 
 <div class="breadcrumbs_area">
     <div class="container">
@@ -58,7 +55,7 @@
                                             </div>
                                             <div class="text_wrapper">
                                                 <div class="time">
-                                                 @message.CreateDate.ToStringShamsiDate() ساعت @message.CreateDate.ToString("HH:mm")
+                                                    @message.CreateDate.ToStringShamsiDate() ساعت @message.CreateDate.ToString("HH:mm")
                                                 </div>
                                                 <div class="text" style="font-size: 16px">
                                                     @Html.Raw(message.Text)

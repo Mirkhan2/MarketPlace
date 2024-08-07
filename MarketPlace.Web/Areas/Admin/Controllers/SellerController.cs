@@ -9,18 +9,18 @@ namespace MarketPlace.Web.Areas.Admin.Controllers
 {
     public class SellerController : AdminBaseController
     {
-        #region contructor
+        #region constructor
+
         private readonly ISellerService _sellerService;
+
         public SellerController(ISellerService sellerService)
         {
             _sellerService = sellerService;
         }
 
-
-
         #endregion
 
-        #region seller request
+        #region seller requests
 
         public async Task<IActionResult> SellerRequests(FilterSellerDTO filter)
         {
@@ -30,39 +30,47 @@ namespace MarketPlace.Web.Areas.Admin.Controllers
         #endregion
 
         #region accept seller request
-        [HttpPost , ValidateAntiForgeryToken]
+
         public async Task<IActionResult> AcceptSellerRequest(long requestId)
         {
             var result = await _sellerService.AcceptSellerRequest(requestId);
 
             if (result)
             {
-                return JsonResponseStatus.SendStatus(JsonResponsStatusType.Success,
-                    "Request Seccussfully " , null);
-
+                return JsonResponseStatus.SendStatus(
+                    JsonResponseStatusType.Success,
+                    "درخواست مورد نظر با موفقیت تایید شد",
+                    null);
             }
- 
 
-            return JsonResponseStatus.SendStatus(JsonResponsStatusType.Danger,
-                "Finde ich mit diese information leider nicht " , null);
+            return JsonResponseStatus.SendStatus(JsonResponseStatusType.Danger,
+                "اطلاعاتی با این مشخصات یافت نشد", null);
         }
+
         #endregion
 
-        #region rejected seller request
-        [HttpPost]
+        #region reject seller request
+
+        [HttpPost, ValidateAntiForgeryToken]
         public async Task<IActionResult> RejectSellerRequest(RejectItemDTO reject)
         {
-            var result = await _sellerService.RejectSellerRequest(reject);
-
-            if (result)
+            if (ModelState.IsValid)
             {
-                return JsonResponseStatus.SendStatus(JsonResponsStatusType.Success,
-                    "Request Seccussfully ", null);
+                var result = await _sellerService.RejectSellerRequest(reject);
+
+                if (result)
+                {
+                    return JsonResponseStatus.SendStatus(
+                        JsonResponseStatusType.Success,
+                        "درخواست مورد نظر با موفقیت رد شد",
+                        reject);
+                }
             }
 
-            return JsonResponseStatus.SendStatus(JsonResponsStatusType.Danger,
-                "Finde ich mit diese information leider nicht ", null);
+            return JsonResponseStatus.SendStatus(JsonResponseStatusType.Danger,
+                "اطلاعاتی با این مشخصات یافت نشد", null);
         }
+
         #endregion
     }
 }

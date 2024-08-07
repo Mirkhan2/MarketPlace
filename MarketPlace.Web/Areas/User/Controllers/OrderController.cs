@@ -40,20 +40,20 @@ namespace MarketPlace.Web.Areas.User.Controllers
                 {
                     await _orderService.AddProductToOpenOrder(User.GetUserId(), order);
                     return JsonResponseStatus.SendStatus(
-                        JsonResponsStatusType.Success,
+                        JsonResponseStatusType.Success,
                         "محصول مورد نظر با موفقیت ثبت شد",
                         null);
                 }
                 else
                 {
                     return JsonResponseStatus.SendStatus(
-                        JsonResponsStatusType.Danger,
+                        JsonResponseStatusType.Danger,
                         "برای ثبت محصول در سبد خرید ابتدا باید وارد سایت شوید",
                         null);
                 }
             }
 
-            return JsonResponseStatus.SendStatus(JsonResponsStatusType.Danger,
+            return JsonResponseStatus.SendStatus(JsonResponseStatusType.Danger,
                 "در ثبت اطلاعات خطایی رخ داد", null);
         }
 
@@ -154,13 +154,14 @@ namespace MarketPlace.Web.Areas.User.Controllers
             if (res)
             {
                 TempData[SuccessMessage] = "محصول مورد نظر با موفقیت از سبد خرید حذف شد";
-                return JsonResponseStatus.SendStatus(JsonResponsStatusType.Success, "محصول مورد نظر با موفقیت از سبد خرید حذف شد", null);
+                return JsonResponseStatus.SendStatus(JsonResponseStatusType.Success, "محصول مورد نظر با موفقیت از سبد خرید حذف شد", null);
             }
 
             TempData[ErrorMessage] = "محصول مورد نظر در سبد خرید شما یافت نشد";
-            return JsonResponseStatus.SendStatus(JsonResponsStatusType.Danger, "محصول مورد نظر در سبد خرید شما یافت نشد", null);
+            return JsonResponseStatus.SendStatus(JsonResponseStatusType.Danger, "محصول مورد نظر در سبد خرید شما یافت نشد", null);
         }
 
         #endregion
+
     }
 }

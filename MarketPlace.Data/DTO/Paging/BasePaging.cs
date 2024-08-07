@@ -33,12 +33,13 @@ namespace MarketPlace.Data.DTO.Paging
             var startItem = 1;
             var endItem = AllEntitiesCount;
 
-           if(EndPage > 1)
+            if (EndPage > 1)
             {
-                 startItem = (PageId - 1) * TakeEntity + 1;
-                 endItem = PageId * TakeEntity > AllEntitiesCount ? AllEntitiesCount : PageId * TakeEntity;
+                startItem = (PageId - 1) * TakeEntity + 1;
+                endItem = PageId * TakeEntity > AllEntitiesCount ? AllEntitiesCount : PageId * TakeEntity;
             }
-            return $"Namayesh{startItem}-{endItem} az {AllEntitiesCount}";
+
+            return $"نمایش {startItem}-{endItem} از {AllEntitiesCount}";
         }
 
         public BasePaging GetCurrentPaging()

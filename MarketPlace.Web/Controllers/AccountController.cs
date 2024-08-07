@@ -16,13 +16,11 @@ namespace MarketPlace.Web.Controllers
 
         private readonly IUserService _userService;
         private readonly ICaptchaValidator _captchaValidator;
-      
 
-        public AccountController(IUserService userService, ICaptchaValidator captchaValidator )
+        public AccountController(IUserService userService, ICaptchaValidator captchaValidator)
         {
             _userService = userService;
             _captchaValidator = captchaValidator;
-           
         }
 
         #endregion
@@ -57,7 +55,7 @@ namespace MarketPlace.Web.Controllers
                     case RegisterUserResult.Success:
                         TempData[SuccessMessage] = "ثبت نام شما با موفقیت انجام شد";
                         TempData[InfoMessage] = "کد تایید تلفن همراه برای شما ارسال شد";
-                        return RedirectToAction("ActivateMobile","Account" , new {mobile = register.Mobile});
+                        return RedirectToAction("ActivateMobile", "Account", new { mobile = register.Mobile });
                 }
             }
 
@@ -124,56 +122,55 @@ namespace MarketPlace.Web.Controllers
             return View(login);
         }
 
-		#endregion
-		#region activate mobile
-		[HttpGet("activate-mobile/{mobile}")]
-		public IActionResult ActivateMobile(string mobile)
-		{
-			if (User.Identity.IsAuthenticated) return Redirect("/");
-            var activateMobileDto = new ActivateMobileDTO
+        #endregion
+
+        #region activate mobile
+
+        [HttpGet("activate-mobile/{mobile}")]
+        public IActionResult ActivateMobile(string mobile)
+        {
+            if (User.Identity.IsAuthenticated) return Redirect("/");
+            var activateMobileDto = new ActivateMobileDTO { Mobile = mobile };
+            return View(activateMobileDto);
+        }
+
+        [HttpPost("activate-mobile/{mobile}"), ValidateAntiForgeryToken]
+        public async Task<IActionResult> ActivateMobile(ActivateMobileDTO activate)
+        {
+            if (!await _captchaValidator.IsCaptchaPassedAsync(activate.Captcha))
             {
-                Mobile = mobile
+                TempData[ErrorMessage] = "کد کپچای شما تایید نشد";
+                return View(activate);
+            }
 
-            };
-			return View(activateMobileDto);
-		}
-
-		[HttpPost("activate-mobile/{mobile}"), ValidateAntiForgeryToken]
-		public async Task<IActionResult> ActivateMobile(ActivateMobileDTO activate)
-		{
-			if (!await _captchaValidator.IsCaptchaPassedAsync(activate.Captcha))
-			{
-				TempData[ErrorMessage] = "کد کپچای شما تایید نشد";
-				return View(activate);
-			}
-
-			if (ModelState.IsValid)
-			{
+            if (ModelState.IsValid)
+            {
                 var res = await _userService.ActivateMobile(activate);
                 if (res)
                 {
-                    TempData[SuccessMessage] = "Spas mowafaqiat hisabi karabri";
+                    TempData[SuccessMessage] = "حساب کاربری شما با موفقیت فعال شد";
                     return RedirectToAction("Login");
                 }
-                
-                    TempData[ErrorMessage] = "na mowafaqiatt anjam shod";
-                
-			}
 
-			return View(activate);
-		}
+                TempData[ErrorMessage] = "کاربری با مشخصات وارد شده یافت نشد";
+            }
 
-		#endregion
-		#region forgot password
-		[HttpGet("forgot-pass")]
+            return View(activate);
+        }
+
+        #endregion
+
+        #region forgot password
+
+        [HttpGet("forgot-pass")]
         public IActionResult ForgotPassword()
         {
             return View();
         }
-        [HttpPost("forgot-pass"),ValidateAntiForgeryToken]
+
+        [HttpPost("forgot-pass"), ValidateAntiForgeryToken]
         public async Task<IActionResult> ForgotPassword(ForgotPasswordDTO forgot)
         {
-
             if (!await _captchaValidator.IsCaptchaPassedAsync(forgot.Captcha))
             {
                 TempData[ErrorMessage] = "کد کپچای شما تایید نشد";
@@ -194,9 +191,9 @@ namespace MarketPlace.Web.Controllers
                         return RedirectToAction("Login");
                 }
             }
+
             return View(forgot);
         }
-
 
         #endregion
 

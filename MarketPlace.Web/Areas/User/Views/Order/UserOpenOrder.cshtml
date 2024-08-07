@@ -97,14 +97,13 @@
                                 </div>
                                 <div class="cart_subtotal ">
                                     <p>تخفیف</p>
-                                    
                                     <p class="cart_amount">@Model.GetTotalDiscounts().ToString("#,0") تومان</p>
                                 </div>
                                 <a href="#">محاسبه هزینه</a>
 
                                 <div class="cart_subtotal has-border">
                                     <p>جمع کل</p>
-                                  <p class="cart_amount">@((Model.GetTotalPrice() - Model.GetTotalDiscounts()).ToString("#,0")) تومان</p>
+                                    <p class="cart_amount">@((Model.GetTotalPrice() - Model.GetTotalDiscounts()).ToString("#,0")) تومان</p>
                                 </div>
                                 <div class="checkout_btn">
                                     <a asp-area="User" asp-controller="Order" asp-action="PayUserOrderPrice">پرداخت</a>

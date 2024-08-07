@@ -2,6 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using MarketPlace.Data.Entities.Commen;
 using MarketPlace.Data.Entities.Contacts;
+using MarketPlace.Data.Entities.Products;
 using MarketPlace.Data.Entities.Store;
 
 namespace MarketPlace.Data.Entities.Account
@@ -66,6 +67,7 @@ namespace MarketPlace.Data.Entities.Account
         public ICollection<Ticket> Tickets { get; set; }
         public ICollection<TicketMessage> TicketMessages { get; set; }
         public ICollection<Seller> Sellers { get; set; }
+        public ICollection<ProductDiscountUse> ProductDiscountUses { get; set; }
 
         #endregion
 

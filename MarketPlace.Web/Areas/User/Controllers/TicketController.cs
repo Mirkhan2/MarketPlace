@@ -9,7 +9,9 @@ namespace MarketPlace.Web.Areas.User.Controllers
     public class TicketController : UserBaseController
     {
         #region constructor
+
         private readonly IContactService _contactService;
+
         public TicketController(IContactService contactService)
         {
             _contactService = contactService;
@@ -18,6 +20,7 @@ namespace MarketPlace.Web.Areas.User.Controllers
         #endregion
 
         #region list
+
         [HttpGet("tickets")]
         public async Task<IActionResult> Index(FilterTicketDTO filter)
         {
@@ -30,12 +33,14 @@ namespace MarketPlace.Web.Areas.User.Controllers
 
         #endregion
 
-        #region add ticket
+        #region add tiket
+
         [HttpGet("add-ticket")]
-        public async Task<IActionResult> addTicket()
+        public async Task<IActionResult> AddTicket()
         {
             return View();
         }
+
         [HttpPost("add-ticket"), ValidateAntiForgeryToken]
         public async Task<IActionResult> AddTicket(AddTicketDTO ticket)
         {
@@ -51,22 +56,26 @@ namespace MarketPlace.Web.Areas.User.Controllers
                         TempData[SuccessMessage] = "تیکت شما با موفقیت ثبت شد";
                         TempData[InfoMessage] = "پاسخ شما به زودی ارسال خواهد شد";
                         return RedirectToAction("Index");
-
                 }
             }
+
             return View(ticket);
         }
+
         #endregion
 
         #region show ticket detail
+
         [HttpGet("tickets/{ticketId}")]
-         public async Task<IActionResult> TicketDetail(long ticketId)
+        public async Task<IActionResult> TicketDetail(long ticketId)
         {
-            var ticket = await _contactService.GetTicketForShow(ticketId , User.GetUserId());
+            var ticket = await _contactService.GetTicketForShow(ticketId, User.GetUserId());
+
             if (ticket == null) return NotFound();
-    
-            return View();
+
+            return View(ticket);
         }
+
         #endregion
 
         #region answer ticket
@@ -101,6 +110,5 @@ namespace MarketPlace.Web.Areas.User.Controllers
         }
 
         #endregion
-
     }
 }

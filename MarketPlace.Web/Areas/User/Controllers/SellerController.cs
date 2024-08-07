@@ -8,12 +8,15 @@ namespace MarketPlace.Web.Areas.User.Controllers
 {
     public class SellerController : UserBaseController
     {
-        #region constructur
+        #region constructor
+
         private readonly ISellerService _sellerService;
+
         public SellerController(ISellerService sellerService)
         {
             _sellerService = sellerService;
         }
+
         #endregion
 
         #region request seller
@@ -51,17 +54,17 @@ namespace MarketPlace.Web.Areas.User.Controllers
 
         #endregion
 
-        #region seller request
+        #region seller requests
 
         [HttpGet("seller-requests")]
         public async Task<IActionResult> SellerRequests(FilterSellerDTO filter)
         {
-            filter.TakeEntity = 5;
             filter.UserId = User.GetUserId();
             filter.State = FilterSellerState.All;
 
             return View(await _sellerService.FilterSellers(filter));
         }
+
         #endregion
 
         #region edit request

@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using MarketPlace.Data.DTO.Products;
 using MarketPlace.Data.Entities.Account;
 using MarketPlace.Data.Entities.Contacts;
@@ -27,6 +28,7 @@ namespace MarketPlace.Data.Context
         public DbSet<SiteSetting> SiteSettings { get; set; }
         public DbSet<Slider> Sliders { get; set; }
         public DbSet<SiteBanner> SiteBanners { get; set; }
+        public DbSet<EmailSetting> EmailSettings { get; set; }
 
         #endregion
 
@@ -90,6 +92,41 @@ namespace MarketPlace.Data.Context
             {
                 relationship.DeleteBehavior = DeleteBehavior.Restrict;
             }
+            #region Seed Data
+
+            var date = DateTime.MinValue;
+
+            modelBuilder.Entity<EmailSetting>().HasData(new EmailSetting()
+            {
+                CreateDate = date,
+                DisplayName = "MarketPlace",
+                EnableSSL = true,
+                From = "mkshams@gmail.com",
+                Id = 1,
+                IsDefault = true,
+                IsDelete = false,
+                Password = "fuqijttnofjradmh",
+                Port = 587,
+                SMTP = "smtp.gmail.com"
+            });
+
+            modelBuilder.Entity<SiteSetting>().HasData(new SiteSetting()
+            {
+                CreateDate = date,
+                Mobile = "09146788445",
+                Address = "Iran",
+                Email = "mkshams@gmail.com",
+                Id = 1,
+                IsDefault = true,
+                IsDelete = false,
+                Phone = "04442248066",
+                CopyRight = "mirkhan shams",
+                FooterText = "mkshams@gmail.com",
+                LastUpdateDate = date,
+                MapScript = "null"
+            });
+
+            #endregion
 
             base.OnModelCreating(modelBuilder);
         }
