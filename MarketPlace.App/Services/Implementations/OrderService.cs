@@ -75,14 +75,14 @@ namespace MarketPlace.App.Services.Implementations
                     : detail.Product.Price;
 
                 var productDiscount = await _productDiscountRepository.GetQuery()
-    .Include(s => s.ProductDiscountUses)
+                    .Include(s => s.ProductDiscountUses)
                     .OrderByDescending(s => s.CreateDate)
-    .FirstOrDefaultAsync(s =>
-        s.ProductId == detail.ProductId && s.DiscountNumber - s.ProductDiscountUses.Count > 0);
+                    .FirstOrDefaultAsync(s =>
+                        s.ProductId == detail.ProductId && s.DiscountNumber - s.ProductDiscountUses.Count > 0);
 
                 if (productDiscount != null)
                 {
-                    discount = (int)Math.Ceiling(totalPrice * productDiscount.Percentage / (decimal)100);
+                    discount = (int)Math.Ceiling(oneProductPrice * productDiscount.Percentage / (decimal)100);
                 }
 
                 totalPrice += detail.Count * (oneProductPrice - discount);
@@ -115,10 +115,9 @@ namespace MarketPlace.App.Services.Implementations
                     {
                         UserId = userId,
                         ProductDiscountId = productDiscount.Id,
-
                     };
+
                     await _productDiscountUseRepository.AddEntity(newDiscountUse);
-                    //  await _productDiscountUseRepository.SaveChanges();
                 }
 
                 var totalPriceWithDiscount = totalPrice - discount;
@@ -126,7 +125,7 @@ namespace MarketPlace.App.Services.Implementations
                 await _sellerWalletService.AddWallet(new SellerWallet
                 {
                     SellerId = detail.Product.SellerId,
-                    Price = (int)Math.Ceiling(totalPriceWithDiscount * detail.Product.SiteProfit / (double)100),
+                    Price = (int)Math.Ceiling(totalPriceWithDiscount * (100 - detail.Product.SiteProfit) / (double)100),
                     TransactionType = TransactionType.Deposit,
                     Description = $"پرداخت مبلغ {totalPriceWithDiscount} تومان جهت فروش {detail.Product.Title} به تعداد {detail.Count} عدد با سهم تهیین شده ی {100 - detail.Product.SiteProfit} درصد"
                 });
@@ -214,7 +213,7 @@ namespace MarketPlace.App.Services.Implementations
                         ProductTitle = s.Product.Title,
                         ProductImageName = s.Product.ImageName,
                         DiscountPercentage = s.Product.ProductDiscounts
-                        //.OrderByDescending(a => a.CreateDate)
+                        .OrderByDescending(a => a.CreateDate)
                         .FirstOrDefault(a => a.ExpireDate > DateTime.Now)?.Percentage
                     }).ToList()
             };
@@ -232,38 +231,6 @@ namespace MarketPlace.App.Services.Implementations
             return true;
         }
 
-        public async Task<bool> CloseUserOpenOrderAfterPayement(long userId, long trackingCode)
-        {
-            var openOrder = await GetUserLatestOpenOrder(userId);
-            openOrder.PaymentDate = DateTime.Now;
-            openOrder.IsPaid = true;
-            _orderRepository.EditEntity(openOrder);
-            await _orderRepository.SaveChanges();
-            return true;
-        }
-
-
-        public async Task ChangeOrderDetailCount(long detailId, int userId, int count)
-        {
-            var userOpenOrder = await GetUserLatestOpenOrder(userId);
-            var detail = userOpenOrder.OrderDetails.SingleOrDefault(s => s.Id == detailId);
-            if (detail != null)
-            {
-                if (count > 0)
-                {
-                    detail.Count = count;
-                }
-                else
-                {
-
-                    _orderDetailRepository.DeleteEntity(detail);
-                }
-                await _orderDetailRepository.SaveChanges();
-            }
-        }
-
-
-
         #endregion
 
         #region dispose
@@ -274,6 +241,7 @@ namespace MarketPlace.App.Services.Implementations
             await _orderDetailRepository.DisposeAsync();
         }
 
+    
 
         #endregion
     }

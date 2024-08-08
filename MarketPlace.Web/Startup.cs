@@ -17,6 +17,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using PasswordHelper = MarketPlace.App.Services.Implementations.PasswordHelper;
 
 namespace MarketPlace.Web
 {
@@ -38,7 +39,7 @@ namespace MarketPlace.Web
             services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<ISiteService, SiteService>();
-          //  services.AddScoped<IPasswordHelper, PasswordHelper>();
+            services.AddScoped<IPasswordHelper, PasswordHelper>();
             services.AddHttpClient<ICaptchaValidator, GoogleReCaptchaValidator>();
             services.AddScoped<ISmsService, SmsService>();
             services.AddScoped<IContactService, ContactService>();

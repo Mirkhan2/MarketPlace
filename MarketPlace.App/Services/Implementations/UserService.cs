@@ -23,12 +23,14 @@ namespace MarketPlace.App.Services.Implementations
       
 		private readonly ISmsService _smsService;
         private readonly IEmailService _emailService;
+        private readonly IPasswordHelper _passwordHelper;
 
-		public UserService(IGenericRepository<User> userRepository, ISmsService smsService,IEmailService emailService)
+        public UserService(IGenericRepository<User> userRepository, ISmsService smsService,IEmailService emailService,IPasswordHelper passwordHelper)
         {
             _userRepository = userRepository;
             _emailService = emailService;
 			_smsService = smsService;
+            _passwordHelper = passwordHelper;
 		}
 
         #endregion
@@ -44,16 +46,14 @@ namespace MarketPlace.App.Services.Implementations
                     FirstName = register.FirstName,
                     LastName = register.LastName,
                     Mobile = register.Mobile,
-                 //   Password = PasswordHelper.EncodePasswordMd5(register.Password),
+                    Password = _passwordHelper.EncodePasswordMd5(register.Password),
                     MobileActiveCode = new Random().Next(10000, 999999).ToString(),
                     EmailActiveCode = Guid.NewGuid().ToString("N")
-                    
                 };
 
                 await _userRepository.AddEntity(user);
                 await _userRepository.SaveChanges();
-                await _smsService.SendVerificationSms(user.Mobile, user.MobileActiveCode );
-             // await _emailService.SendEmail(user.EmailActiveCode,user.Email);
+                await _smsService.SendVerificationSms(user.Mobile, user.MobileActiveCode);
                 return RegisterUserResult.Success;
             }
 
@@ -64,12 +64,13 @@ namespace MarketPlace.App.Services.Implementations
         {
             return await _userRepository.GetQuery().AsQueryable().AnyAsync(s => s.Mobile == mobile);
         }
+
         public async Task<LoginUserResult> GetUserForLogin(LoginUserDTO login)
         {
             var user = await _userRepository.GetQuery().AsQueryable().SingleOrDefaultAsync(s => s.Mobile == login.Mobile);
             if (user == null) return LoginUserResult.NotFound;
             if (!user.IsMobileActive) return LoginUserResult.NotActivated;
-            if (user.Password != login.Password) return LoginUserResult.NotFound;
+            if (user.Password != _passwordHelper.EncodePasswordMd5(login.Password)) return LoginUserResult.NotFound;
             return LoginUserResult.Success;
         }
 
@@ -77,61 +78,70 @@ namespace MarketPlace.App.Services.Implementations
         {
             return await _userRepository.GetQuery().AsQueryable().SingleOrDefaultAsync(s => s.Mobile == mobile);
         }
+
         public async Task<ForgotPasswordResult> RecoverUserPassword(ForgotPasswordDTO forgot)
         {
-
             var user = await _userRepository.GetQuery().SingleOrDefaultAsync(s => s.Mobile == forgot.Mobile);
             if (user == null) return ForgotPasswordResult.NotFound;
             var newPassword = new Random().Next(1000000, 999999999).ToString();
-            user.Password = newPassword;
+            user.Password = _passwordHelper.EncodePasswordMd5(newPassword);
             _userRepository.EditEntity(user);
-            await _smsService.SendUserPasswordSms(user.Mobile, newPassword);    
-
+            await _smsService.SendUserPasswordSms(user.Mobile, newPassword);
             await _userRepository.SaveChanges();
 
             return ForgotPasswordResult.Success;
         }
-		public async Task<bool> ActivateMobile(ActivateMobileDTO activate)
-		{
-			var user = await _userRepository.GetQuery().SingleOrDefaultAsync(s => s.Mobile == activate.Mobile); 
+
+        public async Task<bool> ActivateMobile(ActivateMobileDTO activate)
+        {
+            var user = await _userRepository.GetQuery().AsQueryable()
+                .SingleOrDefaultAsync(s => s.Mobile == activate.Mobile);
             if (user != null)
             {
-                user.IsEmailActive = true;
-                user.MobileActiveCode = new Random().Next(1000000, 999999999).ToString();
-                await _userRepository.SaveChanges();
-				return true;
-			}
-			return false;
-		}
+                if (user.MobileActiveCode == activate.MobileActiveCode)
+                {
+                    user.IsMobileActive = true;
+                    user.MobileActiveCode = new Random().Next(1000000, 999999999).ToString();
+                    await _userRepository.SaveChanges();
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
         public async Task<bool> ChangeUserPassword(ChangePasswordDTO changePass, long currentUserId)
         {
             var user = await _userRepository.GetEntityById(currentUserId);
-            if(user != null)
+            if (user != null)
             {
-                var newPassword = changePass.NewPassword;
+                var newPassword = _passwordHelper.EncodePasswordMd5(changePass.NewPassword);
                 if (newPassword != user.Password)
                 {
-                    user.Password= newPassword;
+                    user.Password = newPassword;
                     _userRepository.EditEntity(user);
                     await _userRepository.SaveChanges();
 
                     return true;
                 }
             }
+
             return false;
         }
+
         public async Task<EditUserProfileDTO> GetProfileForEdit(long userId)
         {
             var user = await _userRepository.GetEntityById(userId);
-            if (user != null) { };
+            if (user == null) return null;
+
             return new EditUserProfileDTO
             {
                 FirstName = user.FirstName,
                 LastName = user.LastName,
                 Avatar = user.Avatar
-
             };
         }
+
         public async Task<EditUserProfileResult> EditUserProfile(EditUserProfileDTO profile, long userId, IFormFile avatarImage)
         {
             var user = await _userRepository.GetEntityById(userId);
@@ -157,7 +167,6 @@ namespace MarketPlace.App.Services.Implementations
         }
 
         #endregion
-
         #region dispose
 
         public async ValueTask DisposeAsync()
