@@ -1,8 +1,4 @@
-﻿ using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System;
 
 namespace MarketPlace.Data.DTO.Paging
 {
@@ -13,18 +9,18 @@ namespace MarketPlace.Data.DTO.Paging
             PageId = 1;
             TakeEntity = 10;
             HowManyShowPageAfterAndBefore = 3;
-            
+
         }
         public int PageId { get; set; }
         public int PageCount { get; set; }
         public int AllEntitiesCount { get; set; }
-        public int StartPage { get;  set; }
+        public int StartPage { get; set; }
         public int EndPage { get; set; }
         public int TakeEntity { get; set; }
         public int SkipEntity { get; set; }
         public int GetLastPage()
         {
-            return (int)Math.Ceiling(AllEntitiesCount /(double) TakeEntity);
+            return (int)Math.Ceiling(AllEntitiesCount / (double)TakeEntity);
         }
         public int HowManyShowPageAfterAndBefore { get; set; }
 

@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using MarketPlace.Data.DTO.Products;
 using MarketPlace.Data.Entities.Commen;
 using MarketPlace.Data.Entities.ProductOrder;
 using MarketPlace.Data.Entities.Store;

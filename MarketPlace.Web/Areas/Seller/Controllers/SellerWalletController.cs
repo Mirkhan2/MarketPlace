@@ -1,6 +1,5 @@
 ﻿using System.Threading.Tasks;
 using MarketPlace.App.Services.Interfaces;
-using MarketPlace.Data.DTO.Seller;
 using MarketPlace.Data.DTO.SellerWallet;
 using MarketPlace.Web.PresentationExtensions;
 using Microsoft.AspNetCore.Mvc;

@@ -42,6 +42,6 @@ namespace MarketPlace.App.Services.Implementations
             return authority.Length == 36 ? authority : null;
         }
 
-    
+
     }
 }

@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Linq;
 using System.Threading.Tasks;
 using MarketPlace.App.Services.Interfaces;
 using MarketPlace.App.Utils;
@@ -14,7 +11,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace MarketPlace.App.Services.Implementations
 {
-    public  class ProductDiscountService : IProductDiscountService
+    public class ProductDiscountService : IProductDiscountService
     {
 
         #region constructor

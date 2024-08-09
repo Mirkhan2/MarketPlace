@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using MarketPlace.App.Extensions;
 using MarketPlace.App.Services.Interfaces;
@@ -31,7 +30,7 @@ namespace MarketPlace.App.Services.Implementations
         private readonly IGenericRepository<ProductFeature> _productFeatureRepository;
         private readonly IGenericRepository<ProductDiscount> _productDiscountRepository;
 
-        public ProductService(IGenericRepository<Product> productRepository, IGenericRepository<ProductCategory> productCategoryRepository, IGenericRepository<ProductSelectedCategory> productSelectedCategoryRepository, IGenericRepository<ProductColor> productColorRepository, IGenericRepository<ProductGallery> productGalleryRepository, IGenericRepository<ProductFeature> productFeatureRepository , IGenericRepository<ProductDiscount> productDiscountRepository)
+        public ProductService(IGenericRepository<Product> productRepository, IGenericRepository<ProductCategory> productCategoryRepository, IGenericRepository<ProductSelectedCategory> productSelectedCategoryRepository, IGenericRepository<ProductColor> productColorRepository, IGenericRepository<ProductGallery> productGalleryRepository, IGenericRepository<ProductFeature> productFeatureRepository, IGenericRepository<ProductDiscount> productDiscountRepository)
         {
             _productRepository = productRepository;
             _productCategoryRepository = productCategoryRepository;
@@ -251,7 +250,7 @@ namespace MarketPlace.App.Services.Implementations
                     .OrderByDescending(s => s.ExpireDate)
                     .Skip(0)
                     .Take(take)
-                
+
                 .Distinct()
                 .ToListAsync();
         }
@@ -539,7 +538,7 @@ namespace MarketPlace.App.Services.Implementations
             await _productColorRepository.DisposeAsync();
         }
 
-       
+
         #endregion
     }
 }

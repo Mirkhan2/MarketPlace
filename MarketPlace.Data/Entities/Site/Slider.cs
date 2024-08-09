@@ -3,9 +3,9 @@ using MarketPlace.Data.Entities.Commen;
 
 namespace MarketPlace.Data.Entities.Site
 {
-	public class Slider : BaseEntity
-	{
-        
+    public class Slider : BaseEntity
+    {
+
         #region properties
 
         [Display(Name = "عنوان اصلی")]

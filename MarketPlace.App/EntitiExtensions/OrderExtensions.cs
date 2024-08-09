@@ -1,6 +1,5 @@
 ﻿
 using MarketPlace.Data.DTO.Orders;
-using MarketPlace.Data.Entities.ProductOrder;
 
 namespace MarketPlace.App.EntitiExtensions
 {

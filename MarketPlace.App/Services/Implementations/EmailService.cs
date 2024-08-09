@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.Mail;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Net.Mail;
 using MarketPlace.App.Services.Interfaces;
 
 namespace MarketPlace.App.Services.Implementations
@@ -14,7 +9,7 @@ namespace MarketPlace.App.Services.Implementations
         private readonly ISiteService _siteService;
         public EmailService(ISiteService siteService)
         {
-              _siteService = siteService;
+            _siteService = siteService;
         }
         #endregion
         public async void SendEmail(string to, string subject, string body)

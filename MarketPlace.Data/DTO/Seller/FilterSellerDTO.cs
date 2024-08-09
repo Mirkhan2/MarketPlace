@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using MarketPlace.Data.DTO.Contacts;
 using MarketPlace.Data.DTO.Paging;
-using MarketPlace.Data.Entities.Contacts;
 
 namespace MarketPlace.Data.DTO.Seller
 {

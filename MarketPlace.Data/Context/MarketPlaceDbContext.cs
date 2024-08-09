@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq;
-using MarketPlace.Data.DTO.Products;
 using MarketPlace.Data.Entities.Account;
 using MarketPlace.Data.Entities.Contacts;
 using MarketPlace.Data.Entities.ProductOrder;
@@ -14,8 +13,8 @@ namespace MarketPlace.Data.Context
 {
 
     public class MarketPlaceDbContext : DbContext
-	{
-		public MarketPlaceDbContext(DbContextOptions<MarketPlaceDbContext> options) : base(options) { }
+    {
+        public MarketPlaceDbContext(DbContextOptions<MarketPlaceDbContext> options) : base(options) { }
 
         #region account
 

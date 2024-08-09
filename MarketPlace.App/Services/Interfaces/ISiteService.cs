@@ -7,9 +7,9 @@ namespace MarketPlace.App.Services.Interfaces
 {
     public interface ISiteService : IAsyncDisposable
     {
-		#region site settings
+        #region site settings
 
-		Task<SiteSetting> GetDefaultSiteSetting();
+        Task<SiteSetting> GetDefaultSiteSetting();
 
         #endregion
 

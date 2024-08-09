@@ -1,10 +1,10 @@
-﻿using System.IO;
-using System;
+﻿using System;
+using System.IO;
+using MarketPlace.App.Extensions;
 using MarketPlace.App.Utils;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
-using MarketPlace.App.Extensions;
 
 namespace MarketPlace.Web.Controllers
 {

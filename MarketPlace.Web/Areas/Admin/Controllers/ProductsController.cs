@@ -19,7 +19,7 @@ namespace MarketPlace.Web.Areas.Admin.Controllers
         #endregion
 
         #region filter products
-        public  async Task<IActionResult> Index(FilterProductDTO filter)
+        public async Task<IActionResult> Index(FilterProductDTO filter)
         {
             return View(await _productService.FilterProducts(filter));
         }
@@ -33,7 +33,7 @@ namespace MarketPlace.Web.Areas.Admin.Controllers
             var result = await _productService.AcceptSellerProduct(id);
             if (result)
             {
-                return JsonResponseStatus.SendStatus( JsonResponseStatusType.Success , "محصول مورد نظر با موفقیت تایید شد", null);
+                return JsonResponseStatus.SendStatus(JsonResponseStatusType.Success, "محصول مورد نظر با موفقیت تایید شد", null);
             }
 
             return JsonResponseStatus.SendStatus(JsonResponseStatusType.Warning, "محصول مورد نظر یافت نشد", null);

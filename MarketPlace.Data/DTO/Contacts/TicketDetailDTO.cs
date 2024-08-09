@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using MarketPlace.Data.Entities.Account;
+﻿using System.Collections.Generic;
 using MarketPlace.Data.Entities.Contacts;
 
 namespace MarketPlace.Data.DTO.Contacts
@@ -12,6 +7,6 @@ namespace MarketPlace.Data.DTO.Contacts
     {
         public Ticket Ticket { get; set; }
 
-        public List<TicketMessage> TicketMessages   { get; set; }
+        public List<TicketMessage> TicketMessages { get; set; }
     }
 }

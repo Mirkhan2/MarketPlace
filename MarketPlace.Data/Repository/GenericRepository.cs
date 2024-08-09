@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using MarketPlace.Data.Context;
 using MarketPlace.Data.Entities.Commen;
-using MarketPlace.Data.Entities.Contacts;
 using Microsoft.EntityFrameworkCore;
 
 namespace MarketPlace.Data.Repository

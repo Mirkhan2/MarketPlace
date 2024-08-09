@@ -1,16 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using MarketPlace.Data.Entities.Products;
 
 namespace MarketPlace.Data.DTO.Products
 {
-    public  class ProductDetailDTO
+    public class ProductDetailDTO
     {
-        public long  ProductId { get; set; }
+        public long ProductId { get; set; }
         public long SellerId { get; set; }
 
         [Display(Name = "نام محصول")]

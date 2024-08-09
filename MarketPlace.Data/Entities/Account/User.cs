@@ -7,8 +7,8 @@ using MarketPlace.Data.Entities.Store;
 
 namespace MarketPlace.Data.Entities.Account
 {
-	public class User : BaseEntity
-	{
+    public class User : BaseEntity
+    {
 
         #region properties
 

@@ -1,7 +1,5 @@
 ﻿using System.Threading.Tasks;
-using MarketPlace.App.Services.Implementations;
 using MarketPlace.App.Services.Interfaces;
-using MarketPlace.Data.Entities.Site;
 using MarketPlace.Web.PresentationExtensions;
 using Microsoft.AspNetCore.Mvc;
 
@@ -15,7 +13,7 @@ namespace MarketPlace.Web.ViewComponents
         private readonly IUserService _userService;
         private readonly IProductService _productService;
 
-        public SiteHeaderViewComponent(ISiteService siteService, IUserService userService , IProductService productService )
+        public SiteHeaderViewComponent(ISiteService siteService, IUserService userService, IProductService productService)
         {
             _siteService = siteService;
             _userService = userService;
@@ -25,7 +23,7 @@ namespace MarketPlace.Web.ViewComponents
         {
             ViewBag.siteSetting = await _siteService.GetDefaultSiteSetting();
             ViewBag.user = await _userService.GetUserByMobile(User.Identity.Name);
-            if (User.Identity.IsAuthenticated )
+            if (User.Identity.IsAuthenticated)
             {
                 ViewBag.user = await _userService.GetUserByMobile(User.Identity.Name);
 
@@ -44,7 +42,7 @@ namespace MarketPlace.Web.ViewComponents
         private readonly ISiteService _siteService;
         public SiteFooterViewComponent(ISiteService siteService)
         {
-            _siteService= siteService;
+            _siteService = siteService;
         }
         public async Task<IViewComponentResult> InvokeAsync()
         {
@@ -54,9 +52,9 @@ namespace MarketPlace.Web.ViewComponents
         }
     }
 
-	#endregion
+    #endregion
 
-	#region home sliders
+    #region home sliders
     public class HomeSliderViewComponent : ViewComponent
     {
         private readonly ISiteService _siteService;
@@ -66,8 +64,8 @@ namespace MarketPlace.Web.ViewComponents
         }
         public async Task<IViewComponentResult> InvokeAsync()
         {
-            var sliders  = await _siteService.GetAllActiveSliders();
-            return View("HomeSlider" , sliders);
+            var sliders = await _siteService.GetAllActiveSliders();
+            return View("HomeSlider", sliders);
         }
     }
     #endregion

@@ -241,7 +241,7 @@ namespace MarketPlace.App.Services.Implementations
             await _orderDetailRepository.DisposeAsync();
         }
 
-    
+
 
         #endregion
     }

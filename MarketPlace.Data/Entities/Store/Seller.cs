@@ -1,9 +1,9 @@
-﻿ using MarketPlace.Data.Entities.Account;
+﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using MarketPlace.Data.Entities.Account;
 using MarketPlace.Data.Entities.Commen;
 using MarketPlace.Data.Entities.Products;
 using MarketPlace.Data.Entities.Wallet;
-using System.Collections.Generic;
 
 namespace MarketPlace.Data.Entities.Store
 {

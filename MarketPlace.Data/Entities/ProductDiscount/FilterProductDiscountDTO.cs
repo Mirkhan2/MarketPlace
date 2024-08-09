@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using MarketPlace.Data.DTO.Paging;
-using MarketPlace.Data.DTO.Seller;
 
 namespace MarketPlace.Data.Entities.ProductDiscount
 {

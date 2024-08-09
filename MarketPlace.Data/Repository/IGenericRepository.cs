@@ -3,12 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using MarketPlace.Data.Entities.Commen;
-using MarketPlace.Data.Entities.Contacts;
 
 namespace MarketPlace.Data.Repository
 {
-	public interface IGenericRepository<TEntity> : IAsyncDisposable where TEntity : BaseEntity
-	{
+    public interface IGenericRepository<TEntity> : IAsyncDisposable where TEntity : BaseEntity
+    {
         IQueryable<TEntity> GetQuery();
         Task AddEntity(TEntity entity);
         Task AddRangeEntities(List<TEntity> entities);

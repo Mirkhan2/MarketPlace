@@ -1,9 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using GoogleReCaptcha.V3.Interface;
-using MarketPlace.App.Services.Implementations;
 using MarketPlace.App.Services.Interfaces;
-using MarketPlace.Data.DTO.Common;
 using MarketPlace.Data.DTO.Contacts;
 using MarketPlace.Data.Entities.Site;
 using MarketPlace.Web.PresentationExtensions;
@@ -11,8 +9,8 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace MarketPlace.Web.Controllers
 {
-	public class HomeController : SiteBaseController
-	{
+    public class HomeController : SiteBaseController
+    {
         #region constructor
 
         private readonly IContactService _contactService;

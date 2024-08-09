@@ -3,8 +3,8 @@ using MarketPlace.App.Services.Interfaces;
 
 namespace MarketPlace.App.Services.Implementations
 {
-	public  class SmsService : ISmsService
-	{
+    public class SmsService : ISmsService
+    {
         private string apiKey = "کد ارسال پیام";
 
 
@@ -22,6 +22,6 @@ namespace MarketPlace.App.Services.Implementations
 
     }
 
-      
-    
+
+
 }

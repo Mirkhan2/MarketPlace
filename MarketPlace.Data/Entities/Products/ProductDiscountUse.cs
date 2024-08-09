@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using MarketPlace.Data.Entities.Account;
+﻿using MarketPlace.Data.Entities.Account;
 using MarketPlace.Data.Entities.Commen;
 
 namespace MarketPlace.Data.Entities.Products

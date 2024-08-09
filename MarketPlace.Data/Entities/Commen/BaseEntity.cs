@@ -4,8 +4,8 @@ using System.ComponentModel.DataAnnotations;
 
 namespace MarketPlace.Data.Entities.Commen
 {
-	public class BaseEntity
-	{
+    public class BaseEntity
+    {
         [Key]
         public long Id { get; set; }
         public bool IsDelete { get; set; }

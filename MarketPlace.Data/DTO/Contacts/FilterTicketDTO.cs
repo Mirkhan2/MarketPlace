@@ -1,8 +1,6 @@
 ﻿
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using MarketPlace.Data.DTO.Paging;
-using MarketPlace.Data.Entities.Commen;
 using MarketPlace.Data.Entities.Contacts;
 
 namespace MarketPlace.Data.DTO.Contacts
@@ -15,7 +13,7 @@ namespace MarketPlace.Data.DTO.Contacts
 
         public long? UserId { get; set; }
         public FilterTicketState? FilterTicketState { get; set; }
-        
+
         public TicketSection? TicketSection { get; set; }
 
         public TicketPriority? TicketPriority { get; set; }
@@ -39,7 +37,7 @@ namespace MarketPlace.Data.DTO.Contacts
             this.HowManyShowPageAfterAndBefore = paging.HowManyShowPageAfterAndBefore;
             this.TakeEntity = paging.TakeEntity;
             this.SkipEntity = paging.SkipEntity;
-            this.PageCount = paging.PageCount;  
+            this.PageCount = paging.PageCount;
 
 
             return this;

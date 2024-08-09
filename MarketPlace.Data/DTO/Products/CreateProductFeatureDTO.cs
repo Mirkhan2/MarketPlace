@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace MarketPlace.Data.DTO.Products
 {
@@ -14,7 +9,7 @@ namespace MarketPlace.Data.DTO.Products
         [Display(Name = "عنوان ویژگی")]
         [Required(ErrorMessage = "لطفا {0} را وارد نمایید")]
         [MaxLength(300, ErrorMessage = "{0} نمیتواند بیشتر از {1} کاراکتر باشد")]
-        public string Feature{ get; set; }
+        public string Feature { get; set; }
 
         [Display(Name = "مقدار ویژگی")]
         [Required(ErrorMessage = "لطفا {0} را وارد نمایید")]

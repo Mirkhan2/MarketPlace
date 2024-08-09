@@ -1,5 +1,4 @@
 ﻿using System.Threading.Tasks;
-using MarketPlace.App.Extensions;
 using MarketPlace.App.Services.Interfaces;
 using MarketPlace.Data.DTO.Products;
 using MarketPlace.Web.Http;

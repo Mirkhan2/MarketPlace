@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using MarketPlace.Data.DTO.Common;
+﻿using MarketPlace.Data.DTO.Common;
 using Microsoft.AspNetCore.Http;
 
 namespace MarketPlace.App.Services.Interfaces
@@ -14,6 +9,6 @@ namespace MarketPlace.App.Services.Interfaces
             string callbackUrl, ref string redirectUrl, string userEmail = null, string userMobile = null);
         PaymentStatus PaymentVerification(string merchantId, string authority, int amount, ref long refId);
         string GetAuthorityCodeFromCallback(HttpContext context);
-            
+
     }
 }

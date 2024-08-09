@@ -5,7 +5,6 @@ using MarketPlace.Web.PresentationExtensions;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 namespace MarketPlace.Web.Areas.User.Controllers
 {

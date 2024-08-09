@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Linq;
 using System.Threading.Tasks;
 using MarketPlace.App.Services.Interfaces;
 using MarketPlace.Data.DTO.Contacts;
@@ -12,44 +9,44 @@ using Microsoft.EntityFrameworkCore;
 
 namespace MarketPlace.App.Services.Implementations
 {
-	public class ContactService : IContactService
-	{
-		#region constructor
+    public class ContactService : IContactService
+    {
+        #region constructor
 
-		private readonly IGenericRepository<ContactUs> _contactUsRepository;
-		private readonly IGenericRepository<Ticket> _ticketRepository;
-		private readonly IGenericRepository<TicketMessage> _ticketMessageRepository;
-		public ContactService(IGenericRepository<ContactUs> contactUsRepository, IGenericRepository<Ticket> ticketRepository, IGenericRepository<TicketMessage> ticketmessageRepository)
-		{
-			_contactUsRepository = contactUsRepository;
-			_ticketRepository = ticketRepository;
-			_ticketMessageRepository = ticketmessageRepository;
+        private readonly IGenericRepository<ContactUs> _contactUsRepository;
+        private readonly IGenericRepository<Ticket> _ticketRepository;
+        private readonly IGenericRepository<TicketMessage> _ticketMessageRepository;
+        public ContactService(IGenericRepository<ContactUs> contactUsRepository, IGenericRepository<Ticket> ticketRepository, IGenericRepository<TicketMessage> ticketmessageRepository)
+        {
+            _contactUsRepository = contactUsRepository;
+            _ticketRepository = ticketRepository;
+            _ticketMessageRepository = ticketmessageRepository;
 
-		}
+        }
 
 
 
-		#endregion
+        #endregion
 
-		#region contact us
-		public async Task CreateContactUs(CreateContactUsDTO contact, string userIp, long? userId)
-		{
-			var newContact = new ContactUs
-			{
-				UserId = userId != null && userId.Value != 0 ? userId.Value : (long?)null,
-				Subject = contact.Subject,
-				Email = contact.Email,
-				UserIp = userIp,
-				Text = contact.Text,
-				FullName = contact.FullName
-			};
-			await _contactUsRepository.AddEntity(newContact);
-			await _contactUsRepository.SaveChanges();
-		}
+        #region contact us
+        public async Task CreateContactUs(CreateContactUsDTO contact, string userIp, long? userId)
+        {
+            var newContact = new ContactUs
+            {
+                UserId = userId != null && userId.Value != 0 ? userId.Value : (long?)null,
+                Subject = contact.Subject,
+                Email = contact.Email,
+                UserIp = userIp,
+                Text = contact.Text,
+                FullName = contact.FullName
+            };
+            await _contactUsRepository.AddEntity(newContact);
+            await _contactUsRepository.SaveChanges();
+        }
 
-		#endregion
+        #endregion
 
-	   #region ticket
+        #region ticket
 
         public async Task<AddTicketResult> AddUserTicket(AddTicketDTO ticket, long userId)
         {
@@ -182,11 +179,11 @@ namespace MarketPlace.App.Services.Implementations
 
         #region dispose
         public async ValueTask DisposeAsync()
-		{
-			await _contactUsRepository.DisposeAsync();
-		}
+        {
+            await _contactUsRepository.DisposeAsync();
+        }
 
-      
+
 
 
 

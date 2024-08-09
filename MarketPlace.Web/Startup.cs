@@ -4,7 +4,6 @@ using System.Text.Encodings.Web;
 using System.Text.Unicode;
 using GoogleReCaptcha.V3;
 using GoogleReCaptcha.V3.Interface;
-using MarketPlace.App.Security;
 using MarketPlace.App.Services.Implementations;
 using MarketPlace.App.Services.Interfaces;
 using MarketPlace.Data.Context;
@@ -134,7 +133,7 @@ namespace MarketPlace.Web
                          pattern: "{controller=Home}/{action=Index}/{id?}");
                  });
             });
-            
+
         }
 
     }

@@ -1,15 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using MarketPlace.Data.Entities.Account;
 using MarketPlace.Data.Entities.Commen;
 
 namespace MarketPlace.Data.Entities.Contacts
 {
-    public  class Ticket : BaseEntity
+    public class Ticket : BaseEntity
     {
         #region properties
 

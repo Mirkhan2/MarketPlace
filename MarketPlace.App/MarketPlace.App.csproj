@@ -7,6 +7,8 @@
   <ItemGroup>
 
 	  <PackageReference Include="KavenegarDotNetCore" Version="1.0.1" />
+
+	  <PackageReference Include="Microsoft.AspNetCore.DataProtection" Version="5.0.17" />
 	  <PackageReference Include="Microsoft.AspNetCore.Http" Version="2.2.2" />
 	  <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
 

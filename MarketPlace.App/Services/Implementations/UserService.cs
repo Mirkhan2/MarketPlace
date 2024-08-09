@@ -3,14 +3,12 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using MarketPlace.App.Extensions;
-using MarketPlace.App.Security;
 using MarketPlace.App.Services.Interfaces;
 using MarketPlace.App.Utils;
 using MarketPlace.Data.DTO.Account;
 using MarketPlace.Data.Entities.Account;
 using MarketPlace.Data.Repository;
 using Microsoft.AspNetCore.Http;
-using Microsoft.Data.SqlClient.Server;
 using Microsoft.EntityFrameworkCore;
 
 namespace MarketPlace.App.Services.Implementations
@@ -20,18 +18,18 @@ namespace MarketPlace.App.Services.Implementations
         #region constructor
 
         private readonly IGenericRepository<User> _userRepository;
-      
-		private readonly ISmsService _smsService;
+
+        private readonly ISmsService _smsService;
         private readonly IEmailService _emailService;
         private readonly IPasswordHelper _passwordHelper;
 
-        public UserService(IGenericRepository<User> userRepository, ISmsService smsService,IEmailService emailService,IPasswordHelper passwordHelper)
+        public UserService(IGenericRepository<User> userRepository, ISmsService smsService, IEmailService emailService, IPasswordHelper passwordHelper)
         {
             _userRepository = userRepository;
             _emailService = emailService;
-			_smsService = smsService;
+            _smsService = smsService;
             _passwordHelper = passwordHelper;
-		}
+        }
 
         #endregion
 
@@ -174,7 +172,7 @@ namespace MarketPlace.App.Services.Implementations
             await _userRepository.DisposeAsync();
         }
 
-       
+
         #endregion
     }
 }

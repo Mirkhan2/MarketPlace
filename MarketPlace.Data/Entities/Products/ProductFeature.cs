@@ -1,15 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Reflection.Metadata.Ecma335;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations;
 using MarketPlace.Data.Entities.Commen;
 
 namespace MarketPlace.Data.Entities.Products
 {
-    public  class ProductFeature : BaseEntity
+    public class ProductFeature : BaseEntity
     {
 
         #region properties

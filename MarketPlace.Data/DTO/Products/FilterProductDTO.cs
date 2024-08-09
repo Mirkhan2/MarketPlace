@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using MarketPlace.Data.DTO.Paging;
-using MarketPlace.Data.Entities.Commen;
 using MarketPlace.Data.Entities.Products;
 
 namespace MarketPlace.Data.DTO.Products
@@ -13,7 +8,7 @@ namespace MarketPlace.Data.DTO.Products
     public class FilterProductDTO : BasePaging
     {
         #region constructor
-        public FilterProductDTO() 
+        public FilterProductDTO()
         {
             OrderBy = FilterProductOrderBy.CreateDate_Des;
         }
@@ -24,17 +19,17 @@ namespace MarketPlace.Data.DTO.Products
         #region properteis
 
         public string ProductTitle { get; set; }
-     
-        public string  Category { get; set; }
+
+        public string Category { get; set; }
         public long? SellerId { get; set; }
-        public int FilterMinPrice { get; set; } 
+        public int FilterMinPrice { get; set; }
         public int FilterMaxPrice { get; set; }
         public int SelectedMinPrice { get; set; }
-        public int SelectedMaxPrice { get; set; } 
+        public int SelectedMaxPrice { get; set; }
         public int PriceStep { get; set; } = 1000000;
 
         public FilterProductState FilterProductState { get; set; }
-        public FilterProductOrderBy OrderBy{ get; set; }
+        public FilterProductOrderBy OrderBy { get; set; }
 
         public List<Product> Products { get; set; }
         public List<long> SelectedProductCategories { get; set; }
@@ -79,12 +74,12 @@ namespace MarketPlace.Data.DTO.Products
         [Display(Name = "غیر فعال")]
         NotActive
     }
-    public enum FilterProductOrderBy 
+    public enum FilterProductOrderBy
     {
         CreateDate_Des,
         CreateDate_Acs,
-            Price_Des,
-            Price_Acs
+        Price_Des,
+        Price_Acs
     }
 
 

@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using MarketPlace.Data.Entities.Commen;
+﻿using MarketPlace.Data.Entities.Commen;
 using MarketPlace.Data.Entities.Store;
 
 namespace MarketPlace.Data.Entities.Wallet
@@ -20,7 +15,7 @@ namespace MarketPlace.Data.Entities.Wallet
 
         #region relations
         public Seller Seller { get; set; }
-     //   public ICollection<SellerWallet> SellerWallets { get; set; }
+        //   public ICollection<SellerWallet> SellerWallets { get; set; }
 
         #endregion
     }
